@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue chez L'Étincelle{% endblock %}
+
+{% block importmap %}
+    {{ importmap(['app']) }}
+{% endblock %}
+
+{% block body %}
+<body>
+   <div class="image-container">
+    <img src="{{asset('img/etincelle.jpg')}}" alt="img">
+    <div class="centered-text">
+        Bienvenue ici
+        <a href="/boutique">Accéder à la boutique</a>
+        <a href="#" class="btn">Accéder aux services</a>
+    </div>
+</div>
+
+    <main>
+        <!-- Contenu de la page d'accueil -->
+        <section>
+
+            <h2>Notre Histoire</h2>
+            <p>Découvrez l'histoire de L'Étincelle, notre inspiration et notre engagement envers des matériaux durables et l'artisanat local.</p>
+        </section>
+
+        <section>
+            <h2>Nos Produits</h2>
+            <!-- Affichage dynamique des produits -->
+        </section>
+    </main>
+</body>
+{% endblock %}

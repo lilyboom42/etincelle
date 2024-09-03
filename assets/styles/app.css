@@ -1,3 +1,166 @@
+/* Style de base pour le corps de la page */
 body {
-    background-color: skyblue;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF; /* Fond blanc */
+    color: #2F4F4F; /* Texte en bleu nuit */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Conteneur principal */
+main {
+    flex: 1; /* Permet au contenu principal de prendre tout l'espace disponible */
+}
+
+/* Style de l'en-tête */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 50%, #8FBC8F 100%);
+}
+
+.header-content h1 {
+    color: #8FBC8F; 
+}
+
+.social-icons a {
+    color: #FFD700; /* Icones en jaune doré */
+    margin: 0 5px;
+    font-size: 1.2em;
+}
+
+/* Image container */
+.image-container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+}
+
+.centered-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #FFFFFF;
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.centered-text a {
+    color: #FFD700;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 10px;
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid #FFD700;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.centered-text a:hover {
+    background-color: #FFD700;
+    color: #2F4F4F;
+}
+
+/* Navigation principale */
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #8FBC8F
+}
+
+.main-nav ul li {
+    margin: 0 15px;
+}
+
+.main-nav ul li a {
+    color: #FFFFFF; /* Texte blanc */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.main-nav ul li a:hover {
+    color: #FFD700; /* Jaune doré au survol */
+}
+
+/* Style pour les sections */
+section {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 50%, #8FBC8F 100%);
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer sticky */
+footer {
+    background: #8FBC8F;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto;
+    width: 100%;
+}
+
+footer nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+footer nav ul li {
+    margin: 0 15px;
+}
+
+footer nav ul li a {
+    color: #FFD700;
+    text-decoration: none;
+}
+
+footer nav ul li a:hover {
+    color: #8B4513;
+    text-decoration: underline;
+}
+
+/* Boutons */
+button, .btn {
+    background-color: #8FBC8F;
+    border: 2px solid #228B22;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+button:hover, .btn:hover {
+    background-color: #FFA07A;
+}
+
+/* Liens */
+a {
+    color: #FFD700;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #8B4513;
 }
