@@ -164,3 +164,39 @@ a {
 a:hover {
     color: #8B4513;
 }
+
+
+
+
+
+/* public/css/shop.css */
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #228B22;
+    color: #fff;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+}

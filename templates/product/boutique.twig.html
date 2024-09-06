@@ -1,0 +1,33 @@
+{# templates/shop/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Boutique{% endblock %}
+
+{% block importmap %}
+{{ importmap(['app']) }}
+{% endblock %}
+
+
+{% block body %}
+<h1>Boutique</h1>
+
+<div class="product-grid">
+    {% for product in products %}
+        <div class="product-card">
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <p>Prix: {{ product.price }} €</p>
+            <p>Quantité en stock: {{ product.stockQuantity }}</p>
+            
+            {% if product.productImages is not empty %}
+                <img src="{{ asset(product.productImages.first.imagesPath) }}" alt="{{ product.name }}" class="product-image">
+            {% endif %}
+            
+            <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
+        </div>
+    {% else %}
+        <p>Aucun produit disponible pour le moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}

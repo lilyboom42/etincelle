@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <h1>Inscription</h1>
+        {# {{ form_row(registrationForm.agreeTerms, { label: 'Accepter les conditions' }) }} #}
+
+ {{ form_start(registrationForm) }}
+    {{ form_errors(registrationForm) }}
+    {{ form_row(registrationForm.email, { 'attr': {'autocomplete': 'email'} }) }}
+    {{ form_errors(registrationForm.email) }}
+    {{ form_row(registrationForm.firstName, { label: 'Prénom', 'attr': {'autocomplete': 'given-name'} }) }}
+    {{ form_errors(registrationForm.firstName) }}
+    {{ form_row(registrationForm.lastName, { label: 'Nom de famille', 'attr': {'autocomplete': 'family-name'} }) }}
+    {{ form_errors(registrationForm.lastName) }}
+    {{ form_row(registrationForm.plainPassword, { label: 'Mot de passe', 'attr': {'autocomplete': 'new-password'} }) }}
+    {{ form_errors(registrationForm.plainPassword) }}
+    {{ form_row(registrationForm.userDetail.city, { label: 'Ville', 'attr': {'autocomplete': 'address-level2'} }) }}
+    {{ form_errors(registrationForm.userDetail.city) }}
+    {{ form_row(registrationForm.userDetail.address, { label: 'Adresse', 'attr': {'autocomplete': 'street-address'} }) }}
+    {{ form_errors(registrationForm.userDetail.address) }}
+    {{ form_row(registrationForm.userDetail.country, { label: 'Pays', 'attr': {'autocomplete': 'country'} }) }}
+    {{ form_errors(registrationForm.userDetail.country) }}
+    {{ form_row(registrationForm.userDetail.postalCode, { label: 'Code postal', 'attr': {'autocomplete': 'postal-code'} }) }}
+    {{ form_errors(registrationForm.userDetail.postalCode) }}
+    {{ form_row(registrationForm.userDetail.phoneNumber, { label: 'Numéro de téléphone', 'attr': {'autocomplete': 'tel'} }) }}
+    {{ form_errors(registrationForm.userDetail.phoneNumber) }}
+    {{ form_row(registrationForm.userDetail.birthDate, { label: 'Date de naissance', 'attr': {'autocomplete': 'bday'} }) }}
+    {{ form_errors(registrationForm.userDetail.birthDate) }}
+
+    {# <button type="submit" class="btn">S'inscrire</button> #}
+{{ form_end(registrationForm) }}
+
+{% endblock %}

@@ -29,17 +29,15 @@ class UserDetails
     #[Assert\Length(max: 50, maxMessage: "Le pays ne doit pas dépasser {{ limit }} caractères.")]
     private ?string $country = null;
 
-    #[ORM\Column]
-    #[Assert\NotNull(message: "Le code postal ne doit pas être nul.")]
-    #[Assert\Positive(message: "Le code postal doit être un nombre positif.")]
+    #[ORM\Column(length: 10)]
+    #[Assert\NotBlank(message: "Le code postal ne doit pas être nul.")]
     #[Assert\Length(min: 4, max: 10, minMessage: "Le code postal doit comporter au moins {{ limit }} chiffres.", maxMessage: "Le code postal ne doit pas dépasser {{ limit }} chiffres.")]
-    private ?int $postalCode = null;
+    private ?string $postalCode = null;
 
-    #[ORM\Column]
-    #[Assert\NotNull(message: "Le numéro de téléphone ne doit pas être nul.")]
-    #[Assert\Positive(message: "Le numéro de téléphone doit être un nombre positif.")]
+    #[ORM\Column(length: 15)]
+    #[Assert\NotBlank(message: "Le numéro de téléphone ne doit pas être nul.")]
     #[Assert\Regex(pattern: "/^[0-9]{10}$/", message: "Le numéro de téléphone doit comporter 10 chiffres.")]
-    private ?int $phoneNumber = null;
+    private ?string $phoneNumber = null;
 
     #[ORM\Column]
     #[Assert\NotNull(message: "La date de naissance ne doit pas être nulle.")]
@@ -106,14 +104,14 @@ class UserDetails
 
     // Get the postal code
     // Obtenir le code postal
-    public function getPostalCode(): ?int
+    public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
 
     // Set the postal code
     // Définir le code postal
-    public function setPostalCode(int $postalCode): static
+    public function setPostalCode(string $postalCode): static
     {
         $this->postalCode = $postalCode;
 
@@ -122,14 +120,14 @@ class UserDetails
 
     // Get the phone number
     // Obtenir le numéro de téléphone
-    public function getPhoneNumber(): ?int
+    public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
 
     // Set the phone number
     // Définir le numéro de téléphone
-    public function setPhoneNumber(int $phoneNumber): static
+    public function setPhoneNumber(string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
 
