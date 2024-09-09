@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un nouveau produit{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un nouveau produit</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.name, { 'label': 'Nom du produit' }) }}
+    {{ form_row(form.description, { 'label': 'Description' }) }}
+    {{ form_row(form.price, { 'label': 'Prix' }) }}
+    {{ form_row(form.stockQuantity, { 'label': 'Quantité en stock' }) }}
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+    {{ form_end(form) }}
+{% endblock %}

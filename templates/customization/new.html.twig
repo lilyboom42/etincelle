@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Personnalisation{% endblock %}
+
+{% block body %}
+    <h1>Nouvelle Personnalisation</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.customizationName, { 'label': 'Nom de la personnalisation' }) }}
+    {{ form_row(form.customizationOption, { 'label': 'Option de personnalisation' }) }}
+    {{ form_row(form.product, { 'label': 'Produit' }) }}
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+    {{ form_end(form) }}
+{% endblock %}

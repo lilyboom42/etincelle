@@ -1,0 +1,9 @@
+<h1>Produits Disponibles</h1>
+
+<a href="{{ path('product_new') }}" class="btn btn-primary">Ajouter un Produit</a>
+
+<ul>
+    {% for product in products %}
+        <li>{{ product.name }} - {{ product.price }} €</li>
+    {% endfor %}
+</ul>

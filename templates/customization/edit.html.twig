@@ -1,0 +1,19 @@
+{# templates/customization/edit.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Personnalisation{% endblock %}
+
+{% block body %}
+    <h1>Modifier Personnalisation</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.price) }}
+        
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('customizations_list') }}" class="btn btn-secondary">Retour à la liste</a>
+{% endblock %}

@@ -1,0 +1,18 @@
+{# templates/customization/detail.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Personnalisation{% endblock %}
+
+{% block body %}
+    <h1>Détails de la Personnalisation</h1>
+
+    <p>ID : {{ customization.id }}</p>
+    <p>Nom : {{ customization.name }}</p>
+    <p>Description : {{ customization.description }}</p>
+    <p>Prix : {{ customization.price }}</p>
+
+    <a href="{{ path('customizations_list') }}" class="btn btn-secondary">Retour à la liste</a>
+    <a href="{{ path('customization_edit', { id: customization.id }) }}" class="btn btn-primary">Modifier</a>
+    <a href="{{ path('customization_delete', { id: customization.id }) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette personnalisation ?');">Supprimer</a>
+{% endblock %}

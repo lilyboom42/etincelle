@@ -1,0 +1,83 @@
+<h2 class="title">
+    {% if product is defined %}
+        Mettre à jour {{ product.name }}
+    {% else %}
+        Nouveau Produit
+    {% endif %}
+</h2>
+
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.price) }}
+    {{ form_row(form.stock) }}
+     <label for="">Images</label>
+    <div id="product_images" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}" data-index="{{ form.images|length }}">
+        <ul class="images">
+            {% for image in form.images %}
+                <li>
+                    {{ form_label(image) }}
+                    {{ form_widget(image) }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {{ form_row(form.category) }}
+
+    <button type="submit">
+        {% if product is defined %}
+            Mettre à jour
+        {% else %}
+            Ajouter
+        {% endif %}
+    </button>
+{{ form_end(form) }}
+
+{% block javascript %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Ajout des liens de suppression pour les images déjà présentes
+    document
+        .querySelectorAll('ul.images li')
+        .forEach((image) => {
+            addTagFormDeleteLink(image)
+        });
+
+    function addTagFormDeleteLink(item) {
+        const removeFormButton = document.createElement('button');
+        removeFormButton.innerText = 'Supprimer cette image';
+        removeFormButton.type = 'button';
+        item.append(removeFormButton);
+
+        removeFormButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Supprimer le li de l'image
+            item.remove();
+        });
+    }
+
+    const collectionHolder = document.querySelector('#product_images');
+    const addButton = document.createElement('button');
+    addButton.innerText = 'Ajouter une image';
+    addButton.type = 'button';
+    addButton.classList.add('add-image');
+    collectionHolder.appendChild(addButton);
+
+    let index = collectionHolder.dataset.index || collectionHolder.querySelectorAll('ul.images li').length;
+
+    addButton.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        let newForm = collectionHolder.dataset.prototype;
+        newForm = newForm.replace(/__name__/g, index);
+
+        const newFormElement = document.createElement('li');
+        newFormElement.innerHTML = newForm;
+        collectionHolder.querySelector('ul.images').appendChild(newFormElement);
+        addTagFormDeleteLink(newFormElement);
+        index++;
+    });
+});
+</script>
+{% endblock %}

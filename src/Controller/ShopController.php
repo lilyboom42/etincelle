@@ -18,7 +18,7 @@ class ShopController extends AbstractController
     {
         $products = $productRepository->findAll();
 
-        return $this->render('product/boutique.twig.html', [
+        return $this->render('product/boutique.html.twig', [
             'products' => $products,
         ]);
     }
