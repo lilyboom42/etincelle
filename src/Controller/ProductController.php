@@ -22,32 +22,28 @@ class ProductController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/products/available', name: 'products_available')]
-    public function availableProducts(): Response
-    {
-        $products = $this->productRepository->findAvailableProducts();
-        return $this->render('product/available.html.twig', [
-            'products' => $products,
-        ]);
-    }
 
-    #[Route('/product/new', name: 'product_new')]
+    #[Route('/product/new', name: 'product_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
-
+    
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($product);
             $this->entityManager->flush();
-
-            return $this->redirectToRoute('products_available');
+    
+            $this->addFlash('success', 'Produit ajouté avec succès.');
+    
+            return $this->redirectToRoute('shop_index');
         }
-
+    
         return $this->render('product/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+    
+    
 }

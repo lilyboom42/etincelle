@@ -2,10 +2,19 @@
 
 {% block title %}Ajouter un nouveau produit{% endblock %}
 
+{% block importmap %}
+    {{ importmap(['app']) }}
+{% endblock %}
+
 {% block body %}
     <h1>Ajouter un nouveau produit</h1>
 
-    {{ form_start(form) }}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {# Désactive Turbo pour ce formulaire #}
+    {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
     {{ form_row(form.name, { 'label': 'Nom du produit' }) }}
     {{ form_row(form.description, { 'label': 'Description' }) }}
     {{ form_row(form.price, { 'label': 'Prix' }) }}

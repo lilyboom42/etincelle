@@ -44,17 +44,19 @@ class BlogPost
     #[ORM\OneToMany(mappedBy: 'blogPost', targetEntity: Media::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $media;
 
+    #[ORM\OneToMany(mappedBy: 'blogPost', targetEntity: BlogPostCategoryRelation::class)]
+    private Collection $blogPostCategoryRelations;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->media = new ArrayCollection();
+        $this->blogPostCategoryRelations = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
     public function setCreationDate(): void
     {
-        // Set creation and update dates before persisting.
-        // Définir les dates de création et de mise à jour avant l'insertion.
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
     }
@@ -62,8 +64,6 @@ class BlogPost
     #[ORM\PreUpdate]
     public function setUpdateDate(): void
     {
-        // Update the updated date before updating.
-        // Mettre à jour la date de modification avant la mise à jour.
         $this->updatedAt = new \DateTimeImmutable();
     }
 
@@ -80,7 +80,6 @@ class BlogPost
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -92,7 +91,6 @@ class BlogPost
     public function setContent(string $content): static
     {
         $this->content = $content;
-
         return $this;
     }
 
@@ -104,7 +102,6 @@ class BlogPost
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
-
         return $this;
     }
 
@@ -118,12 +115,6 @@ class BlogPost
         return $this->updatedAt;
     }
 
-    /**
-     * Get categories associated with the blog post.
-     * Récupérer les catégories associées à l'article de blog.
-     * 
-     * @return Collection<int, BlogPostCategory>
-     */
     public function getCategories(): Collection
     {
         return $this->categories;
@@ -131,30 +122,21 @@ class BlogPost
 
     public function addCategory(BlogPostCategory $category): static
     {
-        // Add a category if it does not already exist.
-        // Ajouter une catégorie si elle n'existe pas déjà.
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
+            $category->getBlogPosts()->add($this); // Synchronisation inverse
         }
-
         return $this;
     }
 
     public function removeCategory(BlogPostCategory $category): static
     {
-        // Remove a category if it exists.
-        // Supprimer une catégorie si elle existe.
-        $this->categories->removeElement($category);
-
+        if ($this->categories->removeElement($category)) {
+            $category->getBlogPosts()->removeElement($this); // Synchronisation inverse
+        }
         return $this;
     }
 
-    /**
-     * Get media associated with the blog post.
-     * Récupérer les médias associés à l'article de blog.
-     * 
-     * @return Collection<int, Media>
-     */
     public function getMedia(): Collection
     {
         return $this->media;
@@ -162,26 +144,44 @@ class BlogPost
 
     public function addMedia(Media $media): static
     {
-        // Add a media if it does not already exist.
-        // Ajouter un média s'il n'existe pas déjà.
         if (!$this->media->contains($media)) {
             $this->media->add($media);
             $media->setBlogPost($this);
         }
-
         return $this;
     }
 
     public function removeMedia(Media $media): static
     {
-        // Remove a media if it exists and set the owning side to null.
-        // Supprimer un média s'il existe et définir le côté propriétaire à null.
         if ($this->media->removeElement($media)) {
             if ($media->getBlogPost() === $this) {
                 $media->setBlogPost(null);
             }
         }
+        return $this;
+    }
 
+    public function getBlogPostCategoryRelations(): Collection
+    {
+        return $this->blogPostCategoryRelations;
+    }
+
+    public function addBlogPostCategoryRelation(BlogPostCategoryRelation $relation): static
+    {
+        if (!$this->blogPostCategoryRelations->contains($relation)) {
+            $this->blogPostCategoryRelations->add($relation);
+            $relation->setBlogPost($this); // Synchronisation inverse
+        }
+        return $this;
+    }
+
+    public function removeBlogPostCategoryRelation(BlogPostCategoryRelation $relation): static
+    {
+        if ($this->blogPostCategoryRelations->removeElement($relation)) {
+            if ($relation->getBlogPost() === $this) {
+                $relation->setBlogPost(null); // Synchronisation inverse
+            }
+        }
         return $this;
     }
 }

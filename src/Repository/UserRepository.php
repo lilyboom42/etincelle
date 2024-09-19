@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -32,9 +33,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         $user->setPassword($newHashedPassword);
-        $entityManager = $this->getEntityManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -97,5 +97,56 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('inactive', false)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Finds active users with pagination.
+     * Trouve les utilisateurs actifs avec pagination.
+     *
+     * @param int $page Le numéro de la page
+     * @param int $limit Le nombre d'éléments par page
+     * @return Paginator Returns a Paginator object with active User objects / Renvoie un objet Paginator avec des objets User actifs
+     */
+    public function findActiveUsersPaginated(int $page, int $limit): Paginator
+    {
+        $query = $this->createQueryBuilder('u')
+            ->andWhere('u.isActive = :active')
+            ->setParameter('active', true)
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        return new Paginator($query);
+    }
+
+    /**
+     * Searches users by multiple criteria.
+     * Recherche les utilisateurs par plusieurs critères.
+     *
+     * @param string|null $email Optional email criteria / Critère optionnel d'e-mail
+     * @param string|null $role Optional role criteria / Critère optionnel de rôle
+     * @param bool|null $isActive Optional active status criteria / Critère optionnel de statut actif
+     * @return User[] Returns an array of User objects / Renvoie un tableau d'objets User
+     */
+    public function searchUsers(?string $email = null, ?string $role = null, ?bool $isActive = null): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        if ($email) {
+            $qb->andWhere('u.email LIKE :email')
+                ->setParameter('email', '%'.$email.'%');
+        }
+
+        if ($role) {
+            $qb->andWhere('JSON_CONTAINS(u.roles, :role) = 1')
+                ->setParameter('role', json_encode($role));
+        }
+
+        if ($isActive !== null) {
+            $qb->andWhere('u.isActive = :isActive')
+                ->setParameter('isActive', $isActive);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

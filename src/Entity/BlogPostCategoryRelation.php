@@ -20,6 +20,7 @@ class BlogPostCategoryRelation
     #[ORM\ManyToOne(targetEntity: BlogPostCategory::class, inversedBy: 'blogPostCategoryRelations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?BlogPostCategory $category = null;
+    
 
     public function getId(): ?int
     {

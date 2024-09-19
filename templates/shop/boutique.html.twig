@@ -1,0 +1,53 @@
+{# templates/shop/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Boutique
+{% endblock %}
+
+{% block importmap %}
+	{{ importmap(['app']) }}
+{% endblock %}
+
+{% block body %}
+	<h1>Boutique</h1>
+
+   {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+	<a href="{{ path('product_new') }}" class="btn btn-primary">Ajouter un nouveau produit</a>
+
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">{{ message }}</div>
+	{% endfor %}
+
+	<div class="product-grid">
+		{% for product in products %}
+			<div class="product-card">
+				<h2>{{ product.name }}</h2>
+				<p>{{ product.description }}</p>
+				<p>Prix:
+					{{ product.price }}
+					€</p>
+				<p>Quantité en stock:
+					{{ product.stockQuantity }}</p>
+
+				{% if product.productImages|length > 0 %}
+					{% for image in product.productImages %}
+						<img src="{{ asset(image.imagesPath) }}" alt="{{ product.name }}" class="product-image">
+					{% endfor %}
+				{% endif %}
+
+				<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
+			</div>
+
+		{% else %}
+			<p>Aucun produit disponible pour le moment.</p>
+		{% endfor %}
+	</div>
+{% endblock %}

@@ -17,23 +17,24 @@
 		{% endblock %}
 
 
-	</head>
-	<body>
-		{% for label, messages in app.flashes %}
-			<div class="alert alert-{{ label }}">
-				{% for message in messages %}
-					<p>{{ message }}</p>
-				{% endfor %}
-			</div>
-		{% endfor %}
-
 		{% block header %}
 			{% include "partials/header.html.twig" %}
 		{% endblock %}
-		{% block body %}{% endblock %}
+		{% block body %}
+
+			{% for label, messages in app.flashes %}
+				<div class="alert alert-{{ label }}">
+					{% for message in messages %}
+						<p>{{ message }}</p>
+					{% endfor %}
+				</div>
+			{% endfor %}
+
+
+		{% endblock %}
 		{% block footer %}
 			{% include "partials/footer.html.twig" %}
 		{% endblock %}
 		{% block javascript %}{% endblock %}
-	</body>
-</html>
+	</head>
+</html></body></html>

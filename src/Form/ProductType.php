@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Product;
-use App\Entity\User; // Importez correctement la classe User depuis l'espace de noms App\Entity
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -26,16 +26,17 @@ class ProductType extends AbstractType
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',
-                'currency' => 'EUR',
+                'currency' => 'EUR', // Ajustez la devise si nécessaire
             ])
             ->add('stockQuantity', IntegerType::class, [
                 'label' => 'Quantité en stock',
             ]);
+            // Décommenter pour inclure le champ favoritedBy
             // ->add('favoritedBy', EntityType::class, [
-            //     'class' => User::class, // Utilisez l'espace de noms correct ici
-            //     'choice_label' => 'id',
+            //     'class' => User::class,
+            //     'choice_label' => 'id', // Ajustez pour afficher un attribut significatif
             //     'multiple' => true,
-            //     'label' => 'Favori par les utilisateurs'
+            //     'label' => 'Favori par les utilisateurs',
             // ]);
     }
 

@@ -1,0 +1,4 @@
+# translations/validators.en.yaml
+
+La date de création ne doit pas être nulle: "The creation date cannot be null."
+La date de mise à jour ne doit pas être nulle: "The update date cannot be null."

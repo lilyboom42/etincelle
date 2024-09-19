@@ -32,17 +32,20 @@ class Order
     #[Assert\NotNull(message: "L'utilisateur associé à la commande ne doit pas être nul.")]
     private ?User $user = null;
 
-    #[ORM\Column]
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     #[Assert\NotNull(message: "Le montant total de la commande ne doit pas être nul.")]
     #[Assert\PositiveOrZero(message: "Le montant total de la commande doit être positif ou nul.")]
-    private ?int $total = null;
+    private ?string $total = null;
+
 
     #[ORM\Column(type: 'string', enumType: OrderStatus::class)]
     #[Assert\NotNull(message: "Le statut de la commande ne doit pas être nul.")]
     private OrderStatus $orderStatus;
 
-    #[ORM\OneToMany(targetEntity: OrderLine::class, mappedBy: 'orders', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderLine::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $orderLines;
+
 
     public function __construct()
     {

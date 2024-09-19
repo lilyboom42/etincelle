@@ -30,10 +30,11 @@ class OrderLine
     #[Assert\NotNull(message: "Le produit associé ne doit pas être nul.")]
     private ?Product $product = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orderLines')]
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'orderLines')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: "La commande associée ne doit pas être nulle.")]
-    private ?Order $order = null; // Renommé pour plus de cohérence
+    private ?Order $order = null;
+    
 
     // Get the ID of the order line.
     // Obtenir l'ID de la ligne de commande.

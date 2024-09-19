@@ -24,38 +24,33 @@ class BlogPostCategory
     #[ORM\ManyToMany(targetEntity: BlogPost::class, mappedBy: 'categories')]
     private Collection $blogPosts;
 
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: BlogPostCategoryRelation::class)]
+    private Collection $blogPostCategoryRelations;
+
     public function __construct()
     {
-        // Initialize the collection of blog posts.
-        // Initialiser la collection des articles de blog.
+        // Initialiser les collections
         $this->blogPosts = new ArrayCollection();
+        $this->blogPostCategoryRelations = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
-        // Get the ID of the blog post category.
-        // Obtenir l'ID de la catégorie d'article de blog.
         return $this->id;
     }
 
     public function getName(): ?string
     {
-        // Get the name of the blog post category.
-        // Obtenir le nom de la catégorie d'article de blog.
         return $this->name;
     }
 
     public function setName(string $name): static
     {
-        // Set the name of the blog post category.
-        // Définir le nom de la catégorie d'article de blog.
         $this->name = $name;
-
         return $this;
     }
 
     /**
-     * Get all blog posts associated with this category.
      * Récupérer tous les articles de blog associés à cette catégorie.
      *
      * @return Collection<int, BlogPost>
@@ -63,5 +58,15 @@ class BlogPostCategory
     public function getBlogPosts(): Collection
     {
         return $this->blogPosts;
+    }
+
+    /**
+     * Récupérer toutes les relations de catégorie d'article de blog.
+     *
+     * @return Collection<int, BlogPostCategoryRelation>
+     */
+    public function getBlogPostCategoryRelations(): Collection
+    {
+        return $this->blogPostCategoryRelations;
     }
 }

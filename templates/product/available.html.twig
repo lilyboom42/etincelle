@@ -1,9 +1,21 @@
-<h1>Produits Disponibles</h1>
+{# templates/product/available.html.twig #}
 
-<a href="{{ path('product_new') }}" class="btn btn-primary">Ajouter un Produit</a>
+{% extends 'base.html.twig' %}
 
-<ul>
-    {% for product in products %}
-        <li>{{ product.name }} - {{ product.price }} €</li>
+{% block title %}Produits disponibles{% endblock %}
+
+{% block body %}
+    <h1>Produits disponibles</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
-</ul>
+
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} - {{ product.price }} EUR</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('product_new') }}" class="btn btn-primary">Ajouter un nouveau produit</a>
+{% endblock %}
