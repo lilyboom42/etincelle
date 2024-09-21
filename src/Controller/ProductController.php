@@ -22,18 +22,22 @@ class ProductController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-
     #[Route('/product/new', name: 'product_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
-    
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($product);
-            $this->entityManager->flush();
+            // Persister chaque image
+            foreach ($product->getProductImages() as $productImage) {
+                $productImage->setProduct($product);
+                $entityManager->persist($productImage);
+            }
+    
+            $entityManager->persist($product);
+            $entityManager->flush();
     
             $this->addFlash('success', 'Produit ajouté avec succès.');
     
@@ -44,6 +48,5 @@ class ProductController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    
     
 }

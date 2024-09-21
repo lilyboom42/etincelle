@@ -1,18 +1,12 @@
-{# templates/shop/index.html.twig #}
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Boutique
-{% endblock %}
-
-{% block importmap %}
-	{{ importmap(['app']) }}
-{% endblock %}
+{% block title %}Boutique{% endblock %}
 
 {% block body %}
-	<h1>Boutique</h1>
+    <h1>Boutique</h1>
 
-   {% for message in app.flashes('error') %}
+    {# Affichage des messages flash d'erreur et de succès #}
+    {% for message in app.flashes('error') %}
         <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
 
@@ -20,34 +14,70 @@
         <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
 
-	<a href="{{ path('product_new') }}" class="btn btn-primary">Ajouter un nouveau produit</a>
+    <a href="{{ path('product_new') }}" class="btn btn-primary mb-3">Ajouter un nouveau produit</a>
 
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success">{{ message }}</div>
-	{% endfor %}
+    <div class="product-grid row">
+        {# Liste des produits #}
+        {% for product in products %}
+            <div class="product-card col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ product.name }}</h2>
+                        <p class="card-text">{{ product.description }}</p>
+                        <p class="card-text">Prix: {{ product.price }} €</p>
 
-	<div class="product-grid">
-		{% for product in products %}
-			<div class="product-card">
-				<h2>{{ product.name }}</h2>
-				<p>{{ product.description }}</p>
-				<p>Prix:
-					{{ product.price }}
-					€</p>
-				<p>Quantité en stock:
-					{{ product.stockQuantity }}</p>
+                        {# Affichage du stock #}
+                        {% if product.stockQuantity > 0 %}
+                            <p class="text-success">En stock: {{ product.stockQuantity }}</p>
+                        {% else %}
+                            <p class="text-danger">Rupture de stock</p>
+                        {% endif %}
 
-				{% if product.productImages|length > 0 %}
-					{% for image in product.productImages %}
-						<img src="{{ asset(image.imagesPath) }}" alt="{{ product.name }}" class="product-image">
-					{% endfor %}
-				{% endif %}
+                        {# Affichage des images du produit #}
+                        {% if product.productImages|length > 0 %}
+                            <div class="product-images mb-2">
+                                {% for image in product.productImages %}
+                                    <img src="{{ asset(image.imagesPath) }}" alt="{{ product.name }}" class="product-image">
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>Aucune image disponible pour ce produit.</p>
+                        {% endif %}
 
-				<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
-			</div>
+                        <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary mt-3">Ajouter au panier</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun produit disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
 
-		{% else %}
-			<p>Aucun produit disponible pour le moment.</p>
-		{% endfor %}
-	</div>
+{% block stylesheets %}
+<style>
+    .product-grid {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .product-card {
+        margin-bottom: 30px;
+    }
+
+    .product-image {
+        max-width: 100px;
+        margin-right: 10px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .btn {
+        margin-top: 10px;
+    }
+</style>
 {% endblock %}

@@ -2,23 +2,61 @@
 
 {% block title %}Ajouter un nouveau produit{% endblock %}
 
-{% block importmap %}
-    {{ importmap(['app']) }}
-{% endblock %}
-
 {% block body %}
     <h1>Ajouter un nouveau produit</h1>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+    {# Le formulaire doit être envoyé avec enctype="multipart/form-data" pour gérer les fichiers #}
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
-    {# Désactive Turbo pour ce formulaire #}
-    {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
     {{ form_row(form.name, { 'label': 'Nom du produit' }) }}
     {{ form_row(form.description, { 'label': 'Description' }) }}
     {{ form_row(form.price, { 'label': 'Prix' }) }}
     {{ form_row(form.stockQuantity, { 'label': 'Quantité en stock' }) }}
+
+    {# Afficher le label "Images du produit" uniquement une fois #}
+    <div class="form-group">
+        <label>Images du produit</label>
+        <div id="product-images-wrapper" data-prototype="{{ form_widget(form.productImages.vars.prototype)|e('html_attr') }}">
+            {# Boucle sur les images déjà existantes si elles existent #}
+            {% for imageForm in form.productImages %}
+                <div class="product-image-item" style="margin-bottom: 10px;">
+                    {{ form_widget(imageForm) }}
+                    <button type="button" class="btn btn-danger remove-image-button">Supprimer</button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <button type="button" id="add-image-button" class="btn btn-primary" style="margin-bottom: 10px;">Ajouter une image</button>
+
     <button type="submit" class="btn btn-success">Enregistrer</button>
+
     {{ form_end(form) }}
+{% endblock %}
+
+{% block javascript %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let productImagesWrapper = document.getElementById('product-images-wrapper');
+        let prototype = productImagesWrapper.dataset.prototype;
+        let index = productImagesWrapper.querySelectorAll('.product-image-item').length; // Compter les fichiers déjà présents
+
+        // Ajouter une nouvelle image
+        document.getElementById('add-image-button').addEventListener('click', function () {
+            let newForm = prototype.replace(/__name__/g, index);
+            let newImageItem = document.createElement('div');
+            newImageItem.classList.add('product-image-item');
+            newImageItem.innerHTML = newForm + '<button type="button" class="btn btn-danger remove-image-button">Supprimer</button>';
+            productImagesWrapper.appendChild(newImageItem);
+            index++;
+        });
+
+        // Supprimer une image ajoutée
+        productImagesWrapper.addEventListener('click', function (event) {
+            if (event.target.classList.contains('remove-image-button')) {
+                event.target.closest('.product-image-item').remove();
+            }
+        });
+    });
+    </script>
 {% endblock %}

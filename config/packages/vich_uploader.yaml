@@ -4,3 +4,13 @@ vich_uploader:
         product_images:
             uri_prefix: /uploads/images
             upload_destination: '%kernel.project_dir%/public/uploads/images'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            # delete_on_update: true
+            # delete_on_remove: true
+        media:
+            uri_prefix: '%blog_image%'
+            upload_destination: '%kernel.project_dir%/public%blog_image%'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        # blog_image:
+        #     uri_prefix: '%blog_image%'
+        #     upload_destination: '%kernel.project_dir%/public%blog_image%'

@@ -11,3 +11,13 @@ Code postal: Postal Code
 Numéro de téléphone: Phone Number
 Date de naissance: Date of Birth
 Register: Register
+
+
+Nom du produit: 'Product Name'
+Description: 'Description'
+Prix: 'Price'
+Quantité en stock: 'Stock Quantity'
+Images du produit: 'Product Images'
+Image du produit: 'Product Image'
+__name__label__: 'Image'
+

@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[Vich\Uploadable]
 #[ORM\HasLifecycleCallbacks]
 class Product
 {
@@ -47,6 +50,15 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $productImages;
 
+    #[Vich\UploadableField(mapping: 'product_images', fileNameProperty: 'imageName')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $imageSize = null;
+
     /**
      * @var Collection<int, CartItem>
      */
@@ -59,6 +71,56 @@ class Product
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->cartItems = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    // Gestion des images
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if ($imageFile) {
+            // Cela déclenche une mise à jour pour que Doctrine mette à jour la base de données.
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
     }
 
     // Getters et Setters
@@ -149,7 +211,7 @@ class Product
         return $this->cartItems;
     }
 
-    public function addCartItem(CartItem $cartItem): static
+    public function addCartItem(CartItem $cartItem): self
     {
         if (!$this->cartItems->contains($cartItem)) {
             $this->cartItems->add($cartItem);
@@ -159,10 +221,9 @@ class Product
         return $this;
     }
 
-    public function removeCartItem(CartItem $cartItem): static
+    public function removeCartItem(CartItem $cartItem): self
     {
         if ($this->cartItems->removeElement($cartItem)) {
-            // set the owning side to null (unless already changed)
             if ($cartItem->getProduct() === $this) {
                 $cartItem->setProduct(null);
             }
