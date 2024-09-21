@@ -8,13 +8,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -39,6 +41,20 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // Faites tout autre traitement nécessaire, comme envoyer un e-mail
+            $email = (new Email())
+            ->from('admin@etincele.com')
+            ->to($user->getEmail())
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('bienvenu parmis nous')
+            ->text('Sending emails is fun again!')
+            // ->html('<p>See Twig integration for better HTML integration!</p>');
+            ->html($this->renderView('emails/registration.html.twig', ['user' => $user]));
+
+
+            $mailer->send($email);
 
             return $this->redirectToRoute('app_login');
         }

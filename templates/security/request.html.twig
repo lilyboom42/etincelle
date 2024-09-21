@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Password reset request{% endblock %}
+
+{% block body %}
+
+<h1>Réinitialiser votre mot de passe</h1>
+
+{{ form_start(form) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.submit) }}
+{{ form_end(form) }}
+
+{% for message in app.flashes('danger') %}
+    <div>{{ message }}</div>
+{% endfor %}
+{% endblock %}

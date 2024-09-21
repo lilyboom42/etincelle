@@ -157,7 +157,7 @@ button:hover, .btn:hover {
 
 /* Liens */
 a {
-    color: #FFD700;
+    color: #228B22;
     text-decoration: none;
 }
 
@@ -199,4 +199,110 @@ a:hover {
     text-align: center;
     display: block;
     margin-top: 10px;
+}
+
+/* Style du conteneur du formulaire */
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre du formulaire */
+h1 {
+    text-align: center;
+    color: #2F4F4F; /* Bleu nuit */
+    margin-bottom: 20px;
+}
+
+/* Style des champs de saisie */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #8FBC8F; /* Vert doux */
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #2F4F4F;
+}
+
+.form-control:focus {
+    border-color: #FFD700; /* Jaune doré */
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Effet doré */
+}
+
+/* Bouton de soumission */
+.btn-primary {
+    background-color: #8FBC8F; /* Vert doux */
+    color: #fff;
+    border: 2px solid #228B22; /* Vert forêt */
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #FFD700; /* Jaune doré au survol */
+    color: #2F4F4F; /* Bleu nuit */
+}
+
+/* Bouton secondaire pour s'inscrire */
+.btn-secondary {
+    background-color: #FFA07A; /* Corail clair */
+    color: #fff;
+    border: 2px solid #FF6347; /* Tomate */
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 40%;
+    margin-top: 10px;
+    text-align: center;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #FF6347; /* Tomate */
+    color: #fff;
+}
+
+/* Lien de réinitialisation du mot de passe */
+.btn-link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #FFD700; /* Jaune doré */
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    }
+
+
+.btn-link:hover {
+    color: #8B4513; /* Marron chocolat */
+}
+
+/* Style de la checkbox */
+.checkbox input {
+    margin-right: 5px;
+}
+
+.checkbox label {
+    color: #2F4F4F; /* Bleu nuit */
+    font-weight: bold;
+}
+
+.btn-control {
+    margin-top: 10px;
+    text-align: center;
 }
