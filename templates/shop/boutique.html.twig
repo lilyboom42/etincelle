@@ -1,55 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Boutique{% endblock %}
+{% block title %}Boutique
+{% endblock %}
 
 {% block body %}
-    <h1>Boutique</h1>
+	<h1>Boutique</h1>
 
-    {# Affichage des messages flash d'erreur et de succès #}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger">{{ message }}</div>
+	{% endfor %}
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">{{ message }}</div>
+	{% endfor %}
 
-    <a href="{{ path('product_new') }}" class="btn btn-primary mb-3">Ajouter un nouveau produit</a>
+	<a href="{{ path('product_new') }}" class="btn btn-primary mb-3">Ajouter un nouveau produit</a>
 
-    <div class="product-grid row">
-        {# Liste des produits #}
-        {% for product in products %}
-            <div class="product-card col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ product.name }}</h2>
-                        <p class="card-text">{{ product.description }}</p>
-                        <p class="card-text">Prix: {{ product.price }} €</p>
+	<div class="product-grid row">
+		{% for product in products %}
+			<div class="product-card col-md-4 mb-4">
+				<div class="card">
+					<div class="card-body">
+						<h2 class="card-title">{{ product.name }}</h2>
 
-                        {# Affichage du stock #}
-                        {% if product.stockQuantity > 0 %}
-                            <p class="text-success">En stock: {{ product.stockQuantity }}</p>
-                        {% else %}
-                            <p class="text-danger">Rupture de stock</p>
-                        {% endif %}
+						{% if product.productImages|length > 0 %}
+							<div class="product-images mb-2">
+								<img src="{{ asset(product.productImages|first.imagesPath) }}" alt="{{ product.name }}" class="product-image" style="width: 200px; height: 200px; object-fit: cover;">
+							</div>
+						{% else %}
+							<p>Aucune image disponible pour ce produit.</p>
+						{% endif %}
 
-                        {# Affichage des images du produit #}
-                        {% if product.productImages|length > 0 %}
-                            <div class="product-images mb-2">
-                                {% for image in product.productImages %}
-                                    <img src="{{ asset(image.imagesPath) }}" alt="{{ product.name }}" class="product-image">
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p>Aucune image disponible pour ce produit.</p>
-                        {% endif %}
+						<p class="card-text">Prix:
+							{{ product.price }}
+							€</p>
 
-                        <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary mt-3">Ajouter au panier</a>
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <p>Aucun produit disponible pour le moment.</p>
-        {% endfor %}
-    </div>
+						{% if product.stockQuantity > 0 %}
+							<p class="text-success">En stock:
+								{{ product.stockQuantity }}</p>
+						{% else %}
+							<p class="text-danger">Rupture de stock</p>
+						{% endif %}
+
+						<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary mt-3">Ajouter au panier</a>
+						<a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning mt-3">Modifier</a>
+
+						{# Vérifier si un formulaire de suppression existe pour ce produit #}
+						<form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" style="display:inline;">
+								<button type="submit" class="delete-button">Supprimer</button>
+							</form>
+
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<p>Aucun produit disponible pour le moment.</p>
+		{% endfor %}
+
+
+	</div>
 {% endblock %}

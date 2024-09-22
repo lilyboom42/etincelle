@@ -184,11 +184,7 @@ a:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.product-image {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-}
+
 
 .btn-primary {
     background-color: #228B22;
@@ -316,10 +312,7 @@ h1 {
     margin-bottom: 30px;
 }
 
-.product-image {
-    max-width: 100px;
-    margin-right: 10px;
-}
+
 
 .card {
     border: 1px solid #ddd;
@@ -329,4 +322,8 @@ h1 {
 
 .btn {
     margin-top: 10px;
+}
+
+.product-details {
+    margin-bottom: 20px;
 }
