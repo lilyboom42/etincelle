@@ -7,11 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-
 
 #[ORM\Entity(repositoryClass: BlogPostRepository::class)]
-#[Vich\Uploadable]
 #[ORM\HasLifecycleCallbacks]
 class BlogPost
 {
@@ -127,7 +124,7 @@ class BlogPost
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
-            $category->getBlogPosts()->add($this); // Synchronisation inverse
+            $category->getBlogPosts()->add($this);
         }
         return $this;
     }
@@ -135,7 +132,7 @@ class BlogPost
     public function removeCategory(BlogPostCategory $category): static
     {
         if ($this->categories->removeElement($category)) {
-            $category->getBlogPosts()->removeElement($this); // Synchronisation inverse
+            $category->getBlogPosts()->removeElement($this);
         }
         return $this;
     }
@@ -173,7 +170,7 @@ class BlogPost
     {
         if (!$this->blogPostCategoryRelations->contains($relation)) {
             $this->blogPostCategoryRelations->add($relation);
-            $relation->setBlogPost($this); // Synchronisation inverse
+            $relation->setBlogPost($this);
         }
         return $this;
     }
@@ -182,7 +179,7 @@ class BlogPost
     {
         if ($this->blogPostCategoryRelations->removeElement($relation)) {
             if ($relation->getBlogPost() === $this) {
-                $relation->setBlogPost(null); // Synchronisation inverse
+                $relation->setBlogPost(null);
             }
         }
         return $this;

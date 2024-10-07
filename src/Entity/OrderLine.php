@@ -20,10 +20,11 @@ class OrderLine
     #[Assert\Positive(message: "La quantité doit être un nombre positif.")]
     private ?int $quantity = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     #[Assert\NotBlank(message: "Le prix ne doit pas être vide.")]
     #[Assert\PositiveOrZero(message: "Le prix doit être un nombre positif ou zéro.")]
-    private ?string $price = null;
+    private ?string $price = null; 
+
 
     #[ORM\ManyToOne(inversedBy: 'orderLines')]
     #[ORM\JoinColumn(nullable: false)]
@@ -34,24 +35,21 @@ class OrderLine
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: "La commande associée ne doit pas être nulle.")]
     private ?Order $order = null;
-    
+
 
     // Get the ID of the order line.
-    // Obtenir l'ID de la ligne de commande.
     public function getId(): ?int
     {
         return $this->id;
     }
 
     // Get the quantity of the order line.
-    // Obtenir la quantité de la ligne de commande.
     public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
     // Set the quantity of the order line.
-    // Définir la quantité de la ligne de commande.
     public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
@@ -60,15 +58,13 @@ class OrderLine
     }
 
     // Get the price of the order line.
-    // Obtenir le prix de la ligne de commande.
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
     // Set the price of the order line.
-    // Définir le prix de la ligne de commande.
-    public function setPrice(string $price): static
+    public function setPrice(float $price): static
     {
         $this->price = $price;
 
@@ -76,14 +72,12 @@ class OrderLine
     }
 
     // Get the product associated with the order line.
-    // Obtenir le produit associé à la ligne de commande.
     public function getProduct(): ?Product
     {
         return $this->product;
     }
 
     // Set the product associated with the order line.
-    // Définir le produit associé à la ligne de commande.
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
@@ -92,14 +86,12 @@ class OrderLine
     }
 
     // Get the order associated with the order line.
-    // Obtenir la commande associée à la ligne de commande.
     public function getOrder(): ?Order
     {
         return $this->order;
     }
 
     // Set the order associated with the order line.
-    // Définir la commande associée à la ligne de commande.
     public function setOrder(?Order $order): static
     {
         $this->order = $order;

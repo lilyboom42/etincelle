@@ -16,16 +16,16 @@
         <label>Images du produit</label>
         <div id="product-images-wrapper" data-prototype="{{ form_widget(form.productImages.vars.prototype)|e('html_attr') }}">
             {% for imageForm in form.productImages %}
-                <div class="product-image-item" style="margin-bottom: 10px;">
-                    {{ form_widget(imageForm.imageFile) }}
+    <div class="product-image-item" style="margin-bottom: 10px;">
+        {{ form_widget(imageForm.imageFile.children.file) }}
 
-                    {% if imageForm.vars.data and imageForm.vars.data.imagesPath %}
-                        <img src="{{ asset(imageForm.vars.data.imagesPath) }}" alt="Image actuelle" class="mb-2" style="max-width: 100px;">
-                        <input type="hidden" name="remove-image-{{ loop.index }}" value="0" class="remove-image-input">
-                        <button type="button" class="btn btn-danger remove-existing-image" data-image-id="{{ loop.index }}">Supprimer l'image</button>
-                    {% endif %}
-                </div>
-            {% endfor %}
+        {% if imageForm.vars.data and imageForm.vars.data.imagesPath %}
+            <img src="{{ vich_uploader_asset(imageForm.vars.data, 'imageFile') }}" alt="Image actuelle" class="mb-2" style="max-width: 100px;">
+            {{ form_widget(imageForm.imageFile.children.delete) }}
+        {% endif %}
+    </div>
+{% endfor %}
+
         </div>
     </div>
 
@@ -47,7 +47,7 @@
             let newForm = prototype.replace(/__name__/g, index);
             let newImageItem = document.createElement('div');
             newImageItem.classList.add('product-image-item');
-            newImageItem.innerHTML = newForm + '<button type="button" class="btn btn-danger remove-image-button">Supprimer</button>';
+            newImageItem.innerHTML = newForm;
             productImagesWrapper.appendChild(newImageItem);
             index++;
         });
@@ -55,18 +55,6 @@
         // Supprimer une image ajoutée
         productImagesWrapper.addEventListener('click', function (event) {
             if (event.target.classList.contains('remove-image-button')) {
-                event.target.closest('.product-image-item').remove();
-            }
-        });
-
-        // Supprimer une image existante
-        productImagesWrapper.addEventListener('click', function (event) {
-            if (event.target.classList.contains('remove-existing-image')) {
-                let imageId = event.target.getAttribute('data-image-id');
-                let removeInput = document.querySelector('input[name="remove-image-' + imageId + '"]');
-                if (removeInput) {
-                    removeInput.value = 1; // Marquer l'image pour suppression
-                }
                 event.target.closest('.product-image-item').remove();
             }
         });

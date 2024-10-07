@@ -3,68 +3,121 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route('/favorite')]
+#[IsGranted('ROLE_USER')]
 class FavoriteController extends AbstractController
 {
-    /**
-     * Adds a product to the user's favorites.
-     * Ajoute un produit aux favoris de l'utilisateur.
-     */
-    #[Route('/favorites/add/{productId}', name: 'add_favorite', methods: ['POST'])]
-    public function addFavorite(int $productId, ProductRepository $productRepository, EntityManagerInterface $em, #[CurrentUser] $user): Response
+    #[Route('/add/{id}', name: 'favorite_add', methods: ['POST'])]
+    public function add(Product $product, EntityManagerInterface $entityManager, Request $request): Response
     {
-        // Find the product by its ID
-        // Trouver le produit par son ID
-        $product = $productRepository->find($productId);
+        $user = $this->getUser();
 
-        if (!$product) {
-            // Throw an exception if the product does not exist
-            // Lancer une exception si le produit n'existe pas
-            throw $this->createNotFoundException('Le produit n\'existe pas.');
+        if (!$user instanceof \App\Entity\User) {
+            throw new \LogicException('L\'utilisateur n\'est pas authentifié ou n\'est pas une instance de User.');
         }
 
-        // Add the product to the user's favorites
-        // Ajouter le produit aux favoris de l'utilisateur
-        $user->addFavorite($product);
-        $em->persist($user);
-        $em->flush();
+        if (!$user->getFavorites()->contains($product)) {
+            $user->addFavorite($product);
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-        // Redirect to the route that displays the favorites
-        // Rediriger vers la route qui affiche les favoris
-        return $this->redirectToRoute('some_route_to_display_favorites');
+            $this->addFlash('success', 'Produit ajouté aux favoris.');
+        } else {
+            $this->addFlash('info', 'Ce produit est déjà dans vos favoris.');
+        }
+
+        // Redirection vers la page précédente
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer ? $referer : $this->generateUrl('shop_index'));
     }
 
-    /**
-     * Removes a product from the user's favorites.
-     * Supprime un produit des favoris de l'utilisateur.
-     */
-    #[Route('/favorites/remove/{productId}', name: 'remove_favorite', methods: ['POST'])]
-    public function removeFavorite(int $productId, ProductRepository $productRepository, EntityManagerInterface $em, #[CurrentUser] $user): Response
+    #[Route('/remove/{id}', name: 'favorite_remove', methods: ['POST'])]
+    public function remove(Product $product, EntityManagerInterface $entityManager, Request $request): Response
     {
-        // Find the product by its ID
-        // Trouver le produit par son ID
-        $product = $productRepository->find($productId);
+        $user = $this->getUser();
 
-        if (!$product) {
-            // Throw an exception if the product does not exist
-            // Lancer une exception si le produit n'existe pas
-            throw $this->createNotFoundException('Le produit n\'existe pas.');
+        if (!$user instanceof \App\Entity\User) {
+            throw new \LogicException('L\'utilisateur n\'est pas authentifié ou n\'est pas une instance de User.');
         }
 
-        // Remove the product from the user's favorites
-        // Supprimer le produit des favoris de l'utilisateur
-        $user->removeFavorite($product);
-        $em->persist($user);
-        $em->flush();
+        if ($user->getFavorites()->contains($product)) {
+            $user->removeFavorite($product);
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-        // Redirect to the route that displays the favorites
-        // Rediriger vers la route qui affiche les favoris
-        return $this->redirectToRoute('some_route_to_display_favorites');
+            $this->addFlash('success', 'Produit retiré des favoris.');
+        } else {
+            $this->addFlash('info', 'Ce produit n\'est pas dans vos favoris.');
+        }
+
+        // Redirection vers la page précédente
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer ? $referer : $this->generateUrl('shop_index'));
+    }
+
+    #[Route('/', name: 'favorite_list', methods: ['GET'])]
+    public function list(): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof \App\Entity\User) {
+            throw new \LogicException('L\'utilisateur n\'est pas authentifié ou n\'est pas une instance de User.');
+        }
+
+        $favorites = $user->getFavorites();
+
+        return $this->render('favorite/list.html.twig', [
+            'favorites' => $favorites,
+        ]);
+    }
+
+    // Optionnel: Méthode pour ajouter un favori en AJAX
+    #[Route('/add-ajax/{id}', name: 'favorite_add_ajax', methods: ['POST'])]
+    public function addAjax(Product $product, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof \App\Entity\User) {
+            return new JsonResponse(['error' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if (!$user->getFavorites()->contains($product)) {
+            $user->addFavorite($product);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return new JsonResponse(['message' => 'Produit ajouté aux favoris.']);
+        }
+
+        return new JsonResponse(['message' => 'Produit déjà dans vos favoris.']);
+    }
+
+    // Optionnel: Méthode pour supprimer un favori en AJAX
+    #[Route('/remove-ajax/{id}', name: 'favorite_remove_ajax', methods: ['POST'])]
+    public function removeAjax(Product $product, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof \App\Entity\User) {
+            return new JsonResponse(['error' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($user->getFavorites()->contains($product)) {
+            $user->removeFavorite($product);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return new JsonResponse(['message' => 'Produit retiré des favoris.']);
+        }
+
+        return new JsonResponse(['message' => 'Produit non trouvé dans vos favoris.']);
     }
 }

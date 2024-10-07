@@ -32,7 +32,7 @@ class Product
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     #[Assert\NotBlank(message: "Le prix ne doit pas être vide.")]
     #[Assert\GreaterThan(value: 0, message: "Le prix doit être supérieur à 0.")]
-    private ?float $price = null;
+    private ?string $price = null;
 
     #[ORM\Column]
     #[Assert\NotNull(message: "La quantité en stock ne doit pas être nulle.")]
@@ -59,18 +59,23 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?int $imageSize = null;
 
-    /**
-     * @var Collection<int, CartItem>
-     */
-    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'product', orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartItem::class, orphanRemoval: true)]
     private Collection $cartItems;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductCustomization::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $productCustomizations;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderLine::class)]
+    private Collection $orderLines;
 
     public function __construct()
     {
         $this->productImages = new ArrayCollection();
+        $this->cartItems = new ArrayCollection();
+        $this->productCustomizations = new ArrayCollection();
+        $this->orderLines = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
-        $this->cartItems = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -87,13 +92,11 @@ class Product
     }
 
     // Gestion des images
-
     public function setImageFile(?File $imageFile = null): void
     {
         $this->imageFile = $imageFile;
 
         if ($imageFile) {
-            // Cela déclenche une mise à jour pour que Doctrine mette à jour la base de données.
             $this->updatedAt = new \DateTimeImmutable();
         }
     }
@@ -124,7 +127,6 @@ class Product
     }
 
     // Getters et Setters
-
     public function getId(): ?int
     {
         return $this->id;
@@ -152,12 +154,12 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice(): ?string
     {
         return $this->price;
     }
 
-    public function setPrice(float $price): self
+    public function setPrice(string $price): self
     {
         $this->price = $price;
         return $this;
@@ -174,38 +176,6 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection<int, ProductImage>
-     */
-    public function getProductImages(): Collection
-    {
-        return $this->productImages;
-    }
-
-    public function addProductImage(ProductImage $productImage): self
-    {
-        if (!$this->productImages->contains($productImage)) {
-            $this->productImages->add($productImage);
-            $productImage->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProductImage(ProductImage $productImage): self
-    {
-        if ($this->productImages->removeElement($productImage)) {
-            if ($productImage->getProduct() === $this) {
-                $productImage->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CartItem>
-     */
     public function getCartItems(): Collection
     {
         return $this->cartItems;
@@ -231,4 +201,69 @@ class Product
 
         return $this;
     }
+
+    public function getProductCustomizations(): Collection
+    {
+        return $this->productCustomizations;
+    }
+
+    public function addProductCustomization(ProductCustomization $customization): self
+    {
+        if (!$this->productCustomizations->contains($customization)) {
+            $this->productCustomizations[] = $customization;
+            $customization->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductCustomization(ProductCustomization $customization): self
+    {
+        if ($this->productCustomizations->removeElement($customization)) {
+            if ($customization->getProduct() === $this) {
+                $customization->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOrderLines(): Collection
+    {
+        return $this->orderLines;
+    }
+
+    public function addOrderLine(OrderLine $orderLine): self
+    {
+        if (!$this->orderLines->contains($orderLine)) {
+            $this->orderLines->add($orderLine);
+            $orderLine->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderLine(OrderLine $orderLine): self
+    {
+        if ($this->orderLines->removeElement($orderLine)) {
+            if ($orderLine->getProduct() === $this) {
+                $orderLine->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProductImages(): Collection
+{
+    return $this->productImages;
+}
+
+public function setProductImages(Collection $productImages): self
+{
+    $this->productImages = $productImages;
+    return $this;
+}
+
+
 }

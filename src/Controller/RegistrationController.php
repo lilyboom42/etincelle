@@ -23,7 +23,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
+            // /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
             // Encode le mot de passe en clair
@@ -54,8 +54,14 @@ class RegistrationController extends AbstractController
             ->html($this->renderView('emails/registration.html.twig', ['user' => $user]));
 
 
-            $mailer->send($email);
+            try {
+                $mailer->send($email);
+                $this->addFlash('success', 'Inscription réussie, un e-mail de bienvenue vous a été envoyé.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'L\'inscription a réussi, mais un problème est survenu lors de l\'envoi de l\'e-mail.');
+            }
 
+            // Rediriger vers la page de connexion après l'inscription
             return $this->redirectToRoute('app_login');
         }
 

@@ -22,19 +22,14 @@ class Cart
     /**
      * @var Collection<int, CartItem>
      */
-    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'cart', orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $cartItems;
 
-    /**
-     * @var Collection<int, CartItem>
-     */
-    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'cart', orphanRemoval: true)]
-    private Collection $items;
+    
 
     public function __construct()
     {
         $this->cartItems = new ArrayCollection();
-        $this->items = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,36 +73,6 @@ class Cart
             // set the owning side to null (unless already changed)
             if ($cartItem->getCart() === $this) {
                 $cartItem->setCart(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CartItem>
-     */
-    public function getItems(): Collection
-    {
-        return $this->items;
-    }
-
-    public function addItem(CartItem $item): static
-    {
-        if (!$this->items->contains($item)) {
-            $this->items->add($item);
-            $item->setCart($this);
-        }
-
-        return $this;
-    }
-
-    public function removeItem(CartItem $item): static
-    {
-        if ($this->items->removeElement($item)) {
-            // set the owning side to null (unless already changed)
-            if ($item->getCart() === $this) {
-                $item->setCart(null);
             }
         }
 

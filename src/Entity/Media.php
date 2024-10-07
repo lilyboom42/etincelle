@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\MediaRepository;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
+#[Vich\Uploadable]
 class Media
 {
     #[ORM\Id]
@@ -18,65 +21,70 @@ class Media
     #[ORM\JoinColumn(nullable: false)]
     private ?BlogPost $blogPost = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le chemin du média ne doit pas être vide.")]
-    private ?string $path = null;
+    #[Vich\UploadableField(mapping: 'media_files', fileNameProperty: 'filename')]
+    #[Assert\File(
+        maxSize: '10M',
+        mimeTypes: ['image/jpeg', 'image/png', 'video/mp4'],
+        mimeTypesMessage: 'Veuillez télécharger un fichier valide (JPEG, PNG, MP4).'
+    )]
+    private ?File $mediaFile = null;
 
-    #[ORM\Column(length: 50)]
-    #[Assert\Choice(choices: ["image", "video"], message: "Le type doit être soit 'image' soit 'video'.")]
-    private ?string $type = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $filename = null;
 
-    // Get the ID of the media.
-    // Obtenir l'ID du média.
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    // Get the associated BlogPost of the media.
-    // Obtenir l'article de blog associé au média.
     public function getBlogPost(): ?BlogPost
     {
         return $this->blogPost;
     }
 
-    // Set the associated BlogPost of the media.
-    // Définir l'article de blog associé au média.
-    public function setBlogPost(?BlogPost $blogPost): static
+    public function setBlogPost(?BlogPost $blogPost): self
     {
         $this->blogPost = $blogPost;
 
         return $this;
     }
 
-    // Get the path of the media.
-    // Obtenir le chemin du média.
-    public function getPath(): ?string
+    public function getMediaFile(): ?File
     {
-        return $this->path;
+        return $this->mediaFile;
     }
 
-    // Set the path of the media.
-    // Définir le chemin du média.
-    public function setPath(string $path): static
+    public function setMediaFile(?File $mediaFile = null): void
     {
-        $this->path = $path;
+        $this->mediaFile = $mediaFile;
+        if ($mediaFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getFilename(): ?string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(?string $filename): self
+    {
+        $this->filename = $filename;
 
         return $this;
     }
 
-    // Get the type of the media (image or video).
-    // Obtenir le type du média (image ou vidéo).
-    public function getType(): ?string
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->type;
+        return $this->updatedAt;
     }
 
-    // Set the type of the media (image or video).
-    // Définir le type du média (image ou vidéo).
-    public function setType(string $type): static
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
-        $this->type = $type;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

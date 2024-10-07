@@ -1,35 +1,31 @@
 <?php
 
+// src/Form/MediaType.php
+
 namespace App\Form;
 
+use App\Entity\Media;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Entity\ProductImage;
 use Vich\UploaderBundle\Form\Type\VichFileType;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
-
-class ProductImageType extends AbstractType
+class MediaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-        ->add('imageFile', VichImageType::class, [
+        $builder->add('file', VichFileType::class, [
+            'label' => 'Fichier à télécharger',
             'required' => false,
-            'label' => 'Image du produit',
-            'allow_delete' => true, // permet la suppression
-            'download_label' => 'Voir le fichier',
-            'download_uri' => false,
-
+            'allow_delete' => true,
+            'download_uri' => true,
         ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ProductImage::class,
+            'data_class' => Media::class,
         ]);
     }
 }

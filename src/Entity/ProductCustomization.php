@@ -32,74 +32,54 @@ class ProductCustomization
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     #[Assert\NotNull(message: "Le prix ne doit pas être nul.")]
     #[Assert\Positive(message: "Le prix doit être supérieur à zéro.")]
-    private ?float $price = null;
+    private ?string $price = null;
 
-    // Get the ID of the product customization
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    // Get the associated product
     public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    // Set the associated product
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
         return $this;
     }
 
-    // Get the customization name
     public function getCustomizationName(): ?string
     {
         return $this->customizationName;
     }
 
-    // Set the customization name
     public function setCustomizationName(string $customizationName): static
     {
         $this->customizationName = $customizationName;
         return $this;
     }
 
-    // Get the customization option
     public function getCustomizationOption(): ?string
     {
         return $this->customizationOption;
     }
 
-    // Set the customization option
     public function setCustomizationOption(string $customizationOption): static
     {
         $this->customizationOption = $customizationOption;
         return $this;
     }
 
-    // Get the price of the customization
-    public function getPrice(): ?float
+    public function getPrice(): ?string
     {
         return $this->price;
     }
 
-    // Set the price of the customization
-    public function setPrice(float $price): static
+    public function setPrice(string $price): static
     {
         $this->price = $price;
         return $this;
-    }
-
-    // Returns a full description of the product customization
-    public function getFullDescription(): string
-    {
-        return sprintf(
-            'Customization: %s - Option: %s - Price: %.2f',
-            $this->customizationName,
-            $this->customizationOption,
-            $this->price
-        );
     }
 }

@@ -32,6 +32,7 @@ class ProductController extends AbstractController
         $products = $this->productRepository->findAll();
 
         $deleteForms = [];
+
         foreach ($products as $product) {
             if ($product->getId()) {
                 // Créer un formulaire de suppression pour ce produit
@@ -49,12 +50,16 @@ class ProductController extends AbstractController
             'delete_forms' => $deleteForms,
         ]);
     }
+    
 
     private function createDeleteForm(Product $product): \Symfony\Component\Form\FormInterface
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('product_delete', ['id' => $product->getId()]))
             ->setMethod('POST')
+            ->add('_token', \Symfony\Component\Form\Extension\Core\Type\HiddenType::class, [
+                'data' => $this->csrfTokenManager->getToken('delete' . $product->getId())->getValue(),
+            ])
             ->getForm();
     }
 
@@ -70,6 +75,10 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($product->getProductImages() as $productImage) {
+                $productImage->setProduct($product); // Associer chaque image au produit
+            }
+
             $this->entityManager->persist($product);
             $this->entityManager->flush();
 
@@ -85,16 +94,24 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/{id}/delete', name: 'product_delete', methods: ['POST'])]
-    public function delete(Product $product, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Product $product): Response
     {
         if (!$product) {
             throw new NotFoundHttpException('Le produit n\'existe pas');
         }
 
-        $entityManager->remove($product);
-        $entityManager->flush();
+        // Vérification du jeton CSRF
+        $submittedToken = $request->request->get('_token');
+        
+        if ($this->isCsrfTokenValid('delete' . $product->getId(), $submittedToken)) {
+            $this->entityManager->remove($product);
+            $this->entityManager->flush();
 
-        $this->addFlash('success', 'Le produit a été supprimé avec succès!');
+            $this->addFlash('success', 'Le produit a été supprimé avec succès!');
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide. La suppression a échoué.');
+        }
+
         return $this->redirectToRoute('shop_index');
     }
 

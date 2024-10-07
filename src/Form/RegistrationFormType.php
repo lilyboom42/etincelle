@@ -1,7 +1,5 @@
 <?php
 
-// src/Form/RegistrationFormType.php
-
 namespace App\Form;
 
 use App\Entity\User;
@@ -29,14 +27,18 @@ class RegistrationFormType extends AbstractType
             ->add('lastName', TextType::class, [
                 'label' => 'Nom de famille',
             ])
-            // ->add('agreeTerms', CheckboxType::class, [
+            ->add('userName', TextType::class, [
+                'label' => 'Pseudo',
+            ])
+                  // ->add('agreeTerms', CheckboxType::class, [
             //     'mapped' => false,
             //     'constraints' => [
             //         new IsTrue([
             //             'message' => 'Vous devez accepter nos termes.',
             //         ]),
             //     ],
-            // ])
+            // ])    
+            // Champ pour le mot de passe
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
@@ -63,4 +65,4 @@ class RegistrationFormType extends AbstractType
             'data_class' => User::class,
         ]);
     }
-}
+}      

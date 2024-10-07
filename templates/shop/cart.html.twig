@@ -2,21 +2,24 @@
 
 {% block title %}Mon Panier{% endblock %}
 
+
+
 {% block body %}
-    <h1>Votre Panier</h1>
+    <h1 style="text-align: center;">Votre Panier</h1> {# Centrer le titre avec inline CSS #}
 
     {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
+        <div class="alert alert-danger" style="text-align: center;">{{ message }}</div> {# Centrer les alertes avec inline CSS #}
     {% endfor %}
 
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
+        <div class="alert alert-success" style="text-align: center;">{{ message }}</div> {# Centrer les alertes avec inline CSS #}
     {% endfor %}
 
     {% if cart|length > 0 %}
         <table>
             <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Produit</th>
                     <th>Quantité</th>
                     <th>Prix Unitaire</th>
@@ -27,6 +30,14 @@
             <tbody>
                 {% for item in cart %}
                     <tr>
+                        <td>
+                            {% if item.product.productImages|length > 0 and item.product.productImages|first.imagesPath is not empty %}
+                                {% set imageUrl = vich_uploader_asset(item.product.productImages|first, 'imageFile') %}
+                                <img src="{{ imageUrl }}" alt="{{ item.product.name }}" class="product-image">
+                            {% else %}
+                                <p>Aucune image</p>
+                            {% endif %}
+                        </td>
                         <td>{{ item.product.name }}</td>
                         <td>
                             <form action="{{ path('update_cart_quantity', {id: item.product.id}) }}" method="post">
@@ -44,7 +55,6 @@
             </tbody>
         </table>
     {% else %}
-        <p>Votre panier est vide.</p>
+        <p style="text-align: center;">Votre panier est vide.</p> {# Centrer le texte "panier vide" avec inline CSS #}
     {% endif %}
-
 {% endblock %}

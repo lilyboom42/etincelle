@@ -1,62 +1,82 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Boutique
-{% endblock %}
+{% block title %}Boutique{% endblock %}
 
 {% block body %}
-	<h1>Boutique</h1>
+    <h1>Boutique</h1>
 
-	{% for message in app.flashes('error') %}
-		<div class="alert alert-danger">{{ message }}</div>
-	{% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
 
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success">{{ message }}</div>
-	{% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
 
-	<a href="{{ path('product_new') }}" class="btn btn-primary mb-3">Ajouter un nouveau produit</a>
+    <a href="{{ path('product_new') }}" class="btn btn-primary mb-3">Ajouter un nouveau produit</a>
 
-	<div class="product-grid row">
-		{% for product in products %}
-			<div class="product-card col-md-4 mb-4">
-				<div class="card">
-					<div class="card-body">
-						<h2 class="card-title">{{ product.name }}</h2>
+    <div class="product-grid row">
+        {% for product in products %}
+            <div class="product-card col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ product.name }}</h2>
 
-						{% if product.productImages|length > 0 %}
-							<div class="product-images mb-2">
-								<img src="{{ asset(product.productImages|first.imagesPath) }}" alt="{{ product.name }}" class="product-image" style="width: 200px; height: 200px; object-fit: cover;">
-							</div>
-						{% else %}
-							<p>Aucune image disponible pour ce produit.</p>
-						{% endif %}
+                        {% if product.productImages|length > 0 and product.productImages|first.imagesPath is not empty %}
+                            {% set imageUrl = vich_uploader_asset(product.productImages|first, 'imageFile') %}
+                            <img src="{{ imageUrl }}" alt="{{ product.name }}" class="product-image">
+                        {% else %}
+                            <p>Aucune image disponible pour ce produit.</p>
+                        {% endif %}
 
-						<p class="card-text">Prix:
-							{{ product.price }}
-							€</p>
+                        <p class="card-text">Prix: {{ product.price }} €</p>
 
-						{% if product.stockQuantity > 0 %}
-							<p class="text-success">En stock:
-								{{ product.stockQuantity }}</p>
-						{% else %}
-							<p class="text-danger">Rupture de stock</p>
-						{% endif %}
+                        {% if product.stockQuantity > 0 %}
+                            <p class="text-success">En stock: {{ product.stockQuantity }}</p>
+                        {% else %}
+                            <p class="text-danger">Rupture de stock</p>
+                        {% endif %}
 
-						<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary mt-3">Ajouter au panier</a>
-						<a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning mt-3">Modifier</a>
+                        <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary mt-3">Ajouter au panier</a>
+                        <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning mt-3">Modifier</a>
+                        <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-info mt-3">Détails</a>
 
-						{# Vérifier si un formulaire de suppression existe pour ce produit #}
-						<form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" style="display:inline;">
-								<button type="submit" class="delete-button">Supprimer</button>
-							</form>
+                        {# Bouton Favoris avec un Cœur #}
+                        {% if app.user %}
+                            {% set isFavorite = false %}
+                            {% for favorite in app.user.getFavorites() %}
+                                {% if favorite.id == product.id %}
+                                    {% set isFavorite = true %}
+                                {% endif %}
+                            {% endfor %}
 
-					</div>
-				</div>
-			</div>
-		{% else %}
-			<p>Aucun produit disponible pour le moment.</p>
-		{% endfor %}
+                            {% if isFavorite %}
+                                <form action="{{ path('favorite_remove', {'id': product.id}) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger mt-3">
+                                        <i class="fa fa-heart"></i> Retirer des favoris
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form action="{{ path('favorite_add', {'id': product.id}) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-outline-danger mt-3">
+                                        <i class="fa fa-heart-o"></i> Ajouter aux favoris
+                                    </button>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                            <p><a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter ce produit à vos favoris.</p>
+                        {% endif %}
 
+                        <form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                            <button type="submit" class="delete-button btn btn-danger">Supprimer</button>
+                        </form>
 
-	</div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun produit disponible pour le moment.</p>
+        {% endfor %}
+    </div>
 {% endblock %}

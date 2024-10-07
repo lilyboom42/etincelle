@@ -3,8 +3,9 @@
 
 parameters:
 
+    media_directory: '%kernel.project_dir%/public/uploads/media'
     product_image: '/uploads/images/products'
-    blog_image: '/uploads/images/blog'
+    blog_media: '/uploads/images/blog_media'
 services:
     # default configuration for services in *this* file
     _defaults:

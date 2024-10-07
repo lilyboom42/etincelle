@@ -3,3 +3,15 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+# blog_index:
+#     path: /blog
+#     controller: App\Controller\BlogController::index
+#     methods: [GET]
+
+# blog_new:
+#     path: /blog/new
+#     controller: App\Controller\BlogController::new
+#     methods: [GET, POST]
+# app_login:
+#     path: /login
+#     controller: App\Controller\SecurityController::login

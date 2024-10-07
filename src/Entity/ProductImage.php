@@ -68,8 +68,9 @@ class ProductImage
     }
 
     public function getImagesPath(): ?string
-    {
-        return 'uploads/images/' . $this->imagesPath;
-    }
+{
+    return $this->imagesPath;
+}
+
     
 }

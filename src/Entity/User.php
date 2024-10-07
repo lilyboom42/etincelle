@@ -28,7 +28,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: "Le mot de passe ne doit pas être vide.")]
     private ?string $password = null;
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
@@ -42,6 +41,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank(message: "Le nom de famille ne doit pas être vide.")]
     private ?string $lastName = null;
+
+    #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: "Le nom d'utilisateur ne doit pas être vide.")]
+    private ?string $username = null;
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $isActive = true;
@@ -129,6 +132,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = $roles;
 
         return $this;
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->getRoles(), true);
     }
 
     public function getPassword(): ?string
@@ -323,6 +331,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->cart = $cart;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }

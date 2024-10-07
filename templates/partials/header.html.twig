@@ -1,30 +1,60 @@
 <!-- Header -->
 <header>
-    <div class="header-content">
-        <h1>L'Étincelle</h1>
-        <nav class="social-icons">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-        </nav>
-    </div>
+	<div class="header-content">
+		<h1>L'Étincelle</h1>
+		<nav class="social-icons">
+			<a href="#">
+				<i class="fab fa-facebook-f"></i>
+			</a>
+			<a href="#">
+				<i class="fab fa-twitter"></i>
+			</a>
+			<a href="#">
+				<i class="fab fa-instagram"></i>
+			</a>
+		</nav>
+	</div>
 </header>
 
 <!-- Navigation Bar -->
 <nav class="main-nav">
-    <ul>
-        <li><a href="/">Accueil</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="/boutique">Boutique</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="/customization/new">Customisation</a></li>
-        <li><a href="/panier">Panier</a></li>
-        {# <li><a href="{{ path('product_new') }}" class="add">Ajouter un produit</a></li> #}
-        
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <li><a href="{{ path('app_logout') }}" class="add">Déconnexion</a></li>
-        {% else %}
-            <li><a href="{{ path('app_login') }}" class="add">Connexion</a></li>
-        {% endif %}
-    </ul>
+	<ul>
+		<li>
+			<a href="{{ path('home') }}">Accueil</a>
+		</li>
+		<li>
+			<a href="#">Services</a>
+		</li>
+		<li>
+			<a href="{{ path('shop_index') }}">Boutique</a>
+		</li>
+		<li>
+			<a href="#">Contact</a>
+		</li>
+		<li>
+			<a href="{{ path('customizations_list') }}">Customisation</a>
+		</li>
+		<li>
+			<a href="{{ path('view_cart') }}">Panier</a>
+		</li>
+		<li>
+		<a href="{{path('blog_index')}}">Blog</a>
+		</li>
+		{% if app.user %}
+    <a href="{{ path('favorite_list') }}">Mes favoris</a>
+{% endif %}
+
+
+		{# <li><a href="{{ path('product_new') }}" class="add">Ajouter un produit</a></li> #}
+
+		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+			<li>
+				<a href="{{ path('app_logout') }}" class="add">Déconnexion</a>
+			</li>
+		{% else %}
+			<li>
+				<a href="{{ path('app_login') }}" class="add">Connexion</a>
+			</li>
+		{% endif %}
+	</ul>
 </nav>

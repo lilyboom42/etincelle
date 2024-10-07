@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes favoris{% endblock %}
+
+{% block body %}
+    <h1>Mes favoris</h1>
+
+    {% if favorites|length > 0 %}
+        <div class="favorites-list">
+            {% for product in favorites %}
+                <div class="favorite-item">
+                    <h2><a href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }}</a></h2>
+
+                    {# Affichage de la première image du produit comme lien vers la page de détails #}
+                    {% if product.productImages|length > 0 %}
+                        <div class="product-image">
+                            <a href="{{ path('product_show', {'id': product.id}) }}">
+                                <img src="{{ vich_uploader_asset(product.productImages|first, 'imageFile') }}" alt="{{ product.name }}" class="product-image" style="max-width: 150px;">
+                            </a>
+                        </div>
+                    {% else %}
+                        <p>Aucune image disponible pour ce produit.</p>
+                    {% endif %}
+
+                    <p>{{ product.description }}</p>
+
+                    <form action="{{ path('favorite_remove', {'id': product.id}) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Retirer des favoris</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Vous n'avez pas encore de favoris.</p>
+    {% endif %}
+{% endblock %}

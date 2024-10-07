@@ -21,3 +21,12 @@ Images du produit: 'Product Images'
 Image du produit: 'Product Image'
 __name__label__: 'Image'
 
+Title: "Title"
+Content: "Content"
+Plain password: "Plain password"
+City: "City"
+Address: "Address"
+Country: "Country"
+Postal code: "Postal code"
+Phone number: "Phone number"
+Pseudo: "Username"

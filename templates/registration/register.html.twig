@@ -19,6 +19,7 @@
     {{ form_row(registrationForm.email) }}
     {{ form_row(registrationForm.firstName) }}
     {{ form_row(registrationForm.lastName) }}
+    {{ form_row(registrationForm.userName) }}
     {{ form_row(registrationForm.plainPassword) }}
     {{ form_row(registrationForm.userDetail.city) }}
     {{ form_row(registrationForm.userDetail.address) }}
@@ -26,6 +27,7 @@
     {{ form_row(registrationForm.userDetail.postalCode) }}
     {{ form_row(registrationForm.userDetail.phoneNumber) }}
     {{ form_row(registrationForm.userDetail.birthDate) }}
+    
     
     <button type="submit" class="btn btn-primary">S'inscrire</button>
     {{ form_end(registrationForm) }}
