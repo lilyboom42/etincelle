@@ -40,7 +40,10 @@
                         <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary mt-3">Ajouter au panier</a>
                         <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning mt-3">Modifier</a>
                         <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-info mt-3">Détails</a>
-
+                        <form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                            <button type="submit" class="delete-button btn btn-danger">Supprimer</button>
+                        </form>
                         {# Bouton Favoris avec un Cœur #}
                         {% if app.user %}
                             {% set isFavorite = false %}
@@ -67,10 +70,7 @@
                             <p><a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter ce produit à vos favoris.</p>
                         {% endif %}
 
-                        <form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
-                            <button type="submit" class="delete-button btn btn-danger">Supprimer</button>
-                        </form>
+                        
 
                     </div>
                 </div>

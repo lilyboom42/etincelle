@@ -10,23 +10,15 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class CartService
 {
-    private $entityManager;
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager
+    ) {}
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
-    /**
-     * Récupérer ou créer un panier pour l'utilisateur.
-     */
     public function getOrCreateCart(User $user): Cart
     {
-        // Utilisation de la méthode getCart de l'entité User
         $cart = $user->getCart();
         
         if (!$cart) {
-            // Si l'utilisateur n'a pas encore de panier, en créer un
             $cart = new Cart();
             $cart->setUser($user);
             $this->entityManager->persist($cart);
@@ -36,44 +28,30 @@ class CartService
         return $cart;
     }
 
-    /**
-     * Ajouter ou mettre à jour un article dans le panier.
-     */
-    public function addOrUpdateCartItem(Cart $cart, Product $product, int $quantity): void
+    public function addToCart(Cart $cart, $product, int $quantity = 1): void
     {
-        // Récupérer l'article du panier s'il existe déjà
-        $cartItem = $this->entityManager->getRepository(CartItem::class)
-            ->findOneBy(['cart' => $cart, 'product' => $product]);
+        // Chercher si le produit existe déjà dans le panier
+        $cartItem = null;
+        foreach ($cart->getCartItems() as $item) {
+            if ($item->getProduct() === $product) {
+                $cartItem = $item;
+                break;
+            }
+        }
 
         if ($cartItem) {
-            // Mettre à jour la quantité
-            $cartItem->setQuantity($quantity);
+            // Mettre à jour la quantité si le produit existe déjà
+            $cartItem->setQuantity($cartItem->getQuantity() + $quantity);
         } else {
-            // Si l'article n'existe pas, le créer
+            // Créer un nouveau CartItem si le produit n'existe pas
             $cartItem = new CartItem();
             $cartItem->setCart($cart);
             $cartItem->setProduct($product);
             $cartItem->setQuantity($quantity);
-            $this->entityManager->persist($cartItem);
+            $cart->addCartItem($cartItem);
         }
 
-        // Sauvegarder les changements dans la base de données
+        $this->entityManager->persist($cartItem);
         $this->entityManager->flush();
-    }
-
-    /**
-     * Supprimer un article du panier.
-     */
-    public function removeItemFromCart(Cart $cart, Product $product): void
-    {
-        // Récupérer l'article du panier
-        $cartItem = $this->entityManager->getRepository(CartItem::class)
-            ->findOneBy(['cart' => $cart, 'product' => $product]);
-
-        if ($cartItem) {
-            // Supprimer l'article et sauvegarder
-            $this->entityManager->remove($cartItem);
-            $this->entityManager->flush();
-        }
     }
 }

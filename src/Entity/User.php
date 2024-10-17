@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Cart;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -68,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'user_favorites')]
     private Collection $favorites;
 
-    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Cart::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Cart $cart = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
@@ -86,15 +87,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreationDate(): void
     {
         if (!$this->createdAt) {
-            $this->createdAt = new \DateTimeImmutable(); // Assigner la date actuelle à la création
+            $this->createdAt = new \DateTimeImmutable();
         }
-        $this->updatedAt = new \DateTimeImmutable(); // Mettre à jour la date de modification
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
     public function setUpdateDate(): void
     {
-        $this->updatedAt = new \DateTimeImmutable(); // Mettre à jour à chaque modification
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -110,7 +111,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -123,20 +123,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
-    }
-
-    public function hasRole(string $role): bool
-    {
-        return in_array($role, $this->getRoles(), true);
     }
 
     public function getPassword(): ?string
@@ -147,13 +140,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
     public function eraseCredentials(): void
     {
-        // Effacer les données sensibles temporaires si nécessaire
     }
 
     public function getResetToken(): ?string
@@ -164,7 +155,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setResetToken(?string $resetToken): self
     {
         $this->resetToken = $resetToken;
-
         return $this;
     }
 
@@ -176,7 +166,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUserDetail(?UserDetails $userDetail): static
     {
         $this->userDetail = $userDetail;
-
         return $this;
     }
 
@@ -188,7 +177,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
-
         return $this;
     }
 
@@ -200,7 +188,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
+        return $this;
+    }
 
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
         return $this;
     }
 
@@ -212,7 +210,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActive(bool $isActive): static
     {
         $this->isActive = $isActive;
-
         return $this;
     }
 
@@ -237,7 +234,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->blogPosts->add($blogPost);
             $blogPost->setAuthor($this);
         }
-
         return $this;
     }
 
@@ -248,7 +244,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $blogPost->setAuthor(null);
             }
         }
-
         return $this;
     }
 
@@ -263,7 +258,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->orders->add($order);
             $order->setUser($this);
         }
-
         return $this;
     }
 
@@ -274,7 +268,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $order->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -294,7 +287,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->subscribers = $subscribers;
-
         return $this;
     }
 
@@ -308,14 +300,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (!$this->favorites->contains($product)) {
             $this->favorites->add($product);
         }
-
         return $this;
     }
 
     public function removeFavorite(Product $product): static
     {
         $this->favorites->removeElement($product);
-
         return $this;
     }
 
@@ -324,26 +314,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->cart;
     }
 
-    public function setCart(Cart $cart): static
+    public function setCart(Cart $cart): self
     {
-        if ($cart->getUser() !== $this) {
+        if ($this->cart !== $cart) {
+            $this->cart = $cart;
             $cart->setUser($this);
         }
-
-        $this->cart = $cart;
-
+    
         return $this;
     }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
-    }
+    
 }

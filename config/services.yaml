@@ -34,3 +34,11 @@ services:
         exclude: 
             - '../src/Service/ProductService.php'
         public: true
+
+    App\Service\CartService:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    App\Controller\PaymentController:
+        arguments:
+            $stripeSecretKey: '%env(STRIPE_SECRET_KEY)%'

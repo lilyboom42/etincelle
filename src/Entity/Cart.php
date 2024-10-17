@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\User;
 use App\Repository\CartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,17 +16,12 @@ class Cart
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'cart', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(inversedBy: 'cart')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
-    /**
-     * @var Collection<int, CartItem>
-     */
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $cartItems;
-
-    
 
     public function __construct()
     {
@@ -42,16 +38,17 @@ class Cart
         return $this->user;
     }
 
-    public function setUser(User $user): static
+    public function setUser(User $user): self
     {
-        $this->user = $user;
-
+        if ($this->user !== $user) {
+            $this->user = $user;
+            $user->setCart($this);
+        }
+    
         return $this;
     }
+    
 
-    /**
-     * @return Collection<int, CartItem>
-     */
     public function getCartItems(): Collection
     {
         return $this->cartItems;
@@ -63,19 +60,37 @@ class Cart
             $this->cartItems->add($cartItem);
             $cartItem->setCart($this);
         }
-
         return $this;
     }
 
     public function removeCartItem(CartItem $cartItem): static
     {
         if ($this->cartItems->removeElement($cartItem)) {
-            // set the owning side to null (unless already changed)
             if ($cartItem->getCart() === $this) {
                 $cartItem->setCart(null);
             }
         }
-
         return $this;
+    }
+
+    public function clearItems(): void
+    {
+        foreach ($this->cartItems as $item) {
+            $this->removeCartItem($item);
+        }
+    }
+
+    public function getTotal(): float
+    {
+        $total = 0;
+        foreach ($this->cartItems as $item) {
+            $total += $item->getProduct()->getPrice() * $item->getQuantity();
+        }
+        return $total;
+    }
+
+    public function hasItems(): bool
+    {
+        return !$this->cartItems->isEmpty();
     }
 }

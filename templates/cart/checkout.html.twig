@@ -1,0 +1,47 @@
+{# templates/cart/checkout.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Valider la commande
+{% endblock %}
+
+{% block body %}
+	<h1 style="text-align: center;">Valider la commande</h1>
+
+	{% if cart|length > 0 %}
+		<table>
+			<thead>
+				<tr>
+					<th>Produit</th>
+					<th>Quantité</th>
+					<th>Prix Unitaire</th>
+					<th>Sous-total</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in cart %}
+					<tr>
+						<td>{{ item.product.name }}</td>
+						<td>{{ item.quantity }}</td>
+						<td>{{ item.product.price|number_format(2, '.', ',') }}
+							€</td>
+						<td>{{ item.subtotal|number_format(2, '.', ',') }}
+							€</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<h3>Total :
+			{{ total|number_format(2, '.', ',') }}
+			€</h3>
+
+		<!-- Bouton pour procéder au paiement avec Stripe -->
+		<form action="{{ path('checkout') }}" method="post" style="text-align: center; margin-top: 20px;">
+			<input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
+			<button type="submit" class="btn btn-success btn-lg">Payer avec Stripe</button>
+		</form>
+	{% else %}
+		<p>Votre panier est vide.</p>
+	{% endif %}
+
+{% endblock %}

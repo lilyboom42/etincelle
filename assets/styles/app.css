@@ -5,14 +5,14 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    background-color: #FFFFFF; /* Fond blanc */
-    color: #2F4F4F; /* Texte en bleu nuit */
+    background-color: #FFFFFF;
+    color: #2F4F4F; /* Contraste avec une teinte bleu nuit */
     font-family: 'Arial', sans-serif;
 }
 
 /* Conteneur principal */
 main {
-    flex: 1; /* Permet au contenu principal de prendre tout l'espace disponible */
+    flex: 1; 
 }
 
 /* Style de l'en-tête */
@@ -21,15 +21,15 @@ main {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 50%, #8FBC8F 100%);
+    background: linear-gradient(135deg, #C4E0F9 0%, #F8C8DC 50%, #C8E6D1 100%); /* Dégradé bleu, rose et vert menthe */
 }
 
 .header-content h1 {
-    color: #8FBC8F; 
+    color: #2F4F4F; /* Vert menthe doux */
 }
 
 .social-icons a {
-    color: #FFD700; /* Icones en jaune doré */
+    color: #FDF1B8; /* Jaune pastel */
     margin: 0 5px;
     font-size: 1.2em;
 }
@@ -58,19 +58,20 @@ main {
 }
 
 .centered-text a {
-    color: #FFD700;
+    background: linear-gradient(135deg, #C4E0F9 0%, #F8C8DC 50%, #C8E6D1 100%); /* Dégradé bleu, rose et vert menthe */
+    color: #2F4F4F;
     text-decoration: none;
     font-weight: bold;
     margin: 10px;
     display: inline-block;
     padding: 10px 20px;
-    border: 2px solid #FFD700;
+    border: 2px solid #FDF1B8;
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .centered-text a:hover {
-    background-color: #FFD700;
+    background-color: #FDF1B8;
     color: #2F4F4F;
 }
 
@@ -81,7 +82,7 @@ main {
     margin: 0;
     display: flex;
     justify-content: center;
-    background-color: #8FBC8F
+    background-color: #D5C6F7; /* Violet pastel pour harmoniser */
 }
 
 .main-nav ul li {
@@ -89,18 +90,18 @@ main {
 }
 
 .main-nav ul li a {
-    color: #FFFFFF; /* Texte blanc */
+    color: #FFFFFF; /* Texte blanc pour ressortir */
     text-decoration: none;
     font-weight: bold;
 }
 
 .main-nav ul li a:hover {
-    color: #FFD700; /* Jaune doré au survol */
+    color: #FDF1B8; /* Jaune pastel au survol */
 }
 
 /* Style pour les sections */
 section {
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 50%, #8FBC8F 100%);
+    background: linear-gradient(135deg, #FDF1B8, #C4E0F9, #F8C8DC); /* Couleurs pastel fondus */
     padding: 20px;
     margin: 10px 0;
     border-radius: 8px;
@@ -109,7 +110,7 @@ section {
 
 /* Footer sticky */
 footer {
-    background: #8FBC8F;
+    background: #C8E6D1; /* Vert menthe pastel */
     color: #FFFFFF;
     text-align: center;
     padding: 15px 0;
@@ -130,19 +131,19 @@ footer nav ul li {
 }
 
 footer nav ul li a {
-    color: #FFD700;
+    color: #FDF1B8;
     text-decoration: none;
 }
 
 footer nav ul li a:hover {
-    color: #8B4513;
+    color: #8B4513; /* Marron pour ajouter du contraste */
     text-decoration: underline;
 }
 
 /* Boutons */
 button, .btn {
-    background-color: #8FBC8F;
-    border: 2px solid #228B22;
+    background: linear-gradient(135deg, #C4E0F9 0%, #F8C8DC 50%, #C8E6D1 100%); /* Dégradé bleu, rose et vert menthe */
+    border: 2px solid #228B22 ;
     color: #FFFFFF;
     padding: 10px 20px;
     cursor: pointer;
@@ -152,7 +153,7 @@ button, .btn {
 }
 
 button:hover, .btn:hover {
-    background-color: #FFA07A;
+    background-color: #FDF1B8; /* Jaune doré au survol */
 }
 
 /* Liens */
@@ -164,10 +165,6 @@ a {
 a:hover {
     color: #8B4513;
 }
-
-
-
-
 
 /* public/css/shop.css */
 
@@ -184,10 +181,8 @@ a:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-
-
 .btn-primary {
-    background-color: #228B22;
+    background: linear-gradient(135deg, #C4E0F9 0%, #F8C8DC 50%, #C8E6D1 100%); /* Dégradé bleu, rose et vert menthe */
     color: #fff;
     padding: 10px;
     text-decoration: none;
@@ -229,7 +224,7 @@ h1 {
 }
 
 .form-control:focus {
-    border-color: #FFD700; /* Jaune doré */
+    border-color: #FDF1B8; /* Jaune doré */
     box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Effet doré */
 }
 
@@ -269,7 +264,7 @@ h1 {
 
 .btn-secondary:hover {
     background-color: #FF6347; /* Tomate */
-    color: #fff;
+    color: #2F4F4F;
 }
 
 /* Lien de réinitialisation du mot de passe */
@@ -277,12 +272,10 @@ h1 {
     display: block;
     text-align: center;
     margin-top: 10px;
-    color: #FFD700; /* Jaune doré */
     font-weight: bold;
     text-decoration: none;
     transition: color 0.3s ease;
-    }
-
+}
 
 .btn-link:hover {
     color: #8B4513; /* Marron chocolat */
@@ -312,8 +305,6 @@ h1 {
     margin-bottom: 30px;
 }
 
-
-
 .card {
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -327,7 +318,6 @@ h1 {
 .product-details {
     margin-bottom: 20px;
 }
-
 
 /* Centrer le tableau dans la page */
 table {
@@ -366,9 +356,9 @@ button:hover {
 }
 
 a {
-    color: #007bff;
+    color: #2F4F4F;
 }
 
 a:hover {
-    color: #0056b3;
+    color: #2F4F4F;
 }

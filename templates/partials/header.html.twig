@@ -31,14 +31,14 @@
 		<li>
 			<a href="#">Contact</a>
 		</li>
-		<li>
+		{# <li>
 			<a href="{{ path('customizations_list') }}">Customisation</a>
-		</li>
+		</li> #}
 		<li>
 			<a href="{{ path('view_cart') }}">Panier</a>
 		</li>
 		<li>
-		<a href="{{path('blog_index')}}">Blog</a>
+		<a href="{{path('blog_index')}}">Evenements</a>
 		</li>
 		{% if app.user %}
     <a href="{{ path('favorite_list') }}">Mes favoris</a>

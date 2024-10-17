@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CartController extends AbstractController
 {
@@ -65,10 +66,8 @@ class CartController extends AbstractController
         $currentQuantity = $cart[$productId]['quantity'] ?? 0;
     
         if ($currentQuantity + 1 > $product->getStockQuantity()) {
-            // Si la quantité demandée dépasse le stock, afficher un message d'erreur
             $this->addFlash('error', 'Vous avez atteint la quantité maximale disponible pour ce produit.');
         } else {
-            // Ajouter ou augmenter la quantité dans le panier
             $cart[$productId]['quantity'] = $currentQuantity + 1;
             $this->saveCart($cart);
             $this->addFlash('success', 'Produit ajouté au panier !');
@@ -76,7 +75,6 @@ class CartController extends AbstractController
     
         return $this->redirectToRoute('shop_index');
     }
-    
 
     #[Route('/supprimer-du-panier/{id}', name: 'remove_from_cart')]
     public function removeFromCart(Product $product): RedirectResponse
@@ -101,14 +99,11 @@ class CartController extends AbstractController
         $newQuantity = (int)$this->requestStack->getMainRequest()->request->get('quantity');
     
         if ($newQuantity > $product->getStockQuantity()) {
-            // Si la quantité modifiée dépasse le stock, afficher un message d'erreur
             $this->addFlash('error', 'Vous avez atteint la quantité maximale disponible pour ce produit.');
         } elseif ($newQuantity > 0) {
-            // Mettre à jour la quantité dans le panier
             $cart[$productId]['quantity'] = $newQuantity;
             $this->addFlash('success', 'Quantité mise à jour dans le panier.');
         } else {
-            // Supprimer le produit du panier si la quantité est inférieure ou égale à 0
             unset($cart[$productId]);
             $this->addFlash('success', 'Produit supprimé du panier.');
         }
@@ -117,5 +112,40 @@ class CartController extends AbstractController
     
         return $this->redirectToRoute('view_cart');
     }
-    
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/panier/confirmation', name: 'cart_checkout')]
+    public function checkout(ProductRepository $productRepository): Response
+    {
+        $cart = $this->getCart();
+        
+        if (!$cart || count($cart) === 0) {
+            $this->addFlash('error', 'Votre panier est vide.');
+            return $this->redirectToRoute('view_cart');
+        }
+
+        $cartData = [];
+        $total = 0;
+
+        foreach ($cart as $productId => $details) {
+            $product = $productRepository->find($productId);
+
+            if ($product) {
+                $quantity = $details['quantity'];
+                $subtotal = $product->getPrice() * $quantity;
+                $total += $subtotal;
+
+                $cartData[] = [
+                    'product' => $product,
+                    'quantity' => $quantity,
+                    'subtotal' => $subtotal,
+                ];
+            }
+        }
+
+        return $this->render('cart/checkout.html.twig', [
+            'cart' => $cartData,
+            'total' => $total,
+        ]);
+    }
 }
