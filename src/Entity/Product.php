@@ -176,6 +176,17 @@ class Product
         return $this;
     }
 
+    public function decrementStockQuantity(int $quantity): self
+    {
+        if ($this->stockQuantity < $quantity) {
+            throw new \Exception('Stock insuffisant pour le produit : ' . $this->getName());
+        }
+
+        $this->stockQuantity -= $quantity;
+        return $this;
+    }
+
+
     public function getCartItems(): Collection
     {
         return $this->cartItems;
@@ -255,15 +266,13 @@ class Product
     }
 
     public function getProductImages(): Collection
-{
-    return $this->productImages;
-}
+    {
+        return $this->productImages;
+    }
 
-public function setProductImages(Collection $productImages): self
-{
-    $this->productImages = $productImages;
-    return $this;
-}
-
-
+    public function setProductImages(Collection $productImages): self
+    {
+        $this->productImages = $productImages;
+        return $this;
+    }
 }

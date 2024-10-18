@@ -40,6 +40,10 @@
 			<input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
 			<button type="submit" class="btn btn-success btn-lg">Payer avec Stripe</button>
 		</form>
+		{# <form action="{{ path('paypal_pay') }}" method="post">
+			<button type="submit" class="btn btn-primary">Payer avec PayPal</button>
+		</form> #}
+
 	{% else %}
 		<p>Votre panier est vide.</p>
 	{% endif %}
