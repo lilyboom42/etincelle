@@ -1,7 +1,6 @@
 framework:
-    default_locale: 'en'
+    default_locale: fr  # Définit le français comme langue par défaut
     translator:
         default_path: '%kernel.project_dir%/translations'
         fallbacks:
-            - 'en'
-        providers:
+            - fr  # Pas de fallback en anglais, seulement le français

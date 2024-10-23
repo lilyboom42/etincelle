@@ -75,17 +75,32 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($product->getProductImages() as $productImage) {
-                $productImage->setProduct($product); // Associer chaque image au produit
+            foreach ($form->get('productImages') as $imageForm) {
+                // Vérifie si l'utilisateur a coché la case de suppression
+                if ($imageForm->get('delete')->getData()) {
+                    $image = $imageForm->getData();
+                    $product->removeProductImage($image); // Suppression de l'image dans l'entité
+                    $this->entityManager->remove($image); // Suppression de l'image dans la base de données
+        
+                    // Supprimer physiquement l'image du serveur
+                    if ($image->getImagesPath()) {
+                        $imagePath = $this->getParameter('images_directory') . '/' . $image->getImagesPath();
+                        if (file_exists($imagePath) && is_file($imagePath)) {
+                            unlink($imagePath);
+                        }
+                    }
+                }
             }
-
+        
             $this->entityManager->persist($product);
             $this->entityManager->flush();
-
-            $this->addFlash('success', 'Produit ajouté/modifié avec succès.');
-
+        
+            $this->addFlash('success', 'Produit modifié avec succès.');
+        
             return $this->redirectToRoute('shop_index');
         }
+        
+        
 
         return $this->render('product/form.html.twig', [
             'form' => $form->createView(),

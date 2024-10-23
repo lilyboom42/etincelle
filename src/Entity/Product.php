@@ -68,6 +68,10 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderLine::class)]
     private Collection $orderLines;
 
+    #[ORM\ManyToOne(inversedBy: 'category')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CategoryProduct $categoryProduct = null;
+
     public function __construct()
     {
         $this->productImages = new ArrayCollection();
@@ -176,17 +180,6 @@ class Product
         return $this;
     }
 
-    public function decrementStockQuantity(int $quantity): self
-    {
-        if ($this->stockQuantity < $quantity) {
-            throw new \Exception('Stock insuffisant pour le produit : ' . $this->getName());
-        }
-
-        $this->stockQuantity -= $quantity;
-        return $this;
-    }
-
-
     public function getCartItems(): Collection
     {
         return $this->cartItems;
@@ -274,5 +267,75 @@ class Product
     {
         $this->productImages = $productImages;
         return $this;
+    }
+
+    public function addProductImage(ProductImage $productImage): self
+    {
+        if (!$this->productImages->contains($productImage)) {
+            $this->productImages[] = $productImage;
+            $productImage->setProduct($this); // Associe l'image au produit
+        }
+
+        return $this;
+    }
+
+    public function removeProductImage(ProductImage $productImage): self
+    {
+        if ($this->productImages->removeElement($productImage)) {
+            // Si l'image était associée à ce produit, on réinitialise la relation
+            if ($productImage->getProduct() === $this) {
+                $productImage->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCategoryProduct(): ?CategoryProduct
+    {
+        return $this->categoryProduct;
+    }
+
+    public function setCategoryProduct(?CategoryProduct $categoryProduct): static
+    {
+        $this->categoryProduct = $categoryProduct;
+
+        return $this;
+    }
+
+    /**
+     * Décrémente la quantité en stock.
+     *
+     * @param int $quantity La quantité à décrémenter.
+     *
+     * @throws \Exception Si le stock est insuffisant.
+     */
+    public function decrementStockQuantity(int $quantity): void
+    {
+        if ($quantity < 0) {
+            throw new \InvalidArgumentException('La quantité à décrémenter doit être positive.');
+        }
+
+        if ($this->stockQuantity < $quantity) {
+            throw new \Exception('Stock insuffisant pour le produit : ' . $this->getName());
+        }
+
+        $this->stockQuantity -= $quantity;
+    }
+
+    /**
+     * Incrémente la quantité en stock.
+     *
+     * @param int $quantity La quantité à incrémenter.
+     *
+     * @throws \InvalidArgumentException Si la quantité est négative.
+     */
+    public function incrementStockQuantity(int $quantity): void
+    {
+        if ($quantity < 0) {
+            throw new \InvalidArgumentException('La quantité à incrémenter doit être positive.');
+        }
+
+        $this->stockQuantity += $quantity;
     }
 }

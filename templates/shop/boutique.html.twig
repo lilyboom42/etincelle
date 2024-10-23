@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Boutique{% endblock %}
+{% block title %}Boutique
+{% endblock %}
 
 {% block body %}
     <h1>Boutique</h1>
@@ -21,8 +22,12 @@
                 <div class="card">
                     <div class="card-body">
                         <h2 class="card-title">{{ product.name }}</h2>
+                        <p>
+                            <strong>Catégorie :</strong>
+                            {{ product.categoryProduct.name }}
+                        </p>
 
-                        {% if product.productImages|length > 0 and product.productImages|first.imagesPath is not empty %}
+                        {% if product.productImages|length > 0 %}
                             {% set imageUrl = vich_uploader_asset(product.productImages|first, 'imageFile') %}
                             <img src="{{ imageUrl }}" alt="{{ product.name }}" class="product-image">
                         {% else %}
@@ -44,16 +49,10 @@
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
                             <button type="submit" class="delete-button btn btn-danger">Supprimer</button>
                         </form>
+
                         {# Bouton Favoris avec un Cœur #}
                         {% if app.user %}
-                            {% set isFavorite = false %}
-                            {% for favorite in app.user.getFavorites() %}
-                                {% if favorite.id == product.id %}
-                                    {% set isFavorite = true %}
-                                {% endif %}
-                            {% endfor %}
-
-                            {% if isFavorite %}
+                            {% if app.user.getFavorites().contains(product) %}
                                 <form action="{{ path('favorite_remove', {'id': product.id}) }}" method="post" style="display:inline;">
                                     <button type="submit" class="btn btn-danger mt-3">
                                         <i class="fa fa-heart"></i> Retirer des favoris
@@ -67,10 +66,10 @@
                                 </form>
                             {% endif %}
                         {% else %}
-                            <p><a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter ce produit à vos favoris.</p>
+                            <p>
+                                <a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter ce produit à vos favoris.
+                            </p>
                         {% endif %}
-
-                        
 
                     </div>
                 </div>

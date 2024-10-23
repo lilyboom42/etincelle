@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\CategoryProduct;
 
 class ProductType extends AbstractType
 {
@@ -32,13 +34,22 @@ class ProductType extends AbstractType
                 'label' => 'Quantité en stock',
             ])
             ->add('productImages', CollectionType::class, [
-                'entry_type' => ProductImageType::class, // Spécifie le type du champ pour les images
-                'allow_add' => true, // Autoriser l'ajout de nouvelles images
-                'allow_delete' => true, // Autoriser la suppression
+                'entry_type' => ImageType::class,  // Assurez-vous que l'entrée est de type ImageType
+                'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
-                'prototype' => true, // Permet d'ajouter dynamiquement des images
-                // 'label' => 'Images du produit',
-                'label' => false, // Désactive le label pour le champ collection
+                'prototype' => true,  // Active le prototype pour l'ajout dynamique
+                'prototype_name' => '__name__',  // Utilisé pour remplacer dynamiquement les index
+                'attr' => [
+                    'class' => 'product-images-collection',
+                ],
+            ])
+            ->add('categoryProduct', EntityType::class, [
+                'class' => CategoryProduct::class,
+                'choice_label' => 'name', // Choisissez la propriété à afficher (exemple: 'name')
+                'label' => 'Catégorie',
+                'placeholder' => 'Sélectionnez une catégorie',
+                'required' => true,
             ]);
     }
 

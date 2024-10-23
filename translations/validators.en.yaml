@@ -60,3 +60,4 @@ La date de naissance doit être dans le passé.: "The birthdate must be in the p
 Veuillez uploader un fichier valide (JPEG, PNG, MP4).: "Please upload a valid file (JPEG, PNG, MP4)."
 Veuillez entrer un mot de passe: "Please enter a password."
 Votre mot de passe doit comporter au moins {{ limit }} caractères: "Your password must be at least {{ limit }} characters long."
+Suprimer cette image: "Delete this image"

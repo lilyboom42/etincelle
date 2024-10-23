@@ -1,63 +1,121 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ isEdit ? 'Modifier' : 'Ajouter' }} un produit{% endblock %}
+{% block title %}
+    {{ isEdit ? 'Modifier' : 'Ajouter' }} un produit
+{% endblock %}
 
 {% block body %}
     <h1>{{ isEdit ? 'Modifier' : 'Ajouter' }} un produit</h1>
 
-    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-
-    {{ form_row(form.name, { 'label': 'Nom du produit' }) }}
-    {{ form_row(form.description, { 'label': 'Description' }) }}
-    {{ form_row(form.price, { 'label': 'Prix' }) }}
-    {{ form_row(form.stockQuantity, { 'label': 'Quantité en stock' }) }}
-
-    <div class="form-group">
-        <label>Images du produit</label>
-        <div id="product-images-wrapper" data-prototype="{{ form_widget(form.productImages.vars.prototype)|e('html_attr') }}">
-            {% for imageForm in form.productImages %}
-    <div class="product-image-item" style="margin-bottom: 10px;">
-        {{ form_widget(imageForm.imageFile.children.file) }}
-
-        {% if imageForm.vars.data and imageForm.vars.data.imagesPath %}
-            <img src="{{ vich_uploader_asset(imageForm.vars.data, 'imageFile') }}" alt="Image actuelle" class="mb-2" style="max-width: 100px;">
-            {{ form_widget(imageForm.imageFile.children.delete) }}
-        {% endif %}
-    </div>
-{% endfor %}
-
+    <div class="product-form">
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+        
+        <div class="form-group">
+            {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
         </div>
+        
+        <div class="form-group">
+            {{ form_row(form.categoryProduct, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_row(form.description, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_row(form.price, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_row(form.stockQuantity, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <label>Images</label>
+        <div id="product_images" data-prototype="{{ form_widget(form.productImages.vars.prototype)|e('html_attr') }}" data-index="{{ form.productImages|length }}">
+            <ul class="images list-unstyled">
+                {% for image in form.productImages %}
+                    <li class="form-group">
+                        {{ form_widget(image, {'attr': {'class': 'form-control'}}) }}
+                        <button type="button" class="btn btn-danger remove-image">Supprimer cette image</button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">
+                {{ product is defined ? 'Mettre à jour' : 'Ajouter' }}
+            </button>
+        </div>
+
+        {{ form_end(form) }}
     </div>
-
-    <button type="button" id="add-image-button" class="btn btn-primary" style="margin-bottom: 10px;">Ajouter une image</button>
-    <button type="submit" class="btn btn-success">Enregistrer</button>
-
-    {{ form_end(form) }}
 {% endblock %}
 
 {% block javascript %}
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let productImagesWrapper = document.getElementById('product-images-wrapper');
-        let prototype = productImagesWrapper.dataset.prototype;
-        let index = productImagesWrapper.querySelectorAll('.product-image-item').length;
+<script>
+    document.addEventListener('DOMContentLoaded', initAddImageFunctionality);
 
-        // Ajouter une nouvelle image
-        document.getElementById('add-image-button').addEventListener('click', function () {
-            let newForm = prototype.replace(/__name__/g, index);
-            let newImageItem = document.createElement('div');
-            newImageItem.classList.add('product-image-item');
-            newImageItem.innerHTML = newForm;
-            productImagesWrapper.appendChild(newImageItem);
+    function initAddImageFunctionality() {
+        const collectionHolder = document.querySelector('#product_images');
+        if (!collectionHolder) {
+            return;
+        }
+
+        const addButton = document.createElement('button');
+        addButton.innerText = 'Ajouter une image';
+        addButton.type = 'button';
+        addButton.classList.add('btn', 'btn-success', 'add-image');
+        collectionHolder.appendChild(addButton);  // Positionner le bouton après la liste d'images
+
+        let index = parseInt(collectionHolder.dataset.index, 10) || collectionHolder.querySelectorAll('ul.images li').length;
+
+        addButton.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            let newForm = collectionHolder.dataset.prototype;
+            newForm = newForm.replace(/__name__/g, index);
+
+            const newFormElement = document.createElement('li');
+            newFormElement.classList.add('form-group');
+            newFormElement.innerHTML = newForm;
+
+            const removeButton = document.createElement('button');
+            removeButton.innerText = 'Supprimer cette image';
+            removeButton.type = 'button';
+            removeButton.classList.add('btn', 'btn-danger', 'remove-image');
+
+            newFormElement.appendChild(removeButton);
+            collectionHolder.querySelector('ul.images').appendChild(newFormElement);
+
+            addTagFormDeleteLink(newFormElement);
             index++;
+            collectionHolder.dataset.index = index;
         });
 
-        // Supprimer une image ajoutée
-        productImagesWrapper.addEventListener('click', function (event) {
-            if (event.target.classList.contains('remove-image-button')) {
-                event.target.closest('.product-image-item').remove();
-            }
+        // Fonction pour ajouter la suppression à chaque image
+        document.querySelectorAll('ul.images li').forEach((image) => {
+            addTagFormDeleteLink(image);
         });
-    });
-    </script>
+
+        function addTagFormDeleteLink(item) {
+            const removeButton = item.querySelector('.remove-image');
+            removeButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
+                    item.remove();
+                    updateIndex();
+                }
+            });
+        }
+
+        function updateIndex() {
+            const imageItems = collectionHolder.querySelectorAll('ul.images li');
+            imageItems.forEach((item, idx) => {
+                item.dataset.index = idx;
+            });
+            collectionHolder.dataset.index = imageItems.length;
+        }
+    }
+</script>
 {% endblock %}

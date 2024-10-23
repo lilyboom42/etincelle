@@ -1,45 +1,55 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
+# config/services.yaml
 
 parameters:
+    images_directory: "%kernel.project_dir%/public/uploads/products"
+    media_directory: "%kernel.project_dir%/public/uploads/media"
+    product_image: "/uploads/images/products"
+    blog_media: "/uploads/images/blog_media"
 
-    media_directory: '%kernel.project_dir%/public/uploads/media'
-    product_image: '/uploads/images/products'
-    blog_media: '/uploads/images/blog_media'
 services:
     # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
+        autowire: true # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/'
+        resource: "../src/"
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+            - "../src/DependencyInjection/"
+            - "../src/Entity/"
+            - "../src/Kernel.php"
 
     # Define services explicitly if needed
     App\Service\ProductService:
         arguments:
-            $entityManager: '@doctrine.orm.entity_manager'
-            $requestStack: '@request_stack'
-            $urlGenerator: '@router'
+            $entityManager: "@doctrine.orm.entity_manager"
+            $requestStack: "@request_stack"
+            $urlGenerator: "@router"
 
     # Autoconfigure all services inside the Service directory
     App\Service\:
-        resource: '../src/Service'
-        exclude: 
-            - '../src/Service/ProductService.php'
+        resource: "../src/Service"
+        exclude:
+            - "../src/Service/ProductService.php"
         public: true
 
     App\Service\CartService:
         arguments:
-            $entityManager: '@doctrine.orm.entity_manager'
+            $entityManager: "@doctrine.orm.entity_manager"
 
+    # Injection de StripeConfig dans PaymentController
     App\Controller\PaymentController:
         arguments:
+            $stripeConfig: '@App\Service\StripeConfig'
+
+     # Configuration pour StripeConfig avec injection des variables d'environnement
+    App\Service\StripeConfig:
+        arguments:
+            $stripePublicKey: '%env(STRIPE_PUBLIC_KEY)%'
             $stripeSecretKey: '%env(STRIPE_SECRET_KEY)%'
             $stripeWebhookSecret: '%env(STRIPE_WEBHOOK_SECRET)%'
+    # Rendre le service StripeConfig public si nécessaire
+        public: true
+    
