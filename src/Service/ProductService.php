@@ -18,7 +18,6 @@ class ProductService
     public function __construct(EntityManagerInterface $entityManager, RequestStack $requestStack, UrlGeneratorInterface $urlGenerator)
     {
         $this->entityManager = $entityManager;
-        // Utilisation de RequestStack pour récupérer la session
         $this->session = $requestStack->getSession();
         $this->urlGenerator = $urlGenerator;
     }
@@ -26,10 +25,9 @@ class ProductService
     public function decreaseStock(Product $product, int $quantity): void
     {
         try {
-            $product->decreaseStock($quantity);
+            $product->decrementStockQuantity($quantity);
             $this->entityManager->persist($product);
         } catch (\Exception $e) {
-            // Accès direct au FlashBag via la session
             $flashBag = $this->session->getBag('flashes');
             if ($flashBag instanceof \Symfony\Component\HttpFoundation\Session\Flash\FlashBag) {
                 $flashBag->add('error', $e->getMessage());

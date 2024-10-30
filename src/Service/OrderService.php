@@ -23,9 +23,8 @@ class OrderService
     {
         $order = new Order();
         $order->setUser($cart->getUser());
-        $order->setOrderStatus(OrderStatus::COMPLETED); // Utiliser l'énumération
+        $order->setOrderStatus(OrderStatus::COMPLETED); 
         $order->setTotal($cart->getTotal());
-        // La date de création sera automatiquement définie si vous avez un lifecycle callback
 
         $this->entityManager->persist($order);
         $cart->clearItems();

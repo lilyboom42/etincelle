@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
-use App\Service\StripeConfig; // Import du service StripeConfig
+use App\Service\StripeConfig; 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,12 +15,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CartController extends AbstractController
 {
     private RequestStack $requestStack;
-    private StripeConfig $stripeConfig; // Ajout de la propriété StripeConfig
-
+    private StripeConfig $stripeConfig; 
     public function __construct(RequestStack $requestStack, StripeConfig $stripeConfig)
     {
         $this->requestStack = $requestStack;
-        $this->stripeConfig = $stripeConfig; // Injection du service StripeConfig
+        $this->stripeConfig = $stripeConfig; 
     }
 
     /**
@@ -152,7 +151,7 @@ class CartController extends AbstractController
         return $this->render('cart/checkout.html.twig', [
             'cart' => $cartData,
             'total' => $total,
-            'stripe_public_key' => $stripePublicKey, // Passage de la clé publique à Twig
+            'stripe_public_key' => $stripePublicKey, 
         ]);
     }
 }

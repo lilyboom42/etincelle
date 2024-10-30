@@ -79,7 +79,7 @@ class FavoriteController extends AbstractController
         ]);
     }
 
-    // Optionnel: Méthode pour ajouter un favori en AJAX
+    // Méthode pour ajouter un favori en AJAX
     #[Route('/add-ajax/{id}', name: 'favorite_add_ajax', methods: ['POST'])]
     public function addAjax(Product $product, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -100,7 +100,7 @@ class FavoriteController extends AbstractController
         return new JsonResponse(['message' => 'Produit déjà dans vos favoris.']);
     }
 
-    // Optionnel: Méthode pour supprimer un favori en AJAX
+    // Méthode pour supprimer un favori en AJAX
     #[Route('/remove-ajax/{id}', name: 'favorite_remove_ajax', methods: ['POST'])]
     public function removeAjax(Product $product, EntityManagerInterface $entityManager): JsonResponse
     {

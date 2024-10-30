@@ -34,19 +34,19 @@ class ProductType extends AbstractType
                 'label' => 'Quantité en stock',
             ])
             ->add('productImages', CollectionType::class, [
-                'entry_type' => ImageType::class,  // Assurez-vous que l'entrée est de type ImageType
+                'entry_type' => ImageType::class,  
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'prototype' => true,  // Active le prototype pour l'ajout dynamique
-                'prototype_name' => '__name__',  // Utilisé pour remplacer dynamiquement les index
+                'prototype' => true,  
+                'prototype_name' => '__name__',  
                 'attr' => [
                     'class' => 'product-images-collection',
                 ],
             ])
             ->add('categoryProduct', EntityType::class, [
                 'class' => CategoryProduct::class,
-                'choice_label' => 'name', // Choisissez la propriété à afficher (exemple: 'name')
+                'choice_label' => 'name', 
                 'label' => 'Catégorie',
                 'placeholder' => 'Sélectionnez une catégorie',
                 'required' => true,

@@ -40,7 +40,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Faites tout autre traitement nécessaire, comme envoyer un e-mail
+            // Traitement nécessaire, comme envoyer un e-mail
             $email = (new Email())
             ->from('admin@etincele.com')
             ->to($user->getEmail())

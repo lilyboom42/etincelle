@@ -21,7 +21,7 @@ class UserDetailsType extends AbstractType
             ->add('birthDate', DateType::class, [
                 'widget' => 'single_text',  // Utilise un input de type date
                 'format' => 'yyyy-MM-dd',   // Spécifie le format de la date
-                'html5' => true,            // Active le support HTML5 pour le champ de type date
+                'html5' => true,            
                 'label' => 'Date de naissance',
                 'attr' => ['autocomplete' => 'bday'],
             ]);

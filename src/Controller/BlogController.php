@@ -26,7 +26,7 @@ class BlogController extends AbstractController
     }
 
     #[Route('/blog/new', name: 'blog_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_ADMIN')] // Restreindre l'accès aux administrateurs
+    // #[IsGranted('ROLE_ADMIN')] // Restreindre l'accès aux administrateurs
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $blog = new BlogPost();
@@ -34,7 +34,6 @@ class BlogController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Plus besoin d'utiliser $this->getDoctrine()->getManager() car EntityManagerInterface est injecté
             $entityManager->persist($blog);
             $entityManager->flush();
 

@@ -26,7 +26,7 @@ class ImageType extends AbstractType
         ->add('delete', CheckboxType::class, [
             'label' => 'Supprimer l\'image actuelle',
             'required' => false,
-            'mapped' => false,  // Ce champ n'est pas mappé à l'entité
+            'mapped' => false,  
         ]);
 }
     public function configureOptions(OptionsResolver $resolver): void

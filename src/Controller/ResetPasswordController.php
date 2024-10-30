@@ -12,8 +12,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\ResetPasswordRequestForm;
-use App\Form\ResetPasswordForm;
+use App\Form\ResetPasswordRequestFormType;
+use App\Form\ResetPasswordFormType;
 
 class ResetPasswordController extends AbstractController
 {
@@ -31,7 +31,7 @@ class ResetPasswordController extends AbstractController
     public function request(Request $request, TokenGeneratorInterface $tokenGenerator)
     {
         // Création du formulaire pour saisir l'email
-        $form = $this->createForm(ResetPasswordRequestForm::class);
+        $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -83,7 +83,7 @@ class ResetPasswordController extends AbstractController
         }
 
         // Créer le formulaire pour soumettre le nouveau mot de passe
-        $form = $this->createForm(ResetPasswordForm::class);
+        $form = $this->createForm(ResetPasswordFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

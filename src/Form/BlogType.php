@@ -22,7 +22,7 @@ class BlogType extends AbstractType
                 'entry_type' => MediaType::class, // Utiliser un formulaire spécifique pour Media
                 'allow_add' => true,
                 'allow_delete' => true,
-                'by_reference' => false, // Nécessaire pour les relations OneToMany
+                'by_reference' => false, 
                 'prototype' => true, // Permet de gérer dynamiquement les médias
             ]);
     }
