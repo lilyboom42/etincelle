@@ -6,7 +6,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #FFFFFF;
-    color: #0D1818; 
+    color: #362B49; 
     font-family: 'Arial', sans-serif;
     list-style: none;
 
@@ -31,7 +31,7 @@ main {
 }
 
 .header-content h1 {
-    color: #192929; /* Vert menthe doux */
+    color: #362B49; /* Vert menthe doux */
 }
 
 .social-icons a {
@@ -65,7 +65,7 @@ main {
 
 .centered-text a {
     background: linear-gradient(135deg, #C4E0F9 0%, #F8C8DC 50%, #C8E6D1 100%); /* Dégradé bleu, rose et vert menthe */
-    color: #2F4F4F;
+    color: #362B49;
     text-decoration: none;
     font-weight: bold;
     margin: 10px;
@@ -78,7 +78,7 @@ main {
 
 .centered-text a:hover {
     background-color: #FDF1B8;
-    color: #2F4F4F;
+     color: #362B49; /*#362B49 */
 }
 
 /* Navigation principale */
@@ -88,7 +88,7 @@ main {
     margin: 0;
     display: flex;
     justify-content: center;
-    background-color: #D5C6F7; /* Violet pastel pour harmoniser */
+    background-color: #362B49; 
     align-content: center;
     height: 50px; /* Hauteur de la navigation */
     flex-wrap: wrap;
@@ -120,7 +120,7 @@ section {
 /* Footer sticky */
 footer {
     background: #C8E6D1; /* Vert menthe pastel */
-    color: #FFFFFF;
+    color: #000000;
     text-align: center;
     padding: 15px 0;
     margin-top: auto;
@@ -140,7 +140,6 @@ footer nav ul li {
 }
 
 footer nav ul li a {
-    color: #FDF1B8;
     text-decoration: none;
 }
 
@@ -214,7 +213,7 @@ a:hover {
 /* Titre du formulaire */
 h1 {
     text-align: center;
-    color: #2F4F4F; /* Bleu nuit */
+    color: #362B49; /* Bleu nuit */
     margin-bottom: 20px;
 }
 
@@ -229,7 +228,7 @@ h1 {
     border: 2px solid #8FBC8F; /* Vert doux */
     border-radius: 5px;
     font-size: 1rem;
-    color: #2F4F4F;
+    color: #362B49;
 }
 
 .form-control:focus {
@@ -252,7 +251,7 @@ h1 {
 
 .btn-primary:hover {
     background-color: #FFD700; /* Jaune doré au survol */
-    color: #2F4F4F; /* Bleu nuit */
+    color: #362B49; /* Bleu nuit */
 }
 
 /* Bouton secondaire pour s'inscrire */
@@ -273,7 +272,7 @@ h1 {
 
 .btn-secondary:hover {
     background-color: #FF6347; /* Tomate */
-    color: #2F4F4F;
+    color: #362B49;
 }
 
 /* Lien de réinitialisation du mot de passe */
@@ -296,7 +295,7 @@ h1 {
 }
 
 .checkbox label {
-    color: #2F4F4F; /* Bleu nuit */
+    color: #362B49;
     font-weight: bold;
 }
 
@@ -365,11 +364,11 @@ button:hover {
 }
 
 a {
-    color: #2F4F4F;
+    color: #362B49;
 }
 
 a:hover {
-    color: #2F4F4F;
+    color: #362B49;
 }
 
 /* Styles de base pour le formulaire */
@@ -688,4 +687,14 @@ h1 {
     .product-card {
         flex: 0 0 30%;
     }
+}
+
+.media-image {
+    max-width: 300px;
+    max-height: 200px;
+}
+
+.media-video {
+    max-width: 400px;
+    max-height: 300px;
 }

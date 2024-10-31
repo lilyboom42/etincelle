@@ -17,11 +17,11 @@ class Media
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: BlogPost::class, inversedBy: 'media')]
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'media')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?BlogPost $blogPost = null;
+    private ?Event $event = null;
 
-    #[Vich\UploadableField(mapping: 'media_files', fileNameProperty: 'filename')]
+    #[Vich\UploadableField(mapping: 'event_media', fileNameProperty: 'filename')]
     #[Assert\File(
         maxSize: '10M',
         mimeTypes: ['image/jpeg', 'image/png', 'video/mp4'],
@@ -40,14 +40,14 @@ class Media
         return $this->id;
     }
 
-    public function getBlogPost(): ?BlogPost
+    public function getEvent(): ?Event
     {
-        return $this->blogPost;
+        return $this->event;
     }
 
-    public function setBlogPost(?BlogPost $blogPost): self
+    public function setEvent(?Event $event): self
     {
-        $this->blogPost = $blogPost;
+        $this->event = $event;
 
         return $this;
     }
@@ -88,4 +88,6 @@ class Media
 
         return $this;
     }
+
+    
 }

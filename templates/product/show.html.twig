@@ -11,7 +11,7 @@
     {% if product.productImages|length > 0 %}
         <div class="product-images">
             {% for image in product.productImages %}
-                <img src="{{ vich_uploader_asset(image, 'imageFile') }}" alt="{{ product.name }}" class="product-image">
+                <img src="{{ vich_uploader_asset(image, 'imageFile') }}" alt="{{ product.name }}" class="product-image" style="max-width: 300px; max-height: 200px;">
             {% endfor %}
         </div>
     {% else %}

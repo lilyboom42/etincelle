@@ -6,6 +6,7 @@ parameters:
     product_image: "/uploads/images/products"
     blog_media: "/uploads/images/blog_media"
 
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -52,4 +53,6 @@ services:
             $stripeWebhookSecret: '%env(STRIPE_WEBHOOK_SECRET)%'
     # Rendre le service StripeConfig public si nécessaire
         public: true
+
+
     

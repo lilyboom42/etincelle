@@ -1,0 +1,42 @@
+{# templates/event/show.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ event.title }} - Détails
+{% endblock %}
+
+{% block body %}
+    <h1>{{ event.title }}</h1>
+
+    {# Affichage des images et vidéos associées à l'événement #}
+    {% if event.media|length > 0 %}
+        {% for media in event.media %}
+            {% set media_url = vich_uploader_asset(media, 'mediaFile') %}
+            {% if media_url %}
+                {% set extension = media.filename|split('.')|last|lower %}
+                {% if extension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                    <img src="{{ media_url }}" alt="Image pour l'événement" class="img-thumbnail" style="max-width: 300px; max-height: 200px;">
+                {% elseif extension == 'mp4' %}
+                    <video controls style="max-width: 400px; max-height: 300px;">
+                        <source src="{{ media_url }}" type="video/mp4">
+                    </video>
+                {% endif %}
+            {% else %}
+                <p>Média introuvable.</p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>Aucun média associé.</p>
+    {% endif %}
+
+    <div class="event-details">
+        <p><strong>Description :</strong> {{ event.description }}</p>
+        <p><strong>Date de l'événement :</strong> {{ event.eventDate|date('d/m/Y') }}</p>
+
+        {# Boutons d'actions pour l'événement #}
+        <a href="{{ path('event_index') }}" class="btn btn-secondary mt-3">Retour aux événements</a>
+        <button type="submit" class="delete-button btn btn-danger">Supprimer</button>
+        <a href="{{ path('event_edit', {'id': event.id}) }}" class="btn btn-warning mt-3">Modifier</a>
+    </div>
+{% endblock %}

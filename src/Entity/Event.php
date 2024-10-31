@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\EventRepository;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,6 +32,9 @@ class Event
     #[Assert\GreaterThanOrEqual('today', message: "La date de l'événement doit être aujourd'hui ou dans le futur.")]
     private ?\DateTimeImmutable $eventDate = null;
 
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Media::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $media;
+
     #[ORM\Column]
     #[Assert\NotNull(message: "La date de création ne doit pas être nulle.")]
     private ?\DateTimeImmutable $createdAt = null;
@@ -38,97 +43,112 @@ class Event
     #[Assert\NotNull(message: "La date de mise à jour ne doit pas être nulle.")]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    // Set creation and update dates before persisting to the database.
-    // Définir les dates de création et de mise à jour avant l'enregistrement dans la base de données.
+    public function __construct()
+    {
+        $this->media = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable(); // Initialiser createdAt lors de la création
+        $this->updatedAt = new \DateTimeImmutable(); // Initialiser updatedAt également
+    }
+
     #[ORM\PrePersist]
     public function setCreationDate(): void
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable(); // Assurez-vous que updatedAt est également défini
     }
 
-    // Update the update date before updating in the database.
-    // Mettre à jour la date de mise à jour avant de la mettre à jour dans la base de données.
     #[ORM\PreUpdate]
     public function setUpdateDate(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
 
-    // Get the ID of the event.
-    // Obtenir l'ID de l'événement.
+    // Getters et Setters...
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    // Get the title of the event.
-    // Obtenir le titre de l'événement.
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    // Set the title of the event.
-    // Définir le titre de l'événement.
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
-    // Get the description of the event.
-    // Obtenir la description de l'événement.
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    // Set the description of the event.
-    // Définir la description de l'événement.
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
-    // Get the date of the event.
-    // Obtenir la date de l'événement.
     public function getEventDate(): ?\DateTimeImmutable
     {
         return $this->eventDate;
     }
 
-    // Set the date of the event.
-    // Définir la date de l'événement.
     public function setEventDate(\DateTimeImmutable $eventDate): static
     {
         $this->eventDate = $eventDate;
-
         return $this;
     }
 
-    // Get the creation date of the event.
-    // Obtenir la date de création de l'événement.
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    // Get the update date of the event.
-    // Obtenir la date de mise à jour de l'événement.
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    // Set the update date of the event.
-    // Définir la date de mise à jour de l'événement.
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function getMedia(): Collection
+    {
+        return $this->media;
+    }
+
+    public function setMedia(Collection $media): self
+    {
+        $this->media = $media;
+        return $this;
+    }
+
+
+    public function addMedia(Media $media): self
+    {
+        if (!$this->media->contains($media)) {
+            $this->media->add($media);
+            $media->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(Media $media): self
+    {
+        if ($this->media->removeElement($media)) {
+            // Set the owning side to null
+            if ($media->getEvent() === $this) {
+                $media->setEvent(null);
+            }
+        }
 
         return $this;
     }

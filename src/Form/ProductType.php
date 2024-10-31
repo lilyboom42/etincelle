@@ -34,6 +34,7 @@ class ProductType extends AbstractType
                 'label' => 'Quantité en stock',
             ])
             ->add('productImages', CollectionType::class, [
+                'label' => false,
                 'entry_type' => ImageType::class,  
                 'allow_add' => true,
                 'allow_delete' => true,
