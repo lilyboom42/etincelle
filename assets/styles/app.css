@@ -698,3 +698,13 @@ h1 {
     max-width: 400px;
     max-height: 300px;
 }
+
+.notification-bell {
+    font-size: 24px;
+    color: #333;
+    text-decoration: none;
+}
+
+.notification-bell:hover {
+    color: #007bff;
+}

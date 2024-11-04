@@ -4,7 +4,9 @@
 
 {% block body %}
     <h1>Liste des événements</h1>
-
+<a href="{{ path('subscribe_to_notifications') }}" class="notification-bell">
+    <i class="fas fa-bell"></i> S'abonner aux notifications
+</a>
     {# Affichage des messages d'erreur et de succès #}
     {% for message in app.flashes('error') %}
         <div class="alert alert-danger">{{ message }}</div>
@@ -14,51 +16,61 @@
         <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
 
-    {# Bouton pour créer un nouvel événement #}
-    <a href="{{ path('event_new') }}" class="btn btn-primary mb-3">Créer un événement</a>
+    {# Bouton pour créer un nouvel événement si l'utilisateur a les droits #}
+    {# {% if is_granted('ROLE_ADMIN') %} #}
+        <a href="{{ path('event_new') }}" class="btn btn-primary mb-3">Créer un événement</a>
+    {# {% endif %} #}
 
-    {# Liste des événements #}
+    {# Liste des événements paginés #}
     <ul class="event-list">
-        {% for event in events %}
+        {% for event in pagination %}
             <li>
                 <h2>{{ event.title }}</h2>
                 <p>{{ event.eventDate|date('d/m/Y') }}</p>
                 <p>{{ event.description }}</p>
 
-                {# <h3>Médias associés :</h3> #}
+                {# Médias associés à l'événement #}
                 {% if event.media|length > 0 %}
-        {% set photo_count = 0 %}
-        {% set video_count = 0 %}
+                    {% set photo_count = 0 %}
+                    {% set video_count = 0 %}
 
-        {% for media in event.media %}
-            {% set media_url = vich_uploader_asset(media, 'mediaFile') %}
-            {% if media_url %}
-                {% set extension = media.filename|split('.')|last|lower %}
-                {% if extension in ['jpg', 'jpeg', 'png', 'gif'] and photo_count < 3 %}
-                    <img src="{{ media_url }}" alt="Image pour l'événement" class="img-thumbnail" style="max-width: 300px; max-height: 200px;">
-                    {% set photo_count = photo_count + 1 %}
-                {% elseif extension == 'mp4' and video_count < 1 %}
-                    <video controls style="max-width: 400px; max-height: 300px;">
-                        <source src="{{ media_url }}" type="video/mp4">
-                    </video>
-                    {% set video_count = video_count + 1 %}
+                    {% for media in event.media %}
+                        {% set media_url = vich_uploader_asset(media, 'mediaFile') %}
+                        {% if media_url %}
+                            {% set extension = media.filename|split('.')|last|lower %}
+                            {% if extension in ['jpg', 'jpeg', 'png', 'gif'] and photo_count < 3 %}
+                                <img src="{{ media_url }}" alt="Image pour l'événement" class="img-thumbnail" style="max-width: 300px; max-height: 200px;">
+                                {% set photo_count = photo_count + 1 %}
+                            {% elseif extension == 'mp4' and video_count < 1 %}
+                                <video controls style="max-width: 400px; max-height: 300px;">
+                                    <source src="{{ media_url }}" type="video/mp4">
+                                </video>
+                                {% set video_count = video_count + 1 %}
+                            {% endif %}
+                        {% else %}
+                            <p>Média introuvable.</p>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>Aucun média associé.</p>
                 {% endif %}
-            {% else %}
-                <p>Média introuvable.</p>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <p>Aucun média associé.</p>
-    {% endif %}
 
-                {# Boutons d'actions pour l'événement (modifier, détails, supprimer) #}
-                <a href="{{ path('event_edit', {'id': event.id}) }}" class="btn btn-warning mt-3">Modifier</a>
-                <a href="{{ path('event_show', {'id': event.id}) }}" class="btn btn-info mt-3">Détails</a>
-                <form action="{{ path('event_delete', { 'id': event.id }) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ event.id) }}">
-                    <button type="submit" class="delete-button btn btn-danger">Supprimer</button>
-                </form>
+                {# Boutons d'actions pour modifier ou supprimer l'événement, accessibles uniquement aux administrateurs #}
+                {# {% if is_granted('ROLE_ADMIN') %} #}
+                    <a href="{{ path('event_edit', {'id': event.id}) }}" class="btn btn-warning mt-3">Modifier</a>
+                                    <a href="{{ path('event_show', {'id': event.id}) }}" class="btn btn-info mt-3">Détails</a>
+
+                    <form action="{{ path('event_delete', { 'id': event.id }) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ event.id) }}">
+                        <button type="submit" class="delete-button btn btn-danger">Supprimer</button>
+                    </form>
+                {# {% endif %} #}
             </li>
         {% endfor %}
     </ul>
+
+    {# Pagination #}
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
+    </div>
 {% endblock %}

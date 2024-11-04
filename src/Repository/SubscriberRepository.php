@@ -2,28 +2,28 @@
 
 namespace App\Repository;
 
-use App\Entity\Subscribers;
+use App\Entity\Subscriber;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Subscribers>
- * Repository for managing operations related to the Subscribers entity.
- * Référentiel pour gérer les opérations relatives à l'entité Subscribers.
+ * @extends ServiceEntityRepository<subscriber>
+ * Repository for managing operations related to the subscriber entity.
+ * Référentiel pour gérer les opérations relatives à l'entité subscriber.
  */
-class SubscribersRepository extends ServiceEntityRepository
+class SubscriberRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Subscribers::class);
+        parent::__construct($registry, Subscriber::class);
     }
 
     /**
-     * Finds subscribers who have been subscribed for at least one year.
+     * Finds subscriber who have been subscribed for at least one year.
      * Trouve les abonnés qui sont abonnés depuis au moins un an.
      *
      * @param \DateTimeImmutable $oneYearAgo The date one year ago / La date d'il y a un an
-     * @return Subscribers[] Returns an array of Subscribers objects / Renvoie un tableau d'objets Subscribers
+     * @return subscriber[] Returns an array of subscriber objects / Renvoie un tableau d'objets subscriber
      */
     public function findSubscribedForOneYear(\DateTimeImmutable $oneYearAgo): array
     {
@@ -35,13 +35,13 @@ class SubscribersRepository extends ServiceEntityRepository
     }
 
     /**
-     * Finds subscribers by email.
+     * Finds subscriber by email.
      * Trouve les abonnés par leur adresse email.
      *
      * @param string $email The email to search by / L'email à rechercher
-     * @return Subscribers|null Returns a Subscribers object or null if not found / Renvoie un objet Subscribers ou null si non trouvé
+     * @return Subscriber|null Returns a subscriber object or null if not found / Renvoie un objet subscriber ou null si non trouvé
      */
-    public function findByEmail(string $email): ?Subscribers
+    public function findByEmail(string $email): ?Subscriber
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.email = :email')
@@ -51,10 +51,10 @@ class SubscribersRepository extends ServiceEntityRepository
     }
 
     /**
-     * Finds all subscribers ordered by subscription date.
+     * Finds all subscriber ordered by subscription date.
      * Trouve tous les abonnés triés par date d'abonnement.
      *
-     * @return Subscribers[] Returns an array of Subscribers objects / Renvoie un tableau d'objets Subscribers
+     * @return Subscriber[] Returns an array of subscriber objects / Renvoie un tableau d'objets subscriber
      */
     public function findAllOrderedBySubscriptionDate(): array
     {
@@ -65,11 +65,11 @@ class SubscribersRepository extends ServiceEntityRepository
     }
 
     //    /**
-    //     * Finds subscribers by a specific field value.
+    //     * Finds subscriber by a specific field value.
     //     * Trouve les abonnés par la valeur d'un champ spécifique.
     //     *
     //     * @param mixed $value The value to search by / La valeur à rechercher
-    //     * @return Subscribers[] Returns an array of Subscribers objects / Renvoie un tableau d'objets Subscribers
+    //     * @return subscriber[] Returns an array of subscriber objects / Renvoie un tableau d'objets subscriber
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -87,9 +87,9 @@ class SubscribersRepository extends ServiceEntityRepository
     //     * Trouve un seul abonné par la valeur d'un champ spécifique.
     //     *
     //     * @param mixed $value The value to search by / La valeur à rechercher
-    //     * @return Subscribers|null Returns a Subscribers object or null if not found / Renvoie un objet Subscribers ou null si non trouvé
+    //     * @return subscriber|null Returns a subscriber object or null if not found / Renvoie un objet subscriber ou null si non trouvé
     //     */
-    //    public function findOneBySomeField($value): ?Subscribers
+    //    public function findOneBySomeField($value): ?subscriber
     //    {
     //        return $this->createQueryBuilder('s')
     //            ->andWhere('s.exampleField = :val')

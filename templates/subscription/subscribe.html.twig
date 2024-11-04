@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}S'abonner aux notifications d'événements{% endblock %}
+
+{% block body %}
+    <h1>S'abonner aux notifications</h1>
+
+    {# Affichage des messages d'erreur et de succès #}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <div>
+        <p>Entrez votre adresse e-mail pour vous abonner aux notifications des nouveaux événements :</p>
+
+        {{ form_start(form) }}
+            {{ form_row(form.email) }}
+            <button type="submit" class="btn btn-primary">S'abonner</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

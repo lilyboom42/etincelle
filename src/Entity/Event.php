@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\EventRepository;
 use Doctrine\DBAL\Types\Types;
+use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,25 +36,23 @@ class Event
     private Collection $media;
 
     #[ORM\Column]
-    #[Assert\NotNull(message: "La date de création ne doit pas être nulle.")]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Assert\NotNull(message: "La date de mise à jour ne doit pas être nulle.")]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
         $this->media = new ArrayCollection();
-        $this->createdAt = new \DateTimeImmutable(); // Initialiser createdAt lors de la création
-        $this->updatedAt = new \DateTimeImmutable(); // Initialiser updatedAt également
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PrePersist]
     public function setCreationDate(): void
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable(); // Assurez-vous que updatedAt est également défini
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
@@ -62,8 +60,6 @@ class Event
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
-
-    // Getters et Setters...
 
     public function getId(): ?int
     {
@@ -124,13 +120,6 @@ class Event
         return $this->media;
     }
 
-    public function setMedia(Collection $media): self
-    {
-        $this->media = $media;
-        return $this;
-    }
-
-
     public function addMedia(Media $media): self
     {
         if (!$this->media->contains($media)) {
@@ -144,7 +133,6 @@ class Event
     public function removeMedia(Media $media): self
     {
         if ($this->media->removeElement($media)) {
-            // Set the owning side to null
             if ($media->getEvent() === $this) {
                 $media->setEvent(null);
             }

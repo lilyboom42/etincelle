@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Événement {{ action }} : {{ event.title }}</title>
+</head>
+<body>
+    <p>Bonjour,</p>
+
+    <p>Nous vous informons que l'événement suivant a été {{ action }} :</p>
+
+    <h2>{{ event.title }}</h2>
+    <p>{{ event.description }}</p>
+    <p>Date de l'événement : {{ event.eventDate|date('d/m/Y H:i') }}</p>
+
+    <p>Cordialement,</p>
+    <p>L'équipe</p>
+</body>
+</html>

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241030134700 extends AbstractMigration
+final class Version20241104174248 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -35,7 +35,7 @@ final class Version20241030134700 extends AbstractMigration
         $this->addSql('CREATE TABLE product_customization (id INT AUTO_INCREMENT NOT NULL, product_id INT NOT NULL, customization_name VARCHAR(50) NOT NULL, customization_option LONGTEXT NOT NULL, price NUMERIC(10, 2) NOT NULL, INDEX IDX_71EE75344584665A (product_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product_image (id INT AUTO_INCREMENT NOT NULL, product_id INT NOT NULL, images_path VARCHAR(255) DEFAULT NULL, updated_at DATETIME DEFAULT NULL, INDEX IDX_64617F034584665A (product_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE reviews (id INT AUTO_INCREMENT NOT NULL, product_id INT NOT NULL, user_id INT NOT NULL, rating INT NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_6970EB0F4584665A (product_id), INDEX IDX_6970EB0FA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE subscribers (id INT AUTO_INCREMENT NOT NULL, user_id_id INT DEFAULT NULL, email VARCHAR(100) NOT NULL, subscribed_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_2FCD16AC9D86650F (user_id_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE subscriber (id INT AUTO_INCREMENT NOT NULL, event_id INT NOT NULL, user_id INT DEFAULT NULL, email VARCHAR(100) NOT NULL, subscribed_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_AD005B6971F7E88B (event_id), INDEX IDX_AD005B69A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, user_detail_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, first_name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, username VARCHAR(180) NOT NULL, is_active TINYINT(1) NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', updated_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', reset_token VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), UNIQUE INDEX UNIQ_8D93D649F85E0677 (username), UNIQUE INDEX UNIQ_8D93D649D8308E5F (user_detail_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_favorites (user_id INT NOT NULL, product_id INT NOT NULL, INDEX IDX_E489ED11A76ED395 (user_id), INDEX IDX_E489ED114584665A (product_id), PRIMARY KEY(user_id, product_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_details (id INT AUTO_INCREMENT NOT NULL, city VARCHAR(50) NOT NULL, address VARCHAR(150) NOT NULL, country VARCHAR(50) NOT NULL, postal_code VARCHAR(10) NOT NULL, phone_number VARCHAR(15) NOT NULL, birth_date DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -57,7 +57,8 @@ final class Version20241030134700 extends AbstractMigration
         $this->addSql('ALTER TABLE product_image ADD CONSTRAINT FK_64617F034584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE reviews ADD CONSTRAINT FK_6970EB0F4584665A FOREIGN KEY (product_id) REFERENCES product (id)');
         $this->addSql('ALTER TABLE reviews ADD CONSTRAINT FK_6970EB0FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $this->addSql('ALTER TABLE subscribers ADD CONSTRAINT FK_2FCD16AC9D86650F FOREIGN KEY (user_id_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE subscriber ADD CONSTRAINT FK_AD005B6971F7E88B FOREIGN KEY (event_id) REFERENCES event (id)');
+        $this->addSql('ALTER TABLE subscriber ADD CONSTRAINT FK_AD005B69A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D649D8308E5F FOREIGN KEY (user_detail_id) REFERENCES user_details (id)');
         $this->addSql('ALTER TABLE user_favorites ADD CONSTRAINT FK_E489ED11A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE user_favorites ADD CONSTRAINT FK_E489ED114584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
@@ -83,7 +84,8 @@ final class Version20241030134700 extends AbstractMigration
         $this->addSql('ALTER TABLE product_image DROP FOREIGN KEY FK_64617F034584665A');
         $this->addSql('ALTER TABLE reviews DROP FOREIGN KEY FK_6970EB0F4584665A');
         $this->addSql('ALTER TABLE reviews DROP FOREIGN KEY FK_6970EB0FA76ED395');
-        $this->addSql('ALTER TABLE subscribers DROP FOREIGN KEY FK_2FCD16AC9D86650F');
+        $this->addSql('ALTER TABLE subscriber DROP FOREIGN KEY FK_AD005B6971F7E88B');
+        $this->addSql('ALTER TABLE subscriber DROP FOREIGN KEY FK_AD005B69A76ED395');
         $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D649D8308E5F');
         $this->addSql('ALTER TABLE user_favorites DROP FOREIGN KEY FK_E489ED11A76ED395');
         $this->addSql('ALTER TABLE user_favorites DROP FOREIGN KEY FK_E489ED114584665A');
@@ -102,7 +104,7 @@ final class Version20241030134700 extends AbstractMigration
         $this->addSql('DROP TABLE product_customization');
         $this->addSql('DROP TABLE product_image');
         $this->addSql('DROP TABLE reviews');
-        $this->addSql('DROP TABLE subscribers');
+        $this->addSql('DROP TABLE subscriber');
         $this->addSql('DROP TABLE user');
         $this->addSql('DROP TABLE user_favorites');
         $this->addSql('DROP TABLE user_details');

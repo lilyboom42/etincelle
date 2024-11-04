@@ -8,35 +8,28 @@
     <h1>{{ isEdit ? 'Modifier' : 'Ajouter' }} un événement</h1>
 
     {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-        <!-- Affichage des erreurs du formulaire -->
         {{ form_errors(form) }}
 
-        <!-- Affichage des champs du formulaire -->
         {{ form_row(form.title) }}
         {{ form_row(form.description) }}
         {{ form_row(form.eventDate) }}
 
         <div id="event-media-wrapper" data-prototype="{{ form_widget(form.media.vars.prototype)|e('html_attr') }}">
-            <!-- Affichage des fichiers média actuels (édition) -->
             {% if isEdit and event.media|length > 0 %}
                 <h3>Médias existants :</h3>
                 {% for media in event.media %}
                     <div class="event-media-item mb-2">
                         <p>Média actuel : <a href="{{ vich_uploader_asset(media, 'mediaFile') }}" target="_blank">{{ media.filename }}</a></p>
-                        <!-- Vous pouvez ajouter un bouton pour supprimer le média existant -->
                     </div>
                 {% endfor %}
             {% endif %}
 
-            <!-- Champs de média pour nouvel ajout -->
             {% for mediaForm in form.media %}
                 {{ form_row(mediaForm) }}
             {% endfor %}
         </div>
 
-        <!-- Le bouton pour ajouter de nouveaux médias est ajouté par le JavaScript -->
-
-        <button type="submit" class="btn btn-success" aria-label="{{ isEdit ? 'Enregistrer les modifications de l\'événement' : 'Créer un nouvel événement' }}">
+        <button type="submit" class="btn btn-success">
             {{ isEdit ? 'Enregistrer les modifications' : 'Créer l\'événement' }}
         </button>
 
@@ -45,66 +38,50 @@
 
 {% block javascript %}
     <script>
-        // JavaScript pour gérer l'ajout dynamique de champs de médias
         document.addEventListener('DOMContentLoaded', function() {
-    // Récupère le conteneur de la collection
-    var $collectionHolder = document.querySelector('#event-media-wrapper');
+            var $collectionHolder = document.querySelector('#event-media-wrapper');
 
-    // Ajoute le bouton "Ajouter un média"
-    var addMediaButton = document.createElement('button');
-    addMediaButton.type = 'button';
-    addMediaButton.className = 'btn btn-primary mb-3';
-    addMediaButton.innerText = 'Ajouter un média';
+            var addMediaButton = document.createElement('button');
+            addMediaButton.type = 'button';
+            addMediaButton.className = 'btn btn-primary mb-3';
+            addMediaButton.innerText = 'Ajouter un média';
 
-    var newLinkDiv = document.createElement('div');
-    newLinkDiv.appendChild(addMediaButton);
+            var newLinkDiv = document.createElement('div');
+            newLinkDiv.appendChild(addMediaButton);
 
-    $collectionHolder.appendChild(newLinkDiv);
+            $collectionHolder.appendChild(newLinkDiv);
 
-    // Compte le nombre de champs actuels dans la collection
-    $collectionHolder.dataset.index = $collectionHolder.querySelectorAll('.event-media-item').length;
+            $collectionHolder.dataset.index = $collectionHolder.querySelectorAll('.event-media-item').length;
 
-    addMediaButton.addEventListener('click', function(e) {
-        // Ajoute un nouveau champ de fichier
-        addMediaForm($collectionHolder, newLinkDiv);
-    });
-});
+            addMediaButton.addEventListener('click', function(e) {
+                addMediaForm($collectionHolder, newLinkDiv);
+            });
+        });
 
-function addMediaForm($collectionHolder, newLinkDiv) {
-    // Récupère le prototype de données
-    var prototype = $collectionHolder.dataset.prototype;
+        function addMediaForm($collectionHolder, newLinkDiv) {
+            var prototype = $collectionHolder.dataset.prototype;
+            var index = $collectionHolder.dataset.index;
 
-    // Récupère l'index pour le nouveau champ
-    var index = $collectionHolder.dataset.index;
+            var newForm = prototype.replace(/__name__/g, index);
+            $collectionHolder.dataset.index = parseInt(index) + 1;
 
-    // Remplace '__name__' dans le prototype par l'index
-    var newForm = prototype.replace(/__name__/g, index);
+            var newFormDiv = document.createElement('div');
+            newFormDiv.innerHTML = newForm;
+            newFormDiv.classList.add('event-media-item', 'mb-2');
 
-    // Incrémente l'index pour le prochain élément
-    $collectionHolder.dataset.index = parseInt(index) + 1;
+            var removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'btn btn-danger remove-media-button mt-2';
+            removeButton.innerText = 'Supprimer';
 
-    // Crée un élément contenant le formulaire
-    var newFormDiv = document.createElement('div');
-    newFormDiv.innerHTML = newForm;
-    newFormDiv.classList.add('event-media-item', 'mb-2');
+            newFormDiv.appendChild(removeButton);
 
-    // Ajoute un bouton pour supprimer le champ
-    var removeButton = document.createElement('button');
-    removeButton.type = 'button';
-    removeButton.className = 'btn btn-danger remove-media-button mt-2';
-    removeButton.innerText = 'Supprimer';
+            $collectionHolder.insertBefore(newFormDiv, newLinkDiv);
 
-    newFormDiv.appendChild(removeButton);
-
-    // Ajoute le nouveau formulaire avant le bouton "Ajouter un média"
-    $collectionHolder.insertBefore(newFormDiv, newLinkDiv);
-
-    // Ajoute un écouteur d'événement au bouton de suppression
-    removeButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        $collectionHolder.removeChild(newFormDiv);
-    });
-}
-
+            removeButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                $collectionHolder.removeChild(newFormDiv);
+            });
+        }
     </script>
 {% endblock %}

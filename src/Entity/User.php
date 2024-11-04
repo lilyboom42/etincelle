@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Cart;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -62,8 +61,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
     private Collection $orders;
 
-    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
-    private ?Subscribers $subscribers = null;
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Subscriber $subscriber = null;
 
     #[ORM\ManyToMany(targetEntity: Product::class)]
     #[ORM\JoinTable(name: 'user_favorites')]
@@ -145,6 +144,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
+        // Si vous stockez des données temporaires sensibles, effacez-les ici
     }
 
     public function getResetToken(): ?string
@@ -271,22 +271,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSubscribers(): ?Subscribers
+    public function getSubscriber(): ?Subscriber
     {
-        return $this->subscribers;
+        return $this->subscriber;
     }
 
-    public function setSubscribers(?Subscribers $subscribers): static
+    public function setSubscriber(?Subscriber $subscriber): self
     {
-        if ($subscribers === null && $this->subscribers !== null) {
-            $this->subscribers->setUserId(null);
+        // Assurez-vous que la relation est bien établie dans les deux sens
+        if ($subscriber !== null && $subscriber->getUser() !== $this) {
+            $subscriber->setUser($this);
         }
-
-        if ($subscribers !== null && $subscribers->getUserId() !== $this) {
-            $subscribers->setUserId($this);
-        }
-
-        $this->subscribers = $subscribers;
+        $this->subscriber = $subscriber;
         return $this;
     }
 
@@ -320,8 +316,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->cart = $cart;
             $cart->setUser($this);
         }
-    
         return $this;
     }
-    
 }
