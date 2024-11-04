@@ -30,6 +30,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    // Propriété temporaire pour le formulaire de changement de mot de passe (non persistée)
+    #[Assert\Length(min: 6, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.")]
+    private ?string $plainPassword = null;
+
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?UserDetails $userDetail = null;
@@ -144,7 +148,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        // Si vous stockez des données temporaires sensibles, effacez-les ici
+        // Efface les données sensibles si nécessaire
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
     }
 
     public function getResetToken(): ?string
@@ -228,25 +243,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->blogPosts;
     }
 
-    public function addBlogPost(BlogPost $blogPost): static
-    {
-        if (!$this->blogPosts->contains($blogPost)) {
-            $this->blogPosts->add($blogPost);
-            $blogPost->setAuthor($this);
-        }
-        return $this;
-    }
-
-    public function removeBlogPost(BlogPost $blogPost): static
-    {
-        if ($this->blogPosts->removeElement($blogPost)) {
-            if ($blogPost->getAuthor() === $this) {
-                $blogPost->setAuthor(null);
-            }
-        }
-        return $this;
-    }
-
     public function getOrders(): Collection
     {
         return $this->orders;
@@ -278,7 +274,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setSubscriber(?Subscriber $subscriber): self
     {
-        // Assurez-vous que la relation est bien établie dans les deux sens
         if ($subscriber !== null && $subscriber->getUser() !== $this) {
             $subscriber->setUser($this);
         }
