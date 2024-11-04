@@ -4,18 +4,15 @@
 
 {% block body %}
     <h1>Mon Profil</h1>
-
-  {{ form_start(form) }}
-        {{ form_row(form.firstName) }}
-        {{ form_row(form.lastName) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.username) }}
-        {# Champs pour le mot de passe #}
-        {{ form_row(form.plainPassword.first) }}
-        {{ form_row(form.plainPassword.second) }}
-        <button type="submit" class="btn btn-success">Mettre à jour</button>
+    {{ form_start(form) }}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.plainPassword.first) }}
+    {{ form_row(form.plainPassword.second) }}
+    <button type="submit" class="btn btn-success">Mettre à jour</button>
     {{ form_end(form) }}
-
 
     <h2>Mes Commandes</h2>
     <ul>
@@ -26,3 +23,4 @@
         {% endfor %}
     </ul>
 {% endblock %}
+
