@@ -79,11 +79,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(max: 255)]
     private ?string $resetToken = null;
 
+    /**
+     * @var Collection<int, Appointment>
+     */
+    #[ORM\OneToMany(targetEntity: Appointment::class, mappedBy: 'user')]
+    private Collection $appointments;
+
     public function __construct()
     {
         $this->blogPosts = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->favorites = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -311,6 +318,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->cart = $cart;
             $cart->setUser($this);
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Appointment>
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointment $appointment): static
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments->add($appointment);
+            $appointment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointment $appointment): static
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            // set the owning side to null (unless already changed)
+            if ($appointment->getUser() === $this) {
+                $appointment->setUser(null);
+            }
+        }
+
         return $this;
     }
 }

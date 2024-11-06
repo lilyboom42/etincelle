@@ -1,7 +1,11 @@
 <?php
-// src/Service/StripeConfig.php
 
 namespace App\Service;
+
+use App\Entity\Appointment;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class StripeConfig
 {

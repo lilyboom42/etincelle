@@ -54,5 +54,10 @@ services:
     # Rendre le service StripeConfig public si nécessaire
         public: true
 
+    App\Service\StripeService:
+        arguments:
+            $stripeConfig: '@App\Service\StripeConfig'
+            $router: '@router'
+
 
     

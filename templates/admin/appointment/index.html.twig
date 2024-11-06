@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Demandes de rendez-vous en attente</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Date et heure</th>
+        <th>Service</th>
+        <th>Client</th>
+        <th>Actions</th>
+    </tr>
+    {% for appointment in appointments %}
+    <tr>
+        <td>{{ appointment.id }}</td>
+        <td>{{ appointment.dateTime|date('Y-m-d H:i') }}</td>
+        <td>{{ appointment.serviceType }}</td>
+        <td>{{ appointment.user.email }}</td>
+        <td>
+            <a href="{{ path('admin_appointment_approve', {'id': appointment.id}) }}">Approuver</a>
+            <a href="{{ path('admin_appointment_reject', {'id': appointment.id}) }}">Refuser</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

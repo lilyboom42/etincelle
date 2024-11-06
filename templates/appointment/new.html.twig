@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Demander un rendez-vous</h1>
+
+{{ form_start(form) }}
+    {{ form_row(form.datetime) }}
+    {{ form_row(form.serviceType) }}
+    <button type="submit">Envoyer</button>
+{{ form_end(form) }}
+{% endblock %}

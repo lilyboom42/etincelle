@@ -1,0 +1,5 @@
+<h2>Nouveau rendez-vous confirmé</h2>
+<p>Un nouveau rendez-vous a été confirmé pour {{ appointment.user.firstName }} {{ appointment.user.lastName }}.</p>
+<p>Date et heure : {{ appointment.datetime|date('d/m/Y H:i') }}</p>
+<p>Type de service : {{ appointment.serviceType }}</p>
+<p><a href="{{ googleLink }}" target="_blank">Ajouter à Google Calendar</a> | <a href="{{ icalLink }}" target="_blank">Télécharger iCal</a></p>

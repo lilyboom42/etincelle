@@ -13,6 +13,7 @@
 {% endfor %}
 
 <h1>Mon Profil</h1>
+
 {{ form_start(form) }}
 {{ form_row(form.firstName) }}
 {{ form_row(form.lastName) }}
@@ -26,19 +27,45 @@
 <h2>Mes Commandes</h2>
 <ul>
     {% for order in orders %}
-    <li>
-        Commande #{{ order.id }} - {{ order.total }}€ - {{ order.createdAt|date('d/m/Y') }}
-        <ul>
-            {% for orderline in order.orderlines %}
-                <li>{{ orderline.product.name }} - {{ orderline.quantity }} x {{ orderline.price }}€</li>
-            {% else %}
-                <li>Aucune ligne de commande disponible.</li>
-            {% endfor %}
-        </ul>
-    </li>
-{% else %}
-    <li>Vous n'avez pas encore de commandes.</li>
-{% endfor %}
-
+        <li>
+            Commande #{{ order.id }} - {{ order.total }}€ - {{ order.createdAt|date('d/m/Y') }}
+            <ul>
+                {% for orderline in order.orderLines %}
+                    <li>{{ orderline.product.name }} - {{ orderline.quantity }} x {{ orderline.price }}€</li>
+                {% else %}
+                    <li>Aucune ligne de commande disponible.</li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% else %}
+        <li>Vous n'avez pas encore de commandes.</li>
+    {% endfor %}
 </ul>
+
+<h2>Mes Rendez-vous</h2>
+<ul>
+    {% for appointment in appointments %}
+        <li>
+            Rendez-vous #{{ appointment.id }} - {{ appointment.datetime|date('d/m/Y H:i') }} - {{ appointment.serviceType|capitalize }}
+            <br>
+            Statut :
+            {% if appointment.status == 'approved' %}
+                <span class="text-success">Accepté</span>
+                {% if appointment.payment is null %}
+                    <a href="{{ path('appointment_payment', {'id': appointment.id}) }}" class="btn btn-primary">Payer maintenant</a>
+                    
+                {% else %}
+                    <span class="text-info">Payé le {{ appointment.payment.paymentDate|date('d/m/Y') }}</span>
+                {% endif %}
+            {% elseif appointment.status == 'rejected' %}
+                <span class="text-danger">Refusé</span>
+            {% else %}
+                <span class="text-warning">En attente</span>
+            {% endif %}
+        </li>
+    {% else %}
+        <li>Vous n'avez pas encore de rendez-vous.</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}

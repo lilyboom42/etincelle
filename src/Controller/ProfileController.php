@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\UserDetails;
 use App\Form\UserProfileType;
+use App\Repository\AppointmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,13 +24,15 @@ class ProfileController extends AbstractController
         EntityManagerInterface $entityManager,
         UserInterface $user,
         UserPasswordHasherInterface $passwordHasher,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        AppointmentRepository $appointmentRepository
     ): Response {
         // Vérifier que l'utilisateur est bien une instance de la classe User
         if (!$user instanceof User) {
             throw $this->createAccessDeniedException('Accès non autorisé.');
         }
 
+        // Gestion du formulaire de profil
         $userDetails = $user->getUserDetail();
 
         if (!$userDetails) {
@@ -53,15 +56,12 @@ class ProfileController extends AbstractController
 
             $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
 
-            // Générer une URL (par exemple, vers la page de profil)
-            $url = $this->generateUrl('profile_index', [], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
-
             // Envoi d'un e-mail après modification du profil
             $email = (new Email())
                 ->from('no-reply@votre-site.com') // Remplacez par votre adresse e-mail d'envoi
                 ->to($user->getEmail())
                 ->subject('Modification de votre profil')
-                ->html($this->renderView('emails/change.html.twig', ['url' => $url]));
+                ->html($this->renderView('emails/change.html.twig'));
 
             $mailer->send($email);
         }
@@ -69,9 +69,13 @@ class ProfileController extends AbstractController
         // Récupérer les commandes de l'utilisateur
         $orders = $user->getOrders();
 
+        // Récupérer les rendez-vous de l'utilisateur
+        $appointments = $appointmentRepository->findBy(['user' => $user]);
+
         return $this->render('profile/index.html.twig', [
             'form' => $form->createView(),
             'orders' => $orders,
+            'appointments' => $appointments,
         ]);
     }
 }
