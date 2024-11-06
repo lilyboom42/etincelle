@@ -1,7 +1,5 @@
 <?php
 
-// src/Form/EventType.php
-
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -14,7 +12,7 @@ use App\Entity\Event;
 
 class EventType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('title')
@@ -41,12 +39,12 @@ class EventType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'mapped' => false, // Champ non mappé directement à l'entité Event
+                'mapped' => false,
                 'required' => false,
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Event::class,

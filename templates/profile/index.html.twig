@@ -2,36 +2,43 @@
 
 {% block title %}Profil{% endblock %}
 
-
-
 {% block body %}
 
 {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
-    
-    <h1>Mon Profil</h1>
-    {{ form_start(form) }}
-    {{ form_row(form.firstName) }}
-    {{ form_row(form.lastName) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.username) }}
-    {{ form_row(form.plainPassword.first) }}
-    {{ form_row(form.plainPassword.second) }}
-    <button type="submit" class="btn btn-success">Mettre à jour</button>
-    {{ form_end(form) }}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
 
-    <h2>Mes Commandes</h2>
-    <ul>
-        {% for order in orders %}
-            <li>Commande #{{ order.id }} - {{ order.total }}€ - {{ order.createdAt|date('d/m/Y') }}</li>
-        {% else %}
-            <li>Vous n'avez pas encore de commandes.</li>
-        {% endfor %}
-    </ul>
+<h1>Mon Profil</h1>
+{{ form_start(form) }}
+{{ form_row(form.firstName) }}
+{{ form_row(form.lastName) }}
+{{ form_row(form.email) }}
+{{ form_row(form.username) }}
+{{ form_row(form.plainPassword.first) }}
+{{ form_row(form.plainPassword.second) }}
+<button type="submit" class="btn btn-success">Mettre à jour</button>
+{{ form_end(form) }}
+
+<h2>Mes Commandes</h2>
+<ul>
+    {% for order in orders %}
+    <li>
+        Commande #{{ order.id }} - {{ order.total }}€ - {{ order.createdAt|date('d/m/Y') }}
+        <ul>
+            {% for orderline in order.orderlines %}
+                <li>{{ orderline.product.name }} - {{ orderline.quantity }} x {{ orderline.price }}€</li>
+            {% else %}
+                <li>Aucune ligne de commande disponible.</li>
+            {% endfor %}
+        </ul>
+    </li>
+{% else %}
+    <li>Vous n'avez pas encore de commandes.</li>
+{% endfor %}
+
+</ul>
 {% endblock %}
-
