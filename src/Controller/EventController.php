@@ -79,7 +79,7 @@ public function index(Request $request, EntityManagerInterface $entityManager, P
             return $this->redirectToRoute('event_index');
         }
 
-        return $this->render('event/edit.html.twig', [
+        return $this->render('event/new.html.twig', [
             'form' => $form->createView(),
             'isEdit' => true,
             'event' => $event,

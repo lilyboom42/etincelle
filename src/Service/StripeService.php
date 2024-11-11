@@ -28,9 +28,9 @@ class StripeService
                 'price_data' => [
                     'currency' => 'eur',
                     'product_data' => [
-                        'name' => $appointment->getServiceType(),
+                        'name' => $appointment->getService()->getName(),
                     ],
-                    'unit_amount' => 5000, // Montant en centimes (par exemple 50,00 €)
+                    'unit_amount' => $appointment->getPrice() * 100, // en centimes
                 ],
                 'quantity' => 1,
             ]],

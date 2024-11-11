@@ -39,13 +39,16 @@ class Order
 
     #[ORM\Column(type: 'string', enumType: OrderStatus::class)]
     #[Assert\NotNull(message: "Le statut de la commande ne doit pas être nul.")]
-    private OrderStatus $orderStatus;
+    private OrderStatus $orderStatus = OrderStatus::PENDING; // Valeur par défaut
 
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderLine::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $orderLines;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $stripeSessionId = null;
+    
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $trackingNumber = null;
 
     public function __construct()
     {
@@ -55,7 +58,9 @@ class Order
     #[ORM\PrePersist]
     public function setCreationDate(): void
     {
-        $this->createdAt = new \DateTimeImmutable();
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
         $this->updatedAt = new \DateTimeImmutable();
     }
 
@@ -82,10 +87,9 @@ class Order
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
-
         return $this;
     }
 
@@ -94,10 +98,9 @@ class Order
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(?User $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -106,10 +109,9 @@ class Order
         return $this->total;
     }
 
-    public function setTotal(string $total): static
+    public function setTotal(string $total): self
     {
         $this->total = $total;
-
         return $this;
     }
 
@@ -118,10 +120,9 @@ class Order
         return $this->orderStatus;
     }
 
-    public function setOrderStatus(OrderStatus $orderStatus): static
+    public function setOrderStatus(OrderStatus $orderStatus): self
     {
         $this->orderStatus = $orderStatus;
-
         return $this;
     }
 
@@ -130,7 +131,7 @@ class Order
         return $this->orderLines;
     }
 
-    public function addOrderLine(OrderLine $orderLine): static
+    public function addOrderLine(OrderLine $orderLine): self
     {
         if (!$this->orderLines->contains($orderLine)) {
             $this->orderLines->add($orderLine);
@@ -140,7 +141,7 @@ class Order
         return $this;
     }
 
-    public function removeOrderLine(OrderLine $orderLine): static
+    public function removeOrderLine(OrderLine $orderLine): self
     {
         if ($this->orderLines->removeElement($orderLine)) {
             if ($orderLine->getOrder() === $this) {
@@ -156,10 +157,20 @@ class Order
         return $this->stripeSessionId;
     }
 
-    public function setStripeSessionId(?string $stripeSessionId): static
+    public function setStripeSessionId(?string $stripeSessionId): self
     {
         $this->stripeSessionId = $stripeSessionId;
+        return $this;
+    }
 
+    public function getTrackingNumber(): ?string
+    {
+        return $this->trackingNumber;
+    }
+    
+    public function setTrackingNumber(?string $trackingNumber): self
+    {
+        $this->trackingNumber = $trackingNumber;
         return $this;
     }
 }

@@ -2,33 +2,68 @@
 
 namespace App\Entity;
 
-use App\Entity\Payment;
 use App\Repository\AppointmentRepository;
-use Doctrine\DBAL\Types\Types;
+use App\Enum\AppointmentStatus;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 class Appointment
 {
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $datetime = null;
 
-    #[ORM\Column(length: 80)]
-    private ?string $serviceType = null;
+    #[ORM\Column(type: 'string', enumType: AppointmentStatus::class)]
+    private AppointmentStatus $status = AppointmentStatus::PENDING;
 
-    #[ORM\Column(length: 50)]
-    private ?string $status = null;
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $trackingNumber = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?User $user = null;
 
-    #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: Service::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Service $service = null;
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private ?float $price = null;
+
+    #[ORM\ManyToOne(targetEntity: Cart::class, inversedBy: 'appointments')]
+    private ?Cart $cart = null;
+
+    #[ORM\OneToOne(targetEntity: Payment::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Payment $payment = null;
+
+    // Getters et Setters
+
+    public function getTrackingNumber(): ?string
+    {
+        return $this->trackingNumber;
+    }
+
+    public function setTrackingNumber(?string $trackingNumber): self
+    {
+        $this->trackingNumber = $trackingNumber;
+        return $this;
+    }
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): self
+    {
+        $this->payment = $payment;
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -40,34 +75,20 @@ class Appointment
         return $this->datetime;
     }
 
-    public function setDatetime(\DateTimeInterface $datetime): static
+    public function setDatetime(\DateTimeInterface $datetime): self
     {
         $this->datetime = $datetime;
-
         return $this;
     }
 
-    public function getServiceType(): ?string
-    {
-        return $this->serviceType;
-    }
-
-    public function setServiceType(string $serviceType): static
-    {
-        $this->serviceType = $serviceType;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
+    public function getStatus(): AppointmentStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(AppointmentStatus $status): self
     {
         $this->status = $status;
-
         return $this;
     }
 
@@ -76,32 +97,48 @@ class Appointment
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(?User $user): self
     {
         $this->user = $user;
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): self
+    {
+        $this->service = $service;
+
+        // Définir automatiquement le prix de l'appointment en fonction du service
+        if ($service) {
+            $this->price = $service->getPrice();
+        }
 
         return $this;
     }
 
-    public function getPayment(): ?Payment
+    public function getPrice(): ?float
     {
-        return $this->payment;
+        return $this->price;
     }
 
-    public function setPayment(?Payment $payment): static
+    public function setPrice(float $price): self
     {
-        // unset the owning side of the relation if necessary
-        if ($payment === null && $this->payment !== null) {
-            $this->payment->setAppointment(null);
-        }
+        $this->price = $price;
+        return $this;
+    }
 
-        // set the owning side of the relation if necessary
-        if ($payment !== null && $payment->getAppointment() !== $this) {
-            $payment->setAppointment($this);
-        }
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
 
-        $this->payment = $payment;
-
+    public function setCart(?Cart $cart): self
+    {
+        $this->cart = $cart;
         return $this;
     }
 }

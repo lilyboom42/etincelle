@@ -1,34 +1,205 @@
+{# templates/registration/register.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <h1>Inscription</h1>
+    <main class="registration-main">
 
-    {# Affichage des messages d'erreur #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">
-                {{ message }}
-            </div>
+        <h1 class="registration-title">Inscription</h1>
+
+        {# Affichage des messages d'erreur et de succès #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
 
-    {{ form_start(registrationForm, {'attr': {'data-turbo': 'false'}}) }}
-    {{ form_errors(registrationForm) }}
-    {{ form_row(registrationForm.email) }}
-    {{ form_row(registrationForm.firstName) }}
-    {{ form_row(registrationForm.lastName) }}
-    {{ form_row(registrationForm.userName) }}
-    {{ form_row(registrationForm.plainPassword) }}
-    {{ form_row(registrationForm.userDetail.city) }}
-    {{ form_row(registrationForm.userDetail.address) }}
-    {{ form_row(registrationForm.userDetail.country) }}
-    {{ form_row(registrationForm.userDetail.postalCode) }}
-    {{ form_row(registrationForm.userDetail.phoneNumber) }}
-    {{ form_row(registrationForm.userDetail.birthDate) }}
-    
-    
-    <button type="submit" class="btn btn-primary">S'inscrire</button>
-    {{ form_end(registrationForm) }}
+        <div class="container registration-container">
+            {{ form_start(registrationForm, {'attr': {'data-turbo': 'false', 'class': 'registration-form'}}) }}
+                {{ form_errors(registrationForm) }}
+
+                {# Email #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.email.vars.id }}">Email</label>
+                    <div class="input-with-icon email">
+                        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'id': registrationForm.email.vars.id}}) }}
+                    </div>
+                    {{ form_errors(registrationForm.email) }}
+                    {% if registrationForm.email.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.email.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Prénom #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.firstName.vars.id }}">Prénom</label>
+                    {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'id': registrationForm.firstName.vars.id}}) }}
+                    {{ form_errors(registrationForm.firstName) }}
+                    {% if registrationForm.firstName.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.firstName.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Nom de famille #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.lastName.vars.id }}">Nom</label>
+                    {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'id': registrationForm.lastName.vars.id}}) }}
+                    {{ form_errors(registrationForm.lastName) }}
+                    {% if registrationForm.lastName.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.lastName.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Nom d'utilisateur #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.userName.vars.id }}">Nom d'utilisateur</label>
+                    {{ form_widget(registrationForm.userName, {'attr': {'class': 'form-control', 'id': registrationForm.userName.vars.id}}) }}
+                    {{ form_errors(registrationForm.userName) }}
+                    {% if registrationForm.userName.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.userName.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Mot de passe #}
+                <div class="form-group">
+                    {{ form_label(registrationForm.plainPassword.first) }}
+                    <div class="input-with-icon password">
+                        {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'id': registrationForm.plainPassword.first.vars.id}}) }}
+                    </div>
+                    {{ form_errors(registrationForm.plainPassword.first) }}
+                    {% if registrationForm.plainPassword.first.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.plainPassword.first.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Confirmer le mot de passe #}
+                <div class="form-group">
+                    {{ form_label(registrationForm.plainPassword.second) }}
+                    <div class="input-with-icon password">
+                        {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'id': registrationForm.plainPassword.second.vars.id}}) }}
+                    </div>
+                    {{ form_errors(registrationForm.plainPassword.second) }}
+                    {% if registrationForm.plainPassword.second.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.plainPassword.second.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Ville #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.userDetail.city.vars.id }}">Ville</label>
+                    {{ form_widget(registrationForm.userDetail.city, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.city.vars.id}}) }}
+                    {{ form_errors(registrationForm.userDetail.city) }}
+                    {% if registrationForm.userDetail.city.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.userDetail.city.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Adresse #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.userDetail.address.vars.id }}">Adresse</label>
+                    {{ form_widget(registrationForm.userDetail.address, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.address.vars.id}}) }}
+                    {{ form_errors(registrationForm.userDetail.address) }}
+                    {% if registrationForm.userDetail.address.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.userDetail.address.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Pays #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.userDetail.country.vars.id }}">Pays</label>
+                    {{ form_widget(registrationForm.userDetail.country, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.country.vars.id}}) }}
+                    {{ form_errors(registrationForm.userDetail.country) }}
+                    {% if registrationForm.userDetail.country.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.userDetail.country.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Code Postal #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.userDetail.postalCode.vars.id }}">Code Postal</label>
+                    {{ form_widget(registrationForm.userDetail.postalCode, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.postalCode.vars.id}}) }}
+                    {{ form_errors(registrationForm.userDetail.postalCode) }}
+                    {% if registrationForm.userDetail.postalCode.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.userDetail.postalCode.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Numéro de Téléphone #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.userDetail.phoneNumber.vars.id }}">Numéro de Téléphone</label>
+                    {{ form_widget(registrationForm.userDetail.phoneNumber, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.phoneNumber.vars.id}}) }}
+                    {{ form_errors(registrationForm.userDetail.phoneNumber) }}
+                    {% if registrationForm.userDetail.phoneNumber.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.userDetail.phoneNumber.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Date de Naissance #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.userDetail.birthDate.vars.id }}">Date de Naissance</label>
+                    {{ form_widget(registrationForm.userDetail.birthDate, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.birthDate.vars.id}}) }}
+                    {{ form_errors(registrationForm.userDetail.birthDate) }}
+                    {% if registrationForm.userDetail.birthDate.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {% for error in registrationForm.userDetail.birthDate.vars.errors %}
+                                <span>{{ error.message }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Bouton de soumission #}
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">S'inscrire</button>
+                </div>
+            {{ form_end(registrationForm) }}
+        </div>
+    </main>
 {% endblock %}

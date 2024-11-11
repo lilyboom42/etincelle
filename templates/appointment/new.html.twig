@@ -1,11 +1,51 @@
+{# templates/appointment/new.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block body %}
-<h1>Demander un rendez-vous</h1>
+{% block title %}Demander un rendez-vous{% endblock %}
 
-{{ form_start(form) }}
-    {{ form_row(form.datetime) }}
-    {{ form_row(form.serviceType) }}
-    <button type="submit">Envoyer</button>
-{{ form_end(form) }}
+{% block body %}
+<main class="appointment-main">
+
+    <section class="appointment-intro">
+        <p>Découvrez nos massages et soins énergétiques pour retrouver harmonie et bien-être. Nos services, réalisés par des praticiens qualifiés, sont adaptés à vos besoins personnels, qu’il s’agisse de relâcher les tensions, de rééquilibrer les énergies ou de revitaliser votre corps et esprit. Nos soins vous procurent détente et sérénité dans un cadre apaisant. Prenez rendez-vous dès aujourd’hui pour une expérience de bien-être unique. Le prix de chaque séance est fixé selon le type de soin choisi, et nous veillons à vous offrir un service de qualité et personnalisé. Offrez-vous un moment rien que pour vous !</p>
+    </section>
+
+    <h1>Nos Services</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Prix</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+                <tr>
+                    <td>{{ service.name }}</td>
+                    <td>{{ service.description }}</td>
+                    <td>{{ service.price }} €</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1 class="appointment-title">Demander un rendez-vous</h1>
+
+    {{ form_start(form, {'attr': {'class': 'form-container'}}) }}
+        <div class="form-group">
+            {{ form_label(form.datetime) }}
+            {{ form_widget(form.datetime, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.datetime) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.service) }}
+            {{ form_widget(form.service, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.service) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    {{ form_end(form) }}
+
+</main>
 {% endblock %}

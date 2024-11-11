@@ -1,3 +1,4 @@
+{# templates/event/form.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}
@@ -5,35 +6,58 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ isEdit ? 'Modifier' : 'Ajouter' }} un événement</h1>
+    <main class="event-form-main">
+        <h1 class="event-form-title">{{ isEdit ? 'Modifier' : 'Ajouter' }} un événement</h1>
 
-    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-        {{ form_errors(form) }}
+        <form class="event-form-container" method="post" enctype="multipart/form-data">
+            {{ form_start(form, {'attr': {'class': 'form-container'}}) }}
+                {{ form_errors(form) }}
 
-        {{ form_row(form.title) }}
-        {{ form_row(form.description) }}
-        {{ form_row(form.eventDate) }}
+                <div class="form-group">
+                    {{ form_label(form.title) }}
+                    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.title) }}
+                </div>
 
-        <div id="event-media-wrapper" data-prototype="{{ form_widget(form.media.vars.prototype)|e('html_attr') }}">
-            {% if isEdit and event.media|length > 0 %}
-                <h3>Médias existants :</h3>
-                {% for media in event.media %}
-                    <div class="event-media-item mb-2">
-                        <p>Média actuel : <a href="{{ vich_uploader_asset(media, 'mediaFile') }}" target="_blank">{{ media.filename }}</a></p>
-                    </div>
-                {% endfor %}
-            {% endif %}
+                <div class="form-group">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
 
-            {% for mediaForm in form.media %}
-                {{ form_row(mediaForm) }}
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    {{ form_label(form.eventDate) }}
+                    {{ form_widget(form.eventDate, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.eventDate) }}
+                </div>
 
-        <button type="submit" class="btn btn-success">
-            {{ isEdit ? 'Enregistrer les modifications' : 'Créer l\'événement' }}
-        </button>
+                <div id="event-media-wrapper" class="media-wrapper" data-prototype="{{ form_widget(form.media.vars.prototype)|e('html_attr') }}">
+                    {% if isEdit and event.media|length > 0 %}
+                        <h3 class="media-existing-title">Médias existants :</h3>
+                        <div class="existing-media-list">
+                            {% for media in event.media %}
+                                <div class="event-media-item mb-2">
+                                    <p>Média actuel : <a href="{{ vich_uploader_asset(media, 'mediaFile') }}" target="_blank" class="media-link">{{ media.filename }}</a></p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
-    {{ form_end(form) }}
+                    {% for mediaForm in form.media %}
+                        <div class="form-group media-form-group">
+                            {{ form_label(mediaForm) }}
+                            {{ form_widget(mediaForm, {'attr': {'class': 'form-control media-input'}}) }}
+                            {{ form_errors(mediaForm) }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-success mt-3">
+                    {{ isEdit ? 'Enregistrer les modifications' : 'Créer l\'événement' }}
+                </button>
+            {{ form_end(form) }}
+        </form>
+    </main>
 {% endblock %}
 
 {% block javascript %}
@@ -43,7 +67,7 @@
 
             var addMediaButton = document.createElement('button');
             addMediaButton.type = 'button';
-            addMediaButton.className = 'btn btn-primary mb-3';
+            addMediaButton.className = 'btn btn-primary mb-3 add-media-button';
             addMediaButton.innerText = 'Ajouter un média';
 
             var newLinkDiv = document.createElement('div');
@@ -67,7 +91,7 @@
 
             var newFormDiv = document.createElement('div');
             newFormDiv.innerHTML = newForm;
-            newFormDiv.classList.add('event-media-item', 'mb-2');
+            newFormDiv.classList.add('event-media-item', 'mb-2', 'media-form-item');
 
             var removeButton = document.createElement('button');
             removeButton.type = 'button';

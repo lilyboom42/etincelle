@@ -124,7 +124,7 @@ class AppointmentPaymentController extends AbstractController
         $start = $appointment->getDatetime();
         $end = (new \DateTime($start->format('Y-m-d H:i:s')))->add(new \DateInterval('PT1H'));
         $title = 'Rendez-vous de ' . $user->getFirstName();
-        $description = 'Rendez-vous pour ' . $appointment->getServiceType();
+        $description = 'Rendez-vous pour ' . $appointment->getService()->getName();
 
         $googleLink = $this->calendarLinkService->generateGoogleCalendarLink($start, $end, $title, $description);
         $icalLink = $this->calendarLinkService->generateIcalLink($start, $end, $title, $description);

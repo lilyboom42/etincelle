@@ -23,7 +23,6 @@ class EventType extends AbstractType
             ->add('media', CollectionType::class, [
                 'entry_type' => FileType::class,
                 'entry_options' => [
-                    'label' => false,
                     'constraints' => [
                         new File([
                             'maxSize' => '30M',
@@ -36,6 +35,7 @@ class EventType extends AbstractType
                         ]),
                     ],
                 ],
+                'label' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,

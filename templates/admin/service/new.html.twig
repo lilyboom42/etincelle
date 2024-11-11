@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ service.id ? 'Modifier le service' : 'Ajouter un nouveau service' }}{% endblock %}
+
+{% block body %}
+<h1>{{ service.id ? 'Modifier le service' : 'Ajouter un nouveau service' }}</h1>
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit" class="btn btn-success">{{ service.id ? 'Mettre à jour' : 'Ajouter' }}</button>
+{{ form_end(form) }}
+
+<a href="{{ path('service_index') }}" class="btn btn-secondary mt-3">Retour à la liste des services</a>
+{% endblock %}

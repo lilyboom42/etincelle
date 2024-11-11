@@ -1,15 +1,18 @@
 <?php
 
+// src/Form/AppointmentType.php
+
 namespace App\Form;
 
 use App\Entity\Appointment;
-use App\Entity\User;
+use App\Entity\Service;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 
 class AppointmentType extends AbstractType
 {
@@ -20,19 +23,14 @@ class AppointmentType extends AbstractType
                 'widget' => 'single_text',
                 'label' => 'Date et heure',
             ])
-            ->add('serviceType', ChoiceType::class, [
-                'choices' => [
-                    'Massage' => 'massage',
-                    'Soin énergétique' => 'soin_energetique',
-                ],
-                'label' => 'Type de service',
-            ])
-            // ->add('status')
-            // ->add('user', EntityType::class, [
-            //     'class' => User::class,
-            //     'choice_label' => 'id',
-            // ])
-        ;
+            ->add('service', EntityType::class, [
+                'class' => Service::class,
+                'choice_label' => function (Service $service) {
+                    return $service->getName() . ' - ' . $service->getPrice() . ' €';
+                },
+                'label' => 'Sélectionnez un service',
+                'placeholder' => 'Choisissez un service',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

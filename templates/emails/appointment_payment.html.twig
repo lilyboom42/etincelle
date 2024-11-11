@@ -1,0 +1,12 @@
+{# templates/emails/appointment_payment.html.twig #}
+
+<p>Bonjour {{ appointment.user.firstName }},</p>
+
+<p>Nous sommes heureux de vous informer que votre rendez-vous pour le {{ appointment.datetime|date('d/m/Y H:i') }} a été approuvé.</p>
+
+<p>Pour finaliser votre réservation, veuillez procéder au paiement en cliquant sur le lien suivant :</p>
+
+<p><a href="{{ paymentLink }}">Procéder au paiement</a></p>
+
+<p>Merci de votre confiance,</p>
+<p>L'équipe de gestion</p>

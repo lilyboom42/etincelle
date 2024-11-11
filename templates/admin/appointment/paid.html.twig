@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rendez-vous Payés{% endblock %}
+
+{% block body %}
+<h1>Rendez-vous Payés</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Service</th>
+            <th>Prix</th>
+            <th>Client</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for appointment in appointments %}
+        {% if appointment.status == constant('App\\Enum\\AppointmentStatus::PAID') %}
+            <tr>
+                <td>{{ appointment.id }}</td>
+                <td>{{ appointment.datetime|date('d/m/Y H:i') }}</td>
+                <td>{{ appointment.service.name }}</td>
+                <td>{{ appointment.price }} €</td>
+            </tr>
+        {% endif %}
+    {% else %}
+        <tr>
+            <td colspan="4" class="text-center">Aucun rendez-vous payé trouvé.</td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}

@@ -23,9 +23,13 @@ class Cart
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $cartItems;
 
+    #[ORM\OneToMany(targetEntity: Appointment::class, mappedBy: 'cart', cascade: ['persist'])]
+    private Collection $appointments;
+
     public function __construct()
     {
         $this->cartItems = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -44,10 +48,9 @@ class Cart
             $this->user = $user;
             $user->setCart($this);
         }
-    
+
         return $this;
     }
-    
 
     public function getCartItems(): Collection
     {
@@ -92,5 +95,31 @@ class Cart
     public function hasItems(): bool
     {
         return !$this->cartItems->isEmpty();
+    }
+
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointment $appointment): self
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments[] = $appointment;
+            $appointment->setCart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointment $appointment): self
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            if ($appointment->getCart() === $this) {
+                $appointment->setCart(null);
+            }
+        }
+
+        return $this;
     }
 }

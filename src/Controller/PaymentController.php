@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse; // Import JsonResponse
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +30,7 @@ class PaymentController extends AbstractController
         private readonly EntityManagerInterface $entityManager,
         private readonly RequestStack $requestStack,
         private readonly LoggerInterface $logger,
-        StripeConfig $stripeConfig  // Injection du service StripeConfig
+        StripeConfig $stripeConfig
     ) {
         $this->stripeConfig = $stripeConfig;
     }
@@ -48,7 +48,6 @@ class PaymentController extends AbstractController
     #[Route('/checkout-page', name: 'checkout_page', methods: ['GET'])]
     public function renderCheckoutPage(): Response
     {
-        // Récupérez la clé publique Stripe depuis StripeConfig
         $stripePublicKey = $this->stripeConfig->getPublicKey();
 
         return $this->render('cart/checkout.html.twig', [
@@ -57,36 +56,32 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/checkout', name: 'checkout', methods: ['POST'])]
-    public function checkout(Request $request): JsonResponse // Changement en JsonResponse
+    public function checkout(Request $request): JsonResponse
     {
-        // Vérifier le token CSRF
         if (!$this->isCsrfTokenValid('checkout', $request->request->get('_token'))) {
             return new JsonResponse(['error' => 'Token CSRF invalide.'], 400);
         }
 
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->getUser();
+        if (!$user instanceof User) {
+            return new JsonResponse(['error' => 'Utilisateur non trouvé ou non connecté.'], 400);
+        }
 
         $cart = $this->getCart();
-
         if (!$cart || count($cart) === 0) {
             return new JsonResponse(['error' => 'Votre panier est vide.'], 400);
         }
 
-        // Utilisation de StripeConfig pour récupérer la clé secrète
         Stripe::setApiKey($this->stripeConfig->getSecretKey());
-
         $lineItems = [];
+
         foreach ($cart as $productId => $details) {
             $product = $this->entityManager->getRepository(Product::class)->find($productId);
-
-            if (!$product) {
-                continue;
-            }
+            if (!$product) continue;
 
             $quantity = $details['quantity'];
 
-            // Vérification du stock avant de créer la session de paiement
             if ($product->getStockQuantity() < $quantity) {
                 return new JsonResponse(['error' => 'Le produit ' . $product->getName() . ' n\'a plus assez de stock.'], 400);
             }
@@ -97,7 +92,7 @@ class PaymentController extends AbstractController
                     'product_data' => [
                         'name' => $product->getName(),
                     ],
-                    'unit_amount' => $product->getPrice() * 100, // En centimes
+                    'unit_amount' => $product->getPrice() * 100,
                 ],
                 'quantity' => $quantity,
             ];
@@ -120,15 +115,11 @@ class PaymentController extends AbstractController
                 'cancel_url' => $this->generateUrl('payment_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
             ]);
 
-            // Log le session_id généré par Stripe
-            $this->logger->info('Session Stripe créée avec succès. ID de session : ' . $checkoutSession->id);
-            $this->logger->info('Redirection vers Stripe avec URL : ' . $checkoutSession->url);
-
             return new JsonResponse(['id' => $checkoutSession->id]);
 
         } catch (\Exception $e) {
             $this->logger->error('Erreur lors de la création de la session de paiement : ' . $e->getMessage());
-            return new JsonResponse(['error' => 'Une erreur est survenue lors de l\'initialisation du paiement : ' . $e->getMessage()], 500);
+            return new JsonResponse(['error' => 'Une erreur est survenue lors de l\'initialisation du paiement.'], 500);
         }
     }
 
@@ -164,7 +155,6 @@ class PaymentController extends AbstractController
             return $this->redirectToRoute('shop_index');
         }
 
-        // Récupérer les métadonnées et le panier
         $userId = $session->metadata->user_id ?? null;
         $cart = json_decode($session->metadata->cart, true);
 
@@ -180,11 +170,9 @@ class PaymentController extends AbstractController
             return $this->redirectToRoute('shop_index');
         }
 
-        // Commencer une transaction
         $this->entityManager->getConnection()->beginTransaction();
 
         try {
-            // Créer la commande
             $order = new Order();
             $order->setUser($user);
             $order->setOrderStatus(OrderStatus::COMPLETED);
@@ -196,7 +184,7 @@ class PaymentController extends AbstractController
                 $product = $this->entityManager->getRepository(Product::class)->find($productId);
 
                 if (!$product) {
-                    continue; // Optionnel : gérer les produits manquants
+                    continue;
                 }
 
                 $quantity = $details['quantity'];
@@ -211,8 +199,6 @@ class PaymentController extends AbstractController
                 $orderLine->setPrice($unitAmount);
 
                 $order->addOrderLine($orderLine);
-
-                // Décrémenter le stock
                 $product->decrementStockQuantity($quantity);
                 $this->entityManager->persist($product);
             }
@@ -221,18 +207,13 @@ class PaymentController extends AbstractController
             $this->entityManager->persist($order);
             $this->entityManager->flush();
 
-            // Valider la transaction
             $this->entityManager->getConnection()->commit();
-
-            // Vider le panier
             $this->saveCart([]);
-
             $this->addFlash('success', 'Votre paiement a été effectué avec succès !');
 
             return $this->redirectToRoute('shop_index');
 
         } catch (\Exception $e) {
-            // Annuler la transaction en cas d'erreur
             $this->entityManager->getConnection()->rollBack();
             $this->logger->error('Erreur lors du traitement de la commande : ' . $e->getMessage());
             $this->addFlash('error', 'Une erreur est survenue lors du traitement de votre commande. Veuillez réessayer.');
@@ -286,11 +267,9 @@ class PaymentController extends AbstractController
                 return new Response('User not found', 400);
             }
 
-            // Commencer une transaction
             $this->entityManager->getConnection()->beginTransaction();
 
             try {
-                // Créer la commande
                 $order = new Order();
                 $order->setUser($user);
                 $order->setOrderStatus(OrderStatus::COMPLETED);
@@ -317,8 +296,6 @@ class PaymentController extends AbstractController
                     $orderLine->setPrice($unitAmount);
 
                     $order->addOrderLine($orderLine);
-
-                    // Décrémenter le stock
                     $product->decrementStockQuantity($quantity);
                     $this->entityManager->persist($product);
                 }
@@ -327,11 +304,9 @@ class PaymentController extends AbstractController
                 $this->entityManager->persist($order);
                 $this->entityManager->flush();
 
-                // Valider la transaction
                 $this->entityManager->getConnection()->commit();
 
             } catch (\Exception $e) {
-                // Annuler la transaction en cas d'erreur
                 $this->entityManager->getConnection()->rollBack();
                 $this->logger->error('Erreur lors du traitement de la commande via webhook : ' . $e->getMessage());
                 return new Response('Webhook processing error', 500);
@@ -340,4 +315,12 @@ class PaymentController extends AbstractController
 
         return new Response('Webhook handled', 200);
     }
+
+    #[Route('/payment/page', name: 'payment_page', methods: ['GET'])]
+public function paymentPage(): Response
+{
+    return $this->render('payment/index.html.twig'); // Assurez-vous que le fichier existe
+}
+
+
 }

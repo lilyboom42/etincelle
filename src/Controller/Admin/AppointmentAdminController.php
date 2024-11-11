@@ -3,48 +3,54 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Appointment;
-use App\Repository\AppointmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Enum\AppointmentStatus;
 
 #[Route('/admin/appointment')]
 class AppointmentAdminController extends AbstractController
 {
-    #[Route('/', name: 'admin_appointment_index')]
-    public function index(AppointmentRepository $appointmentRepository): Response
+    #[Route('/pending', name: 'admin_appointment_pending', methods: ['GET'])]
+    public function pending(EntityManagerInterface $entityManager): Response
     {
-        $appointments = $appointmentRepository->findBy(['status' => 'pending']);
+        $appointments = $entityManager->getRepository(Appointment::class)
+            ->findBy(['status' => AppointmentStatus::PENDING]);
 
-        return $this->render('admin/appointment/index.html.twig', [
-          'appointments' => $appointments,
+        return $this->render('admin/appointment/pending.html.twig', [
+            'appointments' => $appointments,
         ]);
     }
 
-    #[Route('/approve/{id}', name: 'admin_appointment_approve')]
+    #[Route('/approve/{id}', name: 'admin_appointment_approve', methods: ['POST'])]
     public function approve(Appointment $appointment, EntityManagerInterface $entityManager): Response
     {
-        $appointment->setStatus('approved');
+        $appointment->setStatus(AppointmentStatus::APPROVED);
         $entityManager->flush();
 
-        // Envoyer une notification au client pour le paiement
-
-        $this->addFlash('success', 'Le rendez-vous a été approuvé.');
-
-        return $this->redirectToRoute('admin_appointment_index');
+        $this->addFlash('success', 'Rendez-vous approuvé avec succès.');
+        return $this->redirectToRoute('admin_appointment_pending');
     }
 
-    #[Route('/reject/{id}', name: 'admin_appointment_reject')]
+    #[Route('/reject/{id}', name: 'admin_appointment_reject', methods: ['POST'])]
     public function reject(Appointment $appointment, EntityManagerInterface $entityManager): Response
     {
-        $appointment->setStatus('rejected');
+        $appointment->setStatus(AppointmentStatus::REJECTED);
         $entityManager->flush();
 
-        // Envoyer une notification au client pour le refus
+        $this->addFlash('success', 'Rendez-vous rejeté avec succès.');
+        return $this->redirectToRoute('admin_appointment_pending');
+    }
 
-        $this->addFlash('info', 'Le rendez-vous a été rejeté.');
+    #[Route('/paid', name: 'paid_appointments', methods: ['GET'])]
+    public function paidAppointments(EntityManagerInterface $entityManager): Response
+    {
+        $paidAppointments = $entityManager->getRepository(Appointment::class)
+            ->findBy(['status' => AppointmentStatus::APPROVED]);
 
-        return $this->redirectToRoute('admin_appointment_index');
+        return $this->render('admin/appointment/paid.html.twig', [
+            'appointments' => $paidAppointments,
+        ]);
     }
 }

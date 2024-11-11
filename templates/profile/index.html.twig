@@ -1,71 +1,95 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil{% endblock %}
+{% block title %}Mon Profil{% endblock %}
 
 {% block body %}
+    <h1 class="profile-title">Mon Profil</h1>
 
-{% for message in app.flashes('error') %}
-    <div class="alert alert-danger">{{ message }}</div>
-{% endfor %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="admin-dashboard">
+            <h2>Tableau de Bord Administrateur</h2>
+            <div class="admin-buttons">
+                <a href="{{ path('service_index') }}" class="btn btn-primary">Gérer les Services</a>
+                <a href="{{ path('admin_appointment_pending') }}" class="btn btn-primary">Gérer les Rendez-vous en Attente</a>
+                <a href="{{ path('paid_appointments') }}" class="btn btn-primary">Voir Rendez-vous Payés</a>
+                <a href="{{ path('admin_order_index') }}" class="btn btn-primary">Gestion des stocks et envois</a>
+                <a href="{{ path('admin_calendar') }}" class="btn btn-primary">Calendrier</a>
+                <a href="{{ path('admin_user_index') }}" class="btn btn-primary">Gérer les Utilisateurs</a>
+                
+            </div>
+        </div>
+    {% endif %}
 
-{% for message in app.flashes('success') %}
-    <div class="alert alert-success">{{ message }}</div>
-{% endfor %}
-
-<h1>Mon Profil</h1>
-
-{{ form_start(form) }}
-{{ form_row(form.firstName) }}
-{{ form_row(form.lastName) }}
-{{ form_row(form.email) }}
-{{ form_row(form.username) }}
-{{ form_row(form.plainPassword.first) }}
-{{ form_row(form.plainPassword.second) }}
-<button type="submit" class="btn btn-success">Mettre à jour</button>
-{{ form_end(form) }}
-
-<h2>Mes Commandes</h2>
-<ul>
-    {% for order in orders %}
-        <li>
-            Commande #{{ order.id }} - {{ order.total }}€ - {{ order.createdAt|date('d/m/Y') }}
-            <ul>
-                {% for orderline in order.orderLines %}
-                    <li>{{ orderline.product.name }} - {{ orderline.quantity }} x {{ orderline.price }}€</li>
+    <div class="profile-section">
+        <h2>Mes Commandes</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Commande ID</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                    <th>Statut</th>
+                    <th>Numéro de suivi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                        <td>{{ order.total }} €</td>
+                        <td>{{ order.orderStatus.label() }}</td>
+                        <td>
+                            {% if order.trackingNumber %}
+                                {{ order.trackingNumber }}
+                            {% else %}
+                                <span class="text-muted">En attente d'expédition</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <h5>Détails des produits</h5>
+                            <ul>
+                                {% for line in order.orderLines %}
+                                    <li>{{ line.product.name }} - {{ line.quantity }} x {{ line.price }} €</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
                 {% else %}
-                    <li>Aucune ligne de commande disponible.</li>
+                    <tr>
+                        <td colspan="5" class="text-center">Vous n'avez pas encore de commandes.</td>
+                    </tr>
                 {% endfor %}
-            </ul>
-        </li>
-    {% else %}
-        <li>Vous n'avez pas encore de commandes.</li>
-    {% endfor %}
-</ul>
+            </tbody>
+        </table>
+    </div>
 
-<h2>Mes Rendez-vous</h2>
-<ul>
-    {% for appointment in appointments %}
-        <li>
-            Rendez-vous #{{ appointment.id }} - {{ appointment.datetime|date('d/m/Y H:i') }} - {{ appointment.serviceType|capitalize }}
-            <br>
-            Statut :
-            {% if appointment.status == 'approved' %}
-                <span class="text-success">Accepté</span>
-                {% if appointment.payment is null %}
-                    <a href="{{ path('appointment_payment', {'id': appointment.id}) }}" class="btn btn-primary">Payer maintenant</a>
-                    
-                {% else %}
-                    <span class="text-info">Payé le {{ appointment.payment.paymentDate|date('d/m/Y') }}</span>
-                {% endif %}
-            {% elseif appointment.status == 'rejected' %}
-                <span class="text-danger">Refusé</span>
+    <div class="appointments-section">
+        <h2>Mes Rendez-vous</h2>
+        <ul class="appointments-list">
+            {% for appointment in appointments %}
+                <li>
+                    <strong>Rendez-vous #{{ appointment.id }}</strong> - {{ appointment.datetime|date('d/m/Y H:i') }} - {{ appointment.service.name|capitalize }}
+                    <br>
+                    Statut : 
+                    {% if appointment.status == constant('App\\Enum\\AppointmentStatus::APPROVED') %}
+                        <span class="text-success">Approuvé</span>
+                        {% if appointment.payment is null %}
+                            <a href="{{ path('appointment_payment', {'id': appointment.id}) }}" class="btn btn-primary">Payer maintenant</a>
+                        {% else %}
+                            <span class="text-info">Payé le {{ appointment.payment.paymentDate|date('d/m/Y') }}</span>
+                        {% endif %}
+                    {% elseif appointment.status == constant('App\\Enum\\AppointmentStatus::REJECTED') %}
+                        <span class="text-danger">Refusé</span>
+                    {% else %}
+                        <span class="text-warning">En attente</span>
+                    {% endif %}
+                </li>
             {% else %}
-                <span class="text-warning">En attente</span>
-            {% endif %}
-        </li>
-    {% else %}
-        <li>Vous n'avez pas encore de rendez-vous.</li>
-    {% endfor %}
-</ul>
-
+                <li>Vous n'avez pas encore de rendez-vous.</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

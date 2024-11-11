@@ -1,5 +1,7 @@
 <?php
 
+// src/Controller/RegistrationController.php
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -23,10 +25,8 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // /** @var string $plainPassword */
-            $plainPassword = $form->get('plainPassword')->getData();
-
             // Encode le mot de passe en clair
+            $plainPassword = $form->get('plainPassword')->getData();
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             // Associe UserDetails avec l'utilisateur
@@ -40,19 +40,13 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Traitement nécessaire, comme envoyer un e-mail
+            // Envoyer un e-mail de bienvenue
             $email = (new Email())
-            ->from('admin@etincele.com')
-            ->to($user->getEmail())
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
-            ->subject('bienvenu parmis nous')
-            ->text('Sending emails is fun again!')
-            // ->html('<p>See Twig integration for better HTML integration!</p>');
-            ->html($this->renderView('emails/registration.html.twig', ['user' => $user]));
-
+                ->from('admin@etincele.com')
+                ->to($user->getEmail())
+                ->subject('Bienvenue parmi nous')
+                ->text('Bienvenue sur notre plateforme !')
+                ->html($this->renderView('emails/registration.html.twig', ['user' => $user]));
 
             try {
                 $mailer->send($email);

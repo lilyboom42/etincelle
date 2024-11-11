@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Services{% endblock %}
+
+{% block body %}
+<h1>Liste des Services</h1>
+<a href="{{ path('service_new') }}" class="btn btn-primary mb-3">Ajouter un Service</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom du Service</th>
+            <th>Prix</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td>{{ service.price }}</td>
+                <td>
+                    <a href="{{ path('service_edit', {'id': service.id}) }}" class="btn btn-secondary">Modifier</a>
+                    <form action="{{ path('service_delete', {'id': service.id}) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
+                        <button class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucun service actif disponible.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

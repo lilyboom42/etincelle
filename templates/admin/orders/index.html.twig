@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des commandes et des stocks{% endblock %}
+
+{% block body %}
+<h1>Gestion des commandes et des stocks</h1>
+
+<h2>Produits en stock</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom du produit</th>
+            <th>Quantité en stock</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.stockQuantity }}</td>
+                <td>
+                    <form action="{{ path('admin_product_update_stock', {'id': product.id}) }}" method="post">
+                        <input type="number" name="stock" value="{{ product.stockQuantity }}">
+                        <button type="submit">Mettre à jour</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Commandes</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Commande ID</th>
+            <th>Date</th>
+            <th>Montant</th>
+            <th>Statut</th>
+            <th>Numéro de suivi</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                <td>{{ order.total }} €</td>
+                <td>{{ order.orderStatus.label() }}</td>
+                <td>{{ order.trackingNumber }}</td>
+                <td>
+                    {% if order.orderStatus == constant('App\\Enum\\OrderStatus::PAID') %}
+                        <form action="{{ path('admin_order_add_tracking', {'id': order.id}) }}" method="post">
+                            <input type="text" name="tracking_number" placeholder="Numéro de suivi">
+                            <button type="submit">Ajouter</button>
+                        </form>
+                    {% elseif order.orderStatus == constant('App\\Enum\\OrderStatus::SHIPPED') %}
+                        Expédié
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

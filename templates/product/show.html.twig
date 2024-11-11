@@ -11,7 +11,7 @@
     {% if product.productImages|length > 0 %}
         <div class="product-images">
             {% for image in product.productImages %}
-                <img src="{{ vich_uploader_asset(image, 'imageFile') }}" alt="{{ product.name }}" class="product-image" style="max-width: 300px; max-height: 200px;">
+                <img src="{{ vich_uploader_asset(image, 'imageFile') }}" alt="{{ product.name }}" class="product-image">
             {% endfor %}
         </div>
     {% else %}
@@ -19,7 +19,7 @@
     {% endif %}
 
     <div class="product-details">
-<p><strong>Catégorie :</strong> {{ product.categoryProduct.name }}</p>
+        <p><strong>Catégorie :</strong> {{ product.categoryProduct.name }}</p>
 
         <p>
             <strong>Description :</strong>
@@ -54,15 +54,17 @@
                 </form>
             {% else %}
                 <form action="{{ path('favorite_add', {'id': product.id}) }}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-outline-primary">Ajouter aux favoris</button>
+                    <button type="submit" class="btn btn-outline-danger">Ajouter aux favoris</button>
                 </form>
             {% endif %}
         {% else %}
             <p><a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter ce produit à vos favoris.</p>
         {% endif %}
 
-        <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary mt-3">Ajouter au panier</a>
-        <a href="{{ path('shop_index') }}" class="btn btn-secondary mt-3">Retour à la boutique</a>
-        <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning mt-3">Modifier</a>
+        <div class="button-group">
+            <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
+            <a href="{{ path('shop_index') }}" class="btn btn-secondary">Retour à la boutique</a>
+            <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>
+        </div>
     </div>
 {% endblock %}
