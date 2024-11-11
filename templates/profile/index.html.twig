@@ -20,7 +20,94 @@
         </div>
     {% endif %}
 
-    <div class="profile-section">
+   	<div class="profile-form-section">
+		<h2>Mes Informations</h2>
+		<p>Vous pouvez modifier vos informations personnelles en remplissant le formulaire ci-dessous.</p>
+		<div class="container">
+			{{ form_start(form) }}
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="{{ form.firstName.vars.id }}">Prénom</label>
+						{{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+						{{ form_errors(form.firstName) }}
+					</div>
+					<div class="form-group">
+						<label for="{{ form.lastName.vars.id }}">Nom</label>
+						{{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
+						{{ form_errors(form.lastName) }}
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="{{ form.email.vars.id }}">Email</label>
+						{{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+						{{ form_errors(form.email) }}
+					</div>
+					<div class="form-group">
+						<label for="{{ form.username.vars.id }}">Nom d'utilisateur</label>
+						{{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+						{{ form_errors(form.username) }}
+					</div>
+				</div>
+			</div>
+
+			<div class="password-section">
+				<div class="form-group">
+					<label for="{{ form.plainPassword.first.vars.id }}">Mot de passe</label>
+					{{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+					{{ form_errors(form.plainPassword.first) }}
+				</div>
+				<div class="form-group">
+					<label for="{{ form.plainPassword.second.vars.id }}">Confirmer le mot de passe</label>
+					{{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+					{{ form_errors(form.plainPassword.second) }}
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="{{ form.userDetail.city.vars.id }}">Ville</label>
+				{{ form_widget(form.userDetail.city, {'attr': {'class': 'input-field'}}) }}
+				{{ form_errors(form.userDetail.city) }}
+			</div>
+
+			<div class="form-group">
+				<label for="{{ form.userDetail.address.vars.id }}">Adresse</label>
+				{{ form_widget(form.userDetail.address, {'attr': {'class': 'input-field'}}) }}
+				{{ form_errors(form.userDetail.address) }}
+			</div>
+
+			<div class="form-group">
+				<label for="{{ form.userDetail.country.vars.id }}">Pays</label>
+				{{ form_widget(form.userDetail.country, {'attr': {'class': 'input-field'}}) }}
+				{{ form_errors(form.userDetail.country) }}
+			</div>
+
+			<div class="form-group">
+				<label for="{{ form.userDetail.postalCode.vars.id }}">Code Postal</label>
+				{{ form_widget(form.userDetail.postalCode, {'attr': {'class': 'input-field'}}) }}
+				{{ form_errors(form.userDetail.postalCode) }}
+			</div>
+
+			<div class="form-group">
+				<label for="{{ form.userDetail.phoneNumber.vars.id }}">Numéro de téléphone</label>
+				{{ form_widget(form.userDetail.phoneNumber, {'attr': {'class': 'input-field'}}) }}
+				{{ form_errors(form.userDetail.phoneNumber) }}
+			</div>
+
+			<div class="form-group">
+				<label for="{{ form.userDetail.birthDate.vars.id }}">Date de naissance</label>
+				{{ form_widget(form.userDetail.birthDate, {'attr': {'class': 'input-field'}}) }}
+				{{ form_errors(form.userDetail.birthDate) }}
+			</div>
+
+			<div class="button-group">
+				<button type="submit" class="btn btn-success">Mettre à jour</button>
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+
+	<div class="orders-section">
         <h2>Mes Commandes</h2>
         <table class="table table-striped">
             <thead>

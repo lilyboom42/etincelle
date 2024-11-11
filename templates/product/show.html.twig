@@ -70,9 +70,10 @@
 		<div class="button-group">
 			<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
 			<a href="{{ path('shop_index') }}" class="btn btn-secondary">Retour à la boutique</a>
-            
+
 			{% if is_granted('ROLE_ADMIN') %}
 				<a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>
+                
 			{% endif %}
 
 		</div>
