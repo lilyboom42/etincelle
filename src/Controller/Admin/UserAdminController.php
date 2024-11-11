@@ -10,9 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route('/admin/user')]
+#[IsGranted('ROLE_ADMIN')]
 class UserAdminController extends AbstractController
 {
     #[Route('/', name: 'admin_user_index')]
@@ -27,28 +29,28 @@ class UserAdminController extends AbstractController
 
     #[Route('/edit/{id}', name: 'admin_user_edit')]
     public function edit(User $user, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
-{
-    $form = $this->createForm(UserType::class, $user);
-    $form->handleRequest($request);
+    {
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        if ($form->get('plainPassword')->getData()) {
-            $user->setPassword(
-                $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
-            );
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('plainPassword')->getData()) {
+                $user->setPassword(
+                    $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
+                );
+            }
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Utilisateur mis à jour avec succès.');
+
+            return $this->redirectToRoute('admin_user_index');
         }
 
-        $entityManager->flush();
-        $this->addFlash('success', 'Utilisateur mis à jour avec succès.');
-
-        return $this->redirectToRoute('admin_user_index');
+        return $this->render('admin/user/edit.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
     }
-
-    return $this->render('admin/user/edit.html.twig', [
-        'form' => $form->createView(),
-        'user' => $user,
-    ]);
-}
 
     #[Route('/delete/{id}', name: 'admin_user_delete', methods: ['POST'])]
     public function delete(User $user, EntityManagerInterface $entityManager): Response

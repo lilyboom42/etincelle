@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 class ProductController extends AbstractController
 {
@@ -27,6 +29,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/shop', name: 'shop_index')]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
     {
         $products = $this->productRepository->findAll();
@@ -65,6 +68,7 @@ class ProductController extends AbstractController
 
     #[Route('/product/new', name: 'product_new', methods: ['GET', 'POST'])]
     #[Route('/product/{id}/edit', name: 'product_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function form(Request $request, Product $product = null): Response
     {
         if (!$product) {
@@ -109,6 +113,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/{id}/delete', name: 'product_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, Product $product): Response
     {
         if (!$product) {
