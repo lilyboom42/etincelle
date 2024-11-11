@@ -29,14 +29,13 @@ class UserProfileType extends AbstractType
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur',
             ])
-            // Champs pour le nouveau mot de passe (non obligatoire)
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'required' => false, // Le mot de passe n'est pas obligatoire
                 'first_options' => ['label' => 'Nouveau mot de passe'],
                 'second_options' => ['label' => 'Répéter le mot de passe'],
             ])
-            ->add('userDetail', UserDetailsType::class); // Ajouter les détails utilisateur en sous-formulaire
+            ->add('userDetail', UserDetailsType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

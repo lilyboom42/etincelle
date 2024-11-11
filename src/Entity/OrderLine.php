@@ -36,7 +36,6 @@ class OrderLine
     #[Assert\NotNull(message: "La commande associée ne doit pas être nulle.")]
     private ?Order $order = null;
 
-    // Getters et Setters...
 
     public function getId(): ?int
     {

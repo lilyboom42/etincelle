@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{% if is_granted('ROLE_ADMIN') %}
 {% block title %}Rendez-vous Payés{% endblock %}
 
 {% block body %}
@@ -31,4 +31,6 @@
     {% endfor %}
 </tbody>
 </table>
+	{% endif %}
+
 {% endblock %}

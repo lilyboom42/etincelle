@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{% if is_granted('ROLE_ADMIN') %}
 {% block title %}Gestion des commandes et des stocks{% endblock %}
 
 {% block body %}
@@ -64,4 +64,6 @@
         {% endfor %}
     </tbody>
 </table>
+	{% endif %}
+
 {% endblock %}

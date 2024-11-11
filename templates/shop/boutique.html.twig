@@ -1,79 +1,94 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Boutique{% endblock %}
+{% block title %}Boutique
+{% endblock %}
 
 {% block body %}
-    <h1>Boutique</h1>
+	<h1>Boutique</h1>
 
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger">{{ message }}</div>
+	{% endfor %}
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">{{ message }}</div>
+	{% endfor %}
 
-    <a href="{{ path('product_new') }}" class="btn btn-primary mb-3">Ajouter un nouveau produit</a>
+	{% if is_granted('ROLE_ADMIN') %}
 
-    <div class="product-grid">
-        {% for product in products %}
-            <div class="product-card">
-                <h2 class="product-title">{{ product.name }}</h2>
-                <p>
-                    <strong>Catégorie :</strong>
-                    {{ product.categoryProduct.name }}
-                </p>
+		<a href="{{ path('product_new') }}" class="btn btn-primary mb-3">Ajouter un nouveau produit</a>
 
-                {% if product.productImages|length > 0 %}
-                    {% set imageUrl = vich_uploader_asset(product.productImages|first, 'imageFile') %}
-                    <img src="{{ imageUrl }}" alt="{{ product.name }}" class="product-image">
-                {% else %}
-                    <p>Aucune image disponible pour ce produit.</p>
-                {% endif %}
+	{% endif %}
 
-                <p class="product-description">Prix: {{ product.price }} €</p>
+	<div class="product-grid">
+		{% for product in products %}
+			<div class="product-card">
+				<h2 class="product-title">{{ product.name }}</h2>
+				<p>
+					<strong>Catégorie :</strong>
+					{{ product.categoryProduct.name }}
+				</p>
 
-                {% if product.stockQuantity > 0 %}
-                    <p class="text-success">En stock: {{ product.stockQuantity }}</p>
-                {% else %}
-                    <p class="text-danger">Rupture de stock</p>
-                {% endif %}
+				{% if product.productImages|length > 0 %}
+					{% set imageUrl = vich_uploader_asset(product.productImages|first, 'imageFile') %}
+					<img src="{{ imageUrl }}" alt="{{ product.name }}" class="product-image">
+				{% else %}
+					<p>Aucune image disponible pour ce produit.</p>
+				{% endif %}
 
-                <div class="button-group">
-                    <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
-                    <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>
-                    <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-info">Détails</a>
-                    <form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
-                        <button type="submit" class="btn btn-danger delete-button">Supprimer</button>
-                    </form>
-                </div>
+				<p class="product-description">Prix:
+					{{ product.price }}
+					€</p>
 
-                {# Bouton Favoris avec un Cœur #}
-                {% if app.user %}
-                    <div class="button-group">
-                        {% if app.user.getFavorites().contains(product) %}
-                            <form action="{{ path('favorite_remove', {'id': product.id}) }}" method="post">
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fa fa-heart"></i> Retirer des favoris
-                                </button>
-                            </form>
-                        {% else %}
-                            <form action="{{ path('favorite_add', {'id': product.id}) }}" method="post">
-                                <button type="submit" class="btn btn-outline-danger">
-                                    <i class="fa fa-heart-o"></i> Ajouter aux favoris
-                                </button>
-                            </form>
-                        {% endif %}
-                    </div>
-                {% else %}
-                    <p>
-                        <a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter ce produit à vos favoris.
-                    </p>
-                {% endif %}
-            </div>
-        {% else %}
-            <p>Aucun produit disponible pour le moment.</p>
-        {% endfor %}
-    </div>
+				{% if product.stockQuantity > 0 %}
+					<p class="text-success">En stock:
+						{{ product.stockQuantity }}</p>
+				{% else %}
+					<p class="text-danger">Rupture de stock</p>
+				{% endif %}
+
+				<div class="button-group">
+					<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
+					<a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-info">Détails</a>
+					<form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
+						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+						{% if is_granted('ROLE_ADMIN') %}
+
+							<a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>
+							<button type="submit" class="btn btn-danger delete-button">Supprimer</button>
+                            
+						{% endif %}
+					</form>
+				</div>
+
+				{# Bouton Favoris avec un Cœur #}
+				{% if app.user %}
+					<div class="button-group">
+						{% if app.user.getFavorites().contains(product) %}
+							<form action="{{ path('favorite_remove', {'id': product.id}) }}" method="post">
+								<button type="submit" class="btn btn-danger">
+									<i class="fa fa-heart"></i>
+									Retirer des favoris
+								</button>
+							</form>
+						{% else %}
+							<form action="{{ path('favorite_add', {'id': product.id}) }}" method="post">
+								<button type="submit" class="btn btn-outline-danger">
+									<i class="fa fa-heart-o"></i>
+									Ajouter aux favoris
+								</button>
+							</form>
+						{% endif %}
+					</div>
+				{% else %}
+					<p>
+						<a href="{{ path('app_login') }}">Connectez-vous</a>
+						pour ajouter ce produit à vos favoris.
+					</p>
+				{% endif %}
+			</div>
+		{% else %}
+			<p>Aucun produit disponible pour le moment.</p>
+		{% endfor %}
+	</div>
 {% endblock %}

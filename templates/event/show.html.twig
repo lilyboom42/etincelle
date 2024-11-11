@@ -49,8 +49,12 @@
 			{{ event.eventDate|date('d/m/Y') }}</p>
 
 		{# Boutons d'actions pour l'événement #}
+		{% if is_granted('ROLE_ADMIN') %}
+	
 		<button type="submit" class="delete-button btn btn-danger">Supprimer</button>
 		<a href="{{ path('event_edit', {'id': event.id}) }}" class="btn btn-warning mt-3">Modifier</a>
+		
+		{% endif %}
 		<a href="{{ path('event_index') }}" class="btn btn-secondary mt-3">Retour aux événements</a>
 
 	</div>

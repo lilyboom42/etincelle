@@ -19,7 +19,7 @@ class AppointmentController extends AbstractController
         $user = $this->getUser();
         if (!$user) {
             $this->addFlash('error', 'Vous devez être connecté pour prendre un rendez-vous.');
-            return $this->redirectToRoute('app_login'); // Redirige vers la page de connexion
+            return $this->redirectToRoute('app_login'); 
         }
 
         $appointment = new Appointment();

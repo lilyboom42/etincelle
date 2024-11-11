@@ -1,5 +1,6 @@
 {# templates/event/form.html.twig #}
 {% extends 'base.html.twig' %}
+{% if is_granted('ROLE_ADMIN') %}
 
 {% block title %}
     {{ isEdit ? 'Modifier' : 'Ajouter' }} un événement
@@ -57,7 +58,8 @@
                 </button>
             {{ form_end(form) }}
         </form>
-    </main>
+    </main>	
+{% endif %}
 {% endblock %}
 
 {% block javascript %}

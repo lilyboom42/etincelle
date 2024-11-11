@@ -4,7 +4,7 @@
 {% block title %}Mes Favoris{% endblock %}
 
 {% block body %}
-    <div class="container favorites-page"> <!-- Classe ajoutée ici -->
+    <div class="container favorites-page">
         {# Affichage des messages d'erreur et de succès #}
         {% for message in app.flashes('error') %}
             <div class="alert alert-danger" role="alert">

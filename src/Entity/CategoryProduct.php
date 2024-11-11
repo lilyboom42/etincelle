@@ -16,7 +16,7 @@ class CategoryProduct
     private ?int $id = null;
 
     /**
-     * @var Collection<int, Product>
+     * @var Collection<int
      */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'categoryProduct', orphanRemoval: true)]
     private Collection $category;

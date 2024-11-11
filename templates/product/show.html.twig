@@ -1,70 +1,80 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ product.name }} - Détails
+	{{ product.name }}
+	- Détails
 {% endblock %}
 
 {% block body %}
-    <h1>{{ product.name }}</h1>
+	<h1>{{ product.name }}</h1>
 
-    {# Affichage des images du produit #}
-    {% if product.productImages|length > 0 %}
-        <div class="product-images">
-            {% for image in product.productImages %}
-                <img src="{{ vich_uploader_asset(image, 'imageFile') }}" alt="{{ product.name }}" class="product-image">
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>Aucune image disponible pour ce produit.</p>
-    {% endif %}
+	{# Affichage des images du produit #}
+	{% if product.productImages|length > 0 %}
+		<div class="product-images">
+			{% for image in product.productImages %}
+				<img src="{{ vich_uploader_asset(image, 'imageFile') }}" alt="{{ product.name }}" class="product-image">
+			{% endfor %}
+		</div>
+	{% else %}
+		<p>Aucune image disponible pour ce produit.</p>
+	{% endif %}
 
-    <div class="product-details">
-        <p><strong>Catégorie :</strong> {{ product.categoryProduct.name }}</p>
+	<div class="product-details">
+		<p>
+			<strong>Catégorie :</strong>
+			{{ product.categoryProduct.name }}</p>
 
-        <p>
-            <strong>Description :</strong>
-            {{ product.description }}
-        </p>
-        <p>
-            <strong>Prix :</strong>
-            {{ product.price }} €
-        </p>
+		<p>
+			<strong>Description :</strong>
+			{{ product.description }}
+		</p>
+		<p>
+			<strong>Prix :</strong>
+			{{ product.price }}
+			€
+		</p>
 
-        {% if product.stockQuantity > 0 %}
-            <p>
-                <strong>Disponibilité :</strong>
-                <span class="text-success">En stock</span>
-            </p>
-            <p>
-                <strong>Quantité en stock :</strong>
-                {{ product.stockQuantity }}
-            </p>
-        {% else %}
-            <p>
-                <strong>Disponibilité :</strong>
-                <span class="text-danger">Rupture de stock</span>
-            </p>
-        {% endif %}
+		{% if product.stockQuantity > 0 %}
+			<p>
+				<strong>Disponibilité :</strong>
+				<span class="text-success">En stock</span>
+			</p>
+			<p>
+				<strong>Quantité en stock :</strong>
+				{{ product.stockQuantity }}
+			</p>
+		{% else %}
+			<p>
+				<strong>Disponibilité :</strong>
+				<span class="text-danger">Rupture de stock</span>
+			</p>
+		{% endif %}
 
-        {# Bouton Favoris #}
-        {% if app.user %}
-            {% if app.user.favorites.contains(product) %}
-                <form action="{{ path('favorite_remove', {'id': product.id}) }}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-danger">Retirer des favoris</button>
-                </form>
-            {% else %}
-                <form action="{{ path('favorite_add', {'id': product.id}) }}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-outline-danger">Ajouter aux favoris</button>
-                </form>
-            {% endif %}
-        {% else %}
-            <p><a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter ce produit à vos favoris.</p>
-        {% endif %}
+		{# Bouton Favoris #}
+		{% if app.user %}
+			{% if app.user.favorites.contains(product) %}
+				<form action="{{ path('favorite_remove', {'id': product.id}) }}" method="post" style="display:inline;">
+					<button type="submit" class="btn btn-danger">Retirer des favoris</button>
+				</form>
+			{% else %}
+				<form action="{{ path('favorite_add', {'id': product.id}) }}" method="post" style="display:inline;">
+					<button type="submit" class="btn btn-outline-danger">Ajouter aux favoris</button>
+				</form>
+			{% endif %}
+		{% else %}
+			<p>
+				<a href="{{ path('app_login') }}">Connectez-vous</a>
+				pour ajouter ce produit à vos favoris.</p>
+		{% endif %}
 
-        <div class="button-group">
-            <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
-            <a href="{{ path('shop_index') }}" class="btn btn-secondary">Retour à la boutique</a>
-            <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>
-        </div>
-    </div>
+		<div class="button-group">
+			<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
+			<a href="{{ path('shop_index') }}" class="btn btn-secondary">Retour à la boutique</a>
+            
+			{% if is_granted('ROLE_ADMIN') %}
+				<a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>
+			{% endif %}
+
+		</div>
+	</div>
 {% endblock %}

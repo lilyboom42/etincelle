@@ -43,7 +43,7 @@ class ProductController extends AbstractController
             }
         }
 
-        dump($deleteForms); // Vérifier que le tableau contient bien des formulaires de suppression
+        dump($deleteForms); 
 
         return $this->render('shop/boutique.html.twig', [
             'products' => $products,

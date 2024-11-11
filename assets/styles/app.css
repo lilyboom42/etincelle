@@ -1,806 +1,50 @@
-/* =====================================================
-   1. Variables et Réinitialisation
-===================================================== */
-
-/* Variables de Couleurs */
-:root {
-    --color-primary: #C4E0F9;
-    --color-secondary: #F8C8DC;
-    --color-tertiary: #C8E6D1;
-    --color-accent: #FDF1B8;
-    --color-dark: #362B49;
-    --color-light: #FFFFFF;
-    --color-error: #f8d7da;
-    --color-success: #d4edda;
-    --color-warning: #ffc107;
-    --color-info: #17a2b8;
-    --color-black: #000000;
-    --color-contrast: #8B4513;
-    --font-family-base: 'Arial', sans-serif;
-    --transition-speed: 0.3s;
-    --border-radius: 5px;
-    --max-width-form: 600px;
-}
-
-/* Réinitialisation des marges et paddings */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-/* Réinitialisation des listes */
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Réinitialisation des liens */
-a {
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: color var(--transition-speed) ease;
-}
-
-a:hover,
-a:focus {
-    color: var(--color-contrast);
-    outline: none;
-}
-
-/* Réinitialisation des boutons */
-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font: inherit;
-    padding: 0;
-}
-
-button:focus,
-a:focus {
-    outline: 2px dashed var(--color-secondary);
-    outline-offset: 4px;
-}
-
-/* =====================================================
-   2. Styles de Base
-===================================================== */
-
 /* Style de base pour le corps de la page */
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--color-light);
-    color: var(--color-dark);
-    font-family: var(--font-family-base);
-    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF;
+    color: #362B49; 
+    font-family: 'Arial', sans-serif;
+    list-style: none;
+
 }
-
-/* Conteneur principal */
-main {
-    flex: 1;
-    padding: 20px;
-}
-
-/* Images responsives */
-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* =====================================================
-   3. Typographie
-===================================================== */
-
-/* Titres */
-h1, h2, h3, h4, h5, h6 {
-    color: var(--color-dark);
-    margin-bottom: 1rem;
-}
-
-h1 {
-    font-size: 2.5rem;
-    text-align: center;
-    margin-top: 20px;
-}
-
-h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
-
-h3 {
-    font-size: 1.75rem;
-    margin-bottom: 0.75rem;
-}
-
-/* Paragraphes */
-p {
-    margin-bottom: 1rem;
-}
-
-/* =====================================================
-   4. Layout (Disposition)
-===================================================== */
-
-/* Flex Utility Classes */
-.flex {
-    display: flex;
-}
-
-.flex-column {
-    flex-direction: column;
-}
-
-.flex-row {
-    flex-direction: row;
-}
-
-.justify-center {
-    justify-content: center;
-}
-
-.justify-between {
-    justify-content: space-between;
-}
-
-.align-center {
-    align-items: center;
-}
-
-.align-start {
-    align-items: flex-start;
-}
-
-.align-end {
-    align-items: flex-end;
-}
-
-/* Grid Utility Classes */
-.grid {
-    display: grid;
-    gap: 20px;
-}
-
-.grid-cols-1 {
-    grid-template-columns: 1fr;
-}
-
-.grid-cols-2 {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.grid-cols-3 {
-    grid-template-columns: repeat(3, 1fr);
-}
-
-@media (min-width: 768px) {
-    .grid-cols-responsive {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-}
-
-/* =====================================================
-   5. En-tête (Header)
-===================================================== */
-
-header {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-tertiary) 100%);
-    padding: 10px 20px;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header-content h1 {
-    color: var(--color-dark);
-}
-
-.image-logo {
+.image-logo{
     width: 10%;
     height: auto;
 }
 
-/* Social Icons */
+/* Conteneur principal */
+main {
+    flex: 1; 
+}
+
+/* Style de l'en-tête */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #C4E0F9 0%, #F8C8DC 50%, #C8E6D1 100%); /* Dégradé bleu, rose et vert menthe */
+}
+
+.header-content h1 {
+    color: #362B49; /* Vert menthe doux */
+}
+
 .social-icons a {
-    color: var(--color-accent);
+    color: #FDF1B8; /* Jaune pastel */
     margin: 0 5px;
     font-size: 1.2em;
 }
 
-/* =====================================================
-   6. Navigation
-===================================================== */
-
-nav.main-nav {
-    background-color: var(--color-dark);
-    height: 50px;
-}
-
-nav.main-nav ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    flex-wrap: wrap;
-}
-
-nav.main-nav ul li {
-    margin: 0 15px;
-}
-
-nav.main-nav ul li a {
-    color: var(--color-light);
-    font-weight: bold;
-    transition: color var(--transition-speed) ease;
-}
-
-nav.main-nav ul li a:hover,
-nav.main-nav ul li a:focus {
-    color: var(--color-accent);
-}
-
-/* =====================================================
-   7. Boutons
-===================================================== */
-
-/* Boutons Génériques */
-button,
-.btn {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-tertiary) 100%);
-    border: 2px solid #228B22;
-    color: var(--color-light);
-    padding: 10px 20px;
-    border-radius: var(--border-radius);
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-}
-
-button:hover,
-.btn:hover {
-    background-color: var(--color-accent);
-    color: var(--color-dark);
-}
-
-/* Boutons Primaires */
-.btn-primary {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-tertiary) 100%);
-    color: var(--color-light);
-    border: 2px solid #228B22;
-    display: block;
-    margin-top: 10px;
-}
-
-.btn-primary:hover {
-    background-color: var(--color-accent);
-}
-
-/* Boutons Secondaires */
-.btn-secondary {
-    background-color: #FFA07A; /* Corail clair */
-    color: var(--color-light);
-    border: 2px solid #FF6347; /* Tomate */
-    width: 40%;
-    margin-top: 10px;
-    text-align: center;
-    display: block;
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-}
-
-.btn-secondary:hover,
-.btn-secondary:focus {
-    background-color: #FF6347;
-    color: var(--color-dark);
-}
-
-/* Boutons de Suppression */
-.btn-danger {
-    background-color: #dc3545;
-    color: var(--color-light);
-    border: none;
-    border-radius: var(--border-radius);
-    padding: 8px 12px;
-    font-size: 0.9rem;
-    transition: background-color var(--transition-speed) ease;
-    cursor: pointer;
-}
-
-.btn-danger:hover,
-.btn-danger:focus {
-    background-color: #c82333;
-    outline: none;
-}
-
-/* Boutons d'Information */
-.btn-info {
-    background-color: #17a2b8;
-    color: var(--color-light);
-    border: none;
-    padding: 8px 12px;
-    border-radius: var(--border-radius);
-    font-size: 0.9rem;
-    transition: background-color var(--transition-speed) ease;
-    cursor: pointer;
-}
-
-.btn-info:hover,
-.btn-info:focus {
-    background-color: #138496;
-    outline: none;
-}
-
-/* Bouton de Lien */
-.btn-link {
-    background: none;
-    color: var(--color-primary);
-    padding: 0;
-    font-size: 1rem;
-}
-
-.btn-link:hover,
-.btn-link:focus {
-    color: var(--color-contrast);
-    text-decoration: underline;
-    outline: none;
-}
-
-/* =====================================================
-   8. Formulaires
-===================================================== */
-
-/* Conteneur du formulaire */
-.container,
-.product-form,
-.form-horizontal,
-.boutique-form-container {
-    max-width: var(--max-width-form);
-    margin: 0 auto;
-    background-color: var(--color-light);
-    padding: 20px;
-    border-radius: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Titres de formulaire */
-h1,
-h2.title {
-    text-align: center;
-    color: var(--color-dark);
-    margin-bottom: 20px;
-}
-
-h2.title {
-    font-size: 1.25rem;
-    margin-bottom: 15px;
-}
-
-/* Groupes de formulaire */
-.form-group {
-    margin-bottom: 15px;
-}
-
-/* Champs de saisie */
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #8FBC8F; /* Vert doux */
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    color: var(--color-dark);
-    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-}
-
-.form-control:focus {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Effet doré */
-    outline: none;
-}
-
-/* Bouton de soumission */
-button[type="submit"],
-.boutique-form .submit-btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #8FBC8F; /* Vert doux */
-    color: var(--color-light);
-    border: 2px solid #228B22; /* Vert forêt */
-    border-radius: var(--border-radius);
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-}
-
-button[type="submit"]:hover,
-.boutique-form .submit-btn:hover,
-button[type="submit"]:focus,
-.boutique-form .submit-btn:focus {
-    background-color: #FFD700; /* Jaune doré */
-    color: var(--color-dark);
-    outline: none;
-}
-
-/* Checkbox */
-.checkbox {
-    display: flex;
-    align-items: center;
-}
-
-.checkbox input {
-    margin-right: 10px;
-}
-
-.checkbox label {
-    font-weight: normal;
-    color: var(--color-dark);
-}
-
-/* Boutons de contrôle */
-.btn-control {
-    margin-top: 10px;
-    text-align: center;
-}
-
-/* =====================================================
-   9. Produits
-===================================================== */
-
-/* Grille des produits */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    padding: 20px;
-    margin: 0 auto;
-    max-width: 1200px;
-}
-
-@media (min-width: 1024px) {
-    .product-grid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-}
-
-/* Carte produit individuelle */
-.product-card {
-    background-color: var(--color-light);
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Effet au survol de la carte produit */
-.product-card:hover,
-.product-card:focus-within {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Image du produit */
-.product-card img.product-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    transition: transform var(--transition-speed) ease;
-}
-
-/* Zoom sur l'image au survol */
-.product-card:hover img.product-image,
-.product-card:focus-within img.product-image {
-    transform: scale(1.05);
-}
-
-/* Contenu de la carte produit */
-.card-body {
-    padding: 15px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Titre du produit */
-.card-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: var(--color-dark);
-    flex-grow: 1;
-}
-
-/* Description courte */
-.card-text {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 15px;
-    flex-grow: 1;
-}
-
-/* Prix du produit */
-.card-price {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: var(--color-primary);
-    margin-bottom: 15px;
-}
-
-/* Boutons d'action */
-.card-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.card-actions .btn {
-    flex: 1;
-    margin: 0 5px;
-}
-
-/* =====================================================
-   10. Tables (Panier)
-===================================================== */
-
-/* Table du panier */
-.cart-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px auto;
-    max-width: 1000px;
-}
-
-.cart-table th,
-.cart-table td {
-    text-align: center;
-    padding: 12px;
-    border: 1px solid #ddd;
-}
-
-.cart-table th {
-    background-color: var(--color-secondary);
-    color: var(--color-dark);
-}
-
-.cart-table td img.product-image {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 5px;
-}
-
-.cart-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.cart-actions .btn {
-    flex: 1;
-}
-
-/* Total du panier */
-.cart-total {
-    text-align: right;
-    margin: 20px auto;
-    max-width: 1000px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--color-dark);
-}
-
-/* Bouton de validation */
-.cart-validation-btn {
-    display: block;
-    width: 200px;
-    margin: 0 auto 20px auto;
-}
-
-/* =====================================================
-   11. Alertes
-===================================================== */
-
-/* Alertes Générales */
-.alert {
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Alertes de Danger */
-.alert-danger {
-    background-color: var(--color-error);
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-/* Alertes de Succès */
-.alert-success {
-    background-color: var(--color-success);
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-/* =====================================================
-   12. Footer
-===================================================== */
-
-footer {
-    background: var(--color-tertiary);
-    color: var(--color-black);
-    text-align: center;
-    padding: 15px 0;
-    margin-top: auto;
-    width: 100%;
-}
-
-footer nav ul {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-footer nav ul li {
-    margin: 0 15px;
-}
-
-footer nav ul li a {
-    color: var(--color-black);
-    transition: color var(--transition-speed) ease, text-decoration var(--transition-speed) ease;
-}
-
-footer nav ul li a:hover,
-footer nav ul li a:focus {
-    color: var(--color-contrast);
-    text-decoration: underline;
-}
-
-/* =====================================================
-   13. Médias
-===================================================== */
-
-/* Images et Vidéos */
-.media-image {
-    max-width: 300px;
-    max-height: 200px;
-}
-
-.media-video {
-    max-width: 400px;
-    max-height: 300px;
-}
-
-/* Icône de notification */
-.notification-bell {
-    font-size: 24px;
-    color: var(--color-dark);
-    transition: color var(--transition-speed) ease;
-}
-
-.notification-bell:hover {
-    color: var(--color-primary);
-}
-
-/* =====================================================
-   14. Accessibilité
-===================================================== */
-
-/* Contraste des couleurs */
-a,
-button,
-.btn {
-    color: var(--color-dark);
-}
-
-a:hover,
-button:hover,
-.btn:hover {
-    color: var(--color-contrast);
-}
-
-/* Focus visible */
-a:focus,
-button:focus,
-.btn:focus,
-input:focus,
-select:focus,
-textarea:focus {
-    outline: 2px dashed var(--color-secondary);
-    outline-offset: 4px;
-}
-
-/* Taille de police pour une meilleure lisibilité */
-body {
-    font-size: 16px;
-}
-
-@media (max-width: 600px) {
-    body {
-        font-size: 14px;
-    }
-}
-
-/* =====================================================
-   15. Responsivité
-===================================================== */
-
-/* Navigation Responsive */
-@media (max-width: 768px) {
-    nav.main-nav ul {
-        flex-direction: column;
-        height: auto;
-    }
-
-    nav.main-nav ul li {
-        margin: 10px 0;
-    }
-
-    .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .image-logo {
-        width: 20%;
-        margin-bottom: 10px;
-    }
-
-    /* Grille des produits responsive */
-    .product-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Formulaires Responsive */
-@media (max-width: 600px) {
-    .container,
-    .product-form,
-    .form-horizontal,
-    .boutique-form-container {
-        padding: 15px;
-    }
-
-    button[type="submit"],
-    .boutique-form .submit-btn {
-        font-size: 1rem;
-    }
-
-    /* Ajustement des images produits dans le panier */
-    .cart-table td img.product-image {
-        width: 40px;
-        height: 40px;
-    }
-
-    /* Ajustement des boutons */
-    .btn {
-        padding: 8px 12px;
-        font-size: 0.9rem;
-    }
-}
-
-/* =====================================================
-   16. Styles Spécifiques à la Page d'Accueil
-===================================================== */
-
-/* Container de l'image d'accueil */
+/* Image container */
 .image-container {
     position: relative;
     text-align: center;
-    color: var(--color-light);
+    color: white;
 }
 
 .image-container img {
@@ -813,548 +57,428 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: var(--color-light);
+    color: #FFFFFF;
     background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
     padding: 20px;
     border-radius: 10px;
-    text-align: center;
 }
 
 .centered-text a {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-tertiary) 100%);
-    color: var(--color-dark);
+    background: linear-gradient(135deg, #C4E0F9 0%, #F8C8DC 50%, #C8E6D1 100%); /* Dégradé bleu, rose et vert menthe */
+    color: #362B49;
     text-decoration: none;
     font-weight: bold;
     margin: 10px;
     display: inline-block;
     padding: 10px 20px;
-    border: 2px solid var(--color-accent);
-    border-radius: var(--border-radius);
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    border: 2px solid #FDF1B8;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.centered-text a:hover,
-.centered-text a:focus {
-    background-color: var(--color-accent);
-    color: var(--color-dark);
+.centered-text a:hover {
+    background-color: #FDF1B8;
+     color: #362B49; /*#362B49 */
 }
 
-/* Sections sur la page d'accueil */
-main section {
-    background: linear-gradient(135deg, var(--color-accent), var(--color-primary), var(--color-secondary)); /* Couleurs pastel fondus */
+/* Navigation principale */
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #362B49; 
+    align-content: center;
+    height: 50px; /* Hauteur de la navigation */
+    flex-wrap: wrap;
+}
+
+.main-nav ul li {
+    margin: 0 15px;
+}
+
+.main-nav ul li a {
+    color: #FFFFFF; /* Texte blanc pour ressortir */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.main-nav ul li a:hover {
+    color: #FDF1B8; /* Jaune pastel au survol */
+}
+
+/* Style pour les sections */
+section {
+    background: linear-gradient(135deg, #FDF1B8, #C4E0F9, #F8C8DC); /* Couleurs pastel fondus */
     padding: 20px;
     margin: 10px 0;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-main section h2 {
-    margin-bottom: 15px;
+/* Footer sticky */
+footer {
+    background: #C8E6D1; /* Vert menthe pastel */
+    color: #000000;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto;
+    width: 100%;
 }
 
-main section p {
-    color: #555;
-}
-
-/* =====================================================
-   Fin du Fichier CSS
-===================================================== */
-/* =====================================================
-   Styles Spécifiques pour la Page Liste des Événements
-===================================================== */
-
-/* Liste des événements */
-.event-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+footer nav ul {
+    list-style: none;
     padding: 0;
-    margin: 20px 0;
-}
-
-/* Éléments de la liste des événements */
-.event-item {
-    background-color: var(--color-light);
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-}
-
-.event-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* Titre de l'événement */
-.event-title {
-    font-size: 1.75rem;
-    margin-bottom: 10px;
-    color: var(--color-dark);
-}
-
-/* Date de l'événement */
-.event-date {
-    font-size: 1rem;
-    color: var(--color-info);
-    margin-bottom: 10px;
-}
-
-/* Description de l'événement */
-.event-description {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 15px;
-}
-
-/* Conteneur des médias */
-.media-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-/* Images des médias */
-.img-thumbnail {
-    max-width: 100%;
-    max-height: 200px;
-    border-radius: var(--border-radius);
-    object-fit: cover;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Vidéos des médias */
-.media-video {
-    max-width: 400px;
-    max-height: 300px;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Boutons d'action */
-.action-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.action-buttons .btn {
-    margin-top: 10px;
-    flex: 1;
-}
-
-/* Formulaire de suppression */
-.delete-form {
-    display: inline;
-}
-
-/* Pagination */
-.pagination {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin: 0;
 }
 
-.pagination .pagination-item {
-    margin: 0 5px;
+footer nav ul li {
+    margin: 0 15px;
 }
 
-.pagination .pagination-item a {
-    padding: 8px 12px;
-    border: 1px solid var(--color-secondary);
-    border-radius: var(--border-radius);
-    color: var(--color-primary);
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-}
-
-.pagination .pagination-item a:hover,
-.pagination .pagination-item a:focus {
-    background-color: var(--color-secondary);
-    color: var(--color-dark);
+footer nav ul li a {
     text-decoration: none;
 }
 
-/* Responsivité pour la liste des événements */
-@media (max-width: 768px) {
-    .event-item {
-        padding: 15px;
-    }
-
-    .media-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .img-thumbnail,
-    .media-video {
-        max-width: 100%;
-        height: auto;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .action-buttons .btn {
-        width: 100%;
-    }
-}
-/* =====================================================
-   Styles Spécifiques pour la Page de Demande de Rendez-vous
-===================================================== */
-
-/* Conteneur principal de la page de rendez-vous */
-.appointment-main {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: var(--color-light);
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Section introductive */
-.appointment-intro {
-    margin-bottom: 20px;
-    font-size: 1.1rem;
-    color: var(--color-dark);
-}
-
-/* Titre de la page de rendez-vous */
-.appointment-title {
-    font-size: 2rem;
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--color-dark);
-}
-
-/* Formulaire de rendez-vous */
-.appointment-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* Groupe de formulaire */
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Champs de formulaire */
-.form-control {
-    padding: 10px;
-    border: 2px solid #8FBC8F; /* Vert doux */
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    color: var(--color-dark);
-    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-}
-
-.form-control:focus {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Effet doré */
-    outline: none;
-}
-
-/* Bouton du formulaire */
-.appointment-form .btn {
-    align-self: center;
-    width: 150px;
-}
-
-/* =====================================================
-   Styles Spécifiques pour le Formulaire d'Ajout/Modification d'un Événement
-===================================================== */
-
-/* Conteneur principal du formulaire d'événement */
-.event-form-main {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: var(--color-light);
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Titre du formulaire d'événement */
-.event-form-title {
-    font-size: 2rem;
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--color-dark);
-}
-
-/* Conteneur du formulaire */
-.event-form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Wrapper des médias */
-.media-wrapper {
-    margin-top: 20px;
-    padding: 10px;
-    border: 2px dashed var(--color-secondary);
-    border-radius: var(--border-radius);
-    background-color: var(--color-tertiary);
-}
-
-/* Titre des médias existants */
-.media-existing-title {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
-    color: var(--color-dark);
-}
-
-/* Liste des médias existants */
-.existing-media-list {
-    margin-bottom: 15px;
-}
-
-/* Liens vers les médias */
-.media-link {
-    color: var(--color-primary);
+footer nav ul li a:hover {
+    color: #8B4513; /* Marron pour ajouter du contraste */
     text-decoration: underline;
 }
 
-.media-link:hover,
-.media-link:focus {
-    color: var(--color-contrast);
+/* Boutons */
+button, .btn {
+    background: linear-gradient(135deg, #C4E0F9 0%, #F8C8DC 50%, #C8E6D1 100%); /* Dégradé bleu, rose et vert menthe */
+    border: 2px solid #228B22 ;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+button:hover, .btn:hover {
+    background-color: #FDF1B8; /* Jaune doré au survol */
+}
+
+/* Liens */
+a {
+    color: #228B22;
     text-decoration: none;
 }
 
-/* Groupe de formulaire pour les médias */
-.media-form-group {
-    margin-bottom: 15px;
+a:hover {
+    color: #8B4513;
 }
 
-/* Champs de saisie pour les médias */
-.media-input {
-    padding: 8px;
-    border: 2px solid #8FBC8F; /* Vert doux */
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    color: var(--color-dark);
-    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+/* public/css/shop.css */
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
 }
 
-.media-input:focus {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Effet doré */
-    outline: none;
-}
-
-/* Bouton pour ajouter un média */
-.add-media-button {
-    margin-bottom: 15px;
-}
-
-/* Bouton pour supprimer un média */
-.remove-media-button {
-    margin-top: 10px;
-}
-
-/* =====================================================
-   Styles Spécifiques pour la Page de Détails d'un Événement
-===================================================== */
-
-/* Conteneur principal de la page de détails */
-.event-show-main {
+.product-card {
+    border: 1px solid #ddd;
     padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: var(--color-light);
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Titre de la page de détails */
-.event-show-title {
-    font-size: 2rem;
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--color-dark);
-}
-
-/* Conteneur des médias */
-.event-media-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-/* Message d'erreur pour les médias */
-.media-error {
-    color: #dc3545;
-    font-weight: bold;
-}
-
-/* Message lorsqu'il n'y a pas de médias */
-.no-media {
-    font-style: italic;
-    color: #555;
-}
-
-/* Conteneur des détails de l'événement */
-.event-details {
-    font-size: 1.1rem;
-    color: var(--color-dark);
-    margin-bottom: 20px;
-}
-
-/* Conteneur des boutons d'action */
-.event-action-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
-/* Formulaire de suppression */
-.delete-form {
-    display: inline-block;
-}
-
-/* =====================================================
-   Styles Communes aux Nouvelles Classes
-===================================================== */
-
-/* Alertes spécifiques à certaines pages */
-.alert-danger,
-.alert-success {
-    max-width: 800px;
-    margin: 10px auto;
-}
-
-/* Boutons personnalisés */
-.btn {
-    padding: 10px 20px;
-    border-radius: var(--border-radius);
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-tertiary) 100%);
-    color: var(--color-light);
-    border: 2px solid #228B22;
+    background: linear-gradient(135deg, #C4E0F9 0%, #F8C8DC 50%, #C8E6D1 100%); /* Dégradé bleu, rose et vert menthe */
+    color: #fff;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
 }
 
-.btn-primary:hover,
-.btn-primary:focus {
-    background-color: var(--color-accent);
-    color: var(--color-dark);
-}
-
-.btn-success {
-    background-color: #28a745;
-    color: var(--color-light);
-    border: none;
-}
-
-.btn-success:hover,
-.btn-success:focus {
-    background-color: #218838;
-}
-
-.btn-warning {
-    background-color: #ffc107;
-    color: var(--color-dark);
-    border: none;
-}
-
-.btn-warning:hover,
-.btn-warning:focus {
-    background-color: #e0a800;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: var(--color-light);
-    border: none;
-}
-
-.btn-secondary:hover,
-.btn-secondary:focus {
-    background-color: #5a6268;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    color: var(--color-light);
-    border: none;
-    padding: 8px 12px;
-    font-size: 0.9rem;
-}
-
-.btn-danger:hover,
-.btn-danger:focus {
-    background-color: #c82333;
-}
-
-.mt-2 {
-    margin-top: 0.5rem;
-}
-
-.mt-3 {
-    margin-top: 1rem;
-}
-
-.mb-2 {
-    margin-bottom: 0.5rem;
-}
-
-.mb-3 {
-    margin-bottom: 1rem;
-}
-
-.mb-15 {
-    margin-bottom: 1.5rem;
-}
-
-/* Style global de la page */
+/* Style du conteneur du formulaire */
 .container {
-    max-width: 800px;
+    max-width: 400px;
     margin: 0 auto;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre du formulaire */
+h1 {
+    text-align: center;
+    color: #362B49; /* Bleu nuit */
+    margin-bottom: 20px;
+}
+
+/* Style des champs de saisie */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #8FBC8F; /* Vert doux */
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #362B49;
+}
+
+.form-control:focus {
+    border-color: #FDF1B8; /* Jaune doré */
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Effet doré */
+}
+
+/* Bouton de soumission */
+.btn-primary {
+    background-color: #8FBC8F; /* Vert doux */
+    color: #fff;
+    border: 2px solid #228B22; /* Vert forêt */
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #FFD700; /* Jaune doré au survol */
+    color: #362B49; /* Bleu nuit */
+}
+
+/* Bouton secondaire pour s'inscrire */
+.btn-secondary {
+    background-color: #FFA07A; /* Corail clair */
+    color: #fff;
+    border: 2px solid #FF6347; /* Tomate */
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 40%;
+    margin-top: 10px;
+    text-align: center;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #FF6347; /* Tomate */
+    color: #362B49;
+}
+
+/* Lien de réinitialisation du mot de passe */
+.btn-link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.btn-link:hover {
+    color: #8B4513; /* Marron chocolat */
+}
+
+/* Style de la checkbox */
+.checkbox input {
+    margin-right: 5px;
+}
+
+.checkbox label {
+    color: #362B49;
+    font-weight: bold;
+}
+
+.btn-control {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-card {
+    margin-bottom: 30px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
     padding: 20px;
 }
 
-h1, h2 {
-    color: #333;
-    font-family: Arial, sans-serif;
-    text-align: center;
+.btn {
+    margin-top: 10px;
+}
+
+.product-details {
     margin-bottom: 20px;
 }
 
-ul {
-    list-style-type: none;
+/* Centrer le tableau dans la page */
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+/* Centrer le contenu des cellules du tableau */
+table th, table td {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd; /* Ligne de séparation entre les cellules (facultatif) */
+}
+
+/* Centrer l'image dans la cellule */
+.product-image {
+    display: block;
+    margin: 0 auto;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+/* Optionnel : styliser le bouton Mettre à jour et Supprimer */
+button {
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+a {
+    color: #362B49;
+}
+
+a:hover {
+    color: #362B49;
+}
+
+/* Styles de base pour le formulaire */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2.title {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input, textarea, select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Bouton ajouter/supprimer une image */
+button.add-image, button[type="button"] {
+    margin-top: 10px;
+    background-color: #28a745;
+}
+
+button.add-image:hover {
+    background-color: #218838;
+}
+
+button[type="button"] {
+    background-color: #dc3545;
+    color: white;
+}
+
+button[type="button"]:hover {
+    background-color: #c82333;
+}
+
+ul.images {
+    list-style: none;
     padding: 0;
 }
 
-ul li {
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 5px;
+ul.images li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
+ul.images li button {
+    margin-left: 15px;
+}
+
+ul.images li input {
+    width: auto;
+    flex-grow: 1;
+}
+
+/* Messages d'alerte */
 .alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Styles pour les messages d'alerte */
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
 .alert-danger {
@@ -1362,258 +486,225 @@ ul li {
     color: #721c24;
 }
 
-/* Styles pour les formulaires */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.product-form {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-.form-group label {
+label {
+    font-weight: bold;
+}
+
+button[type="submit"] {
     display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #333;
-}
-
-.form-control {
     width: 100%;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.input-with-icon {
-    position: relative;
-}
-
-.input-with-icon .form-control {
-    padding-left: 30px;
-}
-
-.form-error {
-    color: #e3342f;
-    font-size: 0.9em;
-    margin-top: 5px;
-}
-
-/* Bouton */
-.btn {
-    display: inline-block;
-    padding: 10px 15px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
     border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+ul.images {
+    margin-top: 10px;
+}
+
+.remove-image {
+    margin-top: 10px;
+}
+
+/* Styles généraux */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 2.5rem;
+}
+
+/* Messages d'alerte */
+.alert {
+    padding: 15px;
+    margin: 10px 0;
     border-radius: 5px;
     font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
     text-align: center;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Grille des produits */
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.product-card {
+    max-width: 100%;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.product-image:hover {
+    transform: scale(1.05);
+}
+
+/* Boutons */
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-right: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
 .btn-primary {
     background-color: #007bff;
     color: white;
+    border: none;
 }
 
 .btn-primary:hover {
     background-color: #0056b3;
 }
 
-.btn-success {
-    background-color: #28a745;
+.btn-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.btn-info {
+    background-color: #17a2b8;
     color: white;
 }
 
-.btn-success:hover {
-    background-color: #218838;
+.btn-info:hover {
+    background-color: #138496;
 }
 
-/* Styles pour les informations sur les commandes */
-.command-list, .appointment-list {
-    margin-top: 20px;
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
 }
 
-.command-list h2, .appointment-list h2 {
-    margin-bottom: 15px;
-    font-size: 1.5em;
-    color: #333;
+.btn-danger:hover {
+    background-color: #c82333;
 }
 
-.command-item, .appointment-item {
-    background: #ffffff;
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 15px;
-}
-
-.order-lines {
-    margin-top: 10px;
-}
-
-.order-lines li {
-    font-size: 0.95em;
-    padding: 5px;
-}
-
-/* Statut de rendez-vous */
-.text-success {
-    color: #28a745;
-    font-weight: bold;
-}
-
-.text-danger {
+.btn-outline-danger {
+    background-color: transparent;
     color: #dc3545;
-    font-weight: bold;
+    border: 1px solid #dc3545;
 }
 
-.text-warning {
-    color: #ffc107;
-    font-weight: bold;
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
 }
 
-.text-info {
-    color: #17a2b8;
-    font-weight: bold;
-}
-
-/* Général */
-body {
-    font-family: Arial, sans-serif;
-    color: #333;
-}
-
-h1.profile-title {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.alert {
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-/* Tableau de Bord Admin */
-.admin-dashboard {
-    background-color: #f3f4f6;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.admin-buttons {
-    display: flex;
-    gap: 10px;
+/* Formulaire de suppression */
+.delete-button {
     margin-top: 10px;
 }
 
-.admin-buttons a {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
+/* Responsiveness */
+@media (max-width: 768px) {
+    .product-card {
+        flex: 0 0 100%;
+    }
+}
+
+@media (min-width: 769px) {
+    .product-card {
+        flex: 0 0 30%;
+    }
+}
+
+.media-image {
+    max-width: 300px;
+    max-height: 200px;
+}
+
+.media-video {
+    max-width: 400px;
+    max-height: 300px;
+}
+
+.notification-bell {
+    font-size: 24px;
+    color: #333;
     text-decoration: none;
-    border-radius: 4px;
 }
 
-.admin-buttons a:hover {
-    background-color: #0056b3;
+.notification-bell:hover {
+    color: #007bff;
 }
-
-/* Formulaire */
-.profile-form-section {
-    max-width: 700px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fafafa;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.input-field, .form-control {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 1rem;
-}
-
-.input-field:focus, .form-control:focus {
-    border-color: #0066cc;
-    outline: none;
-}
-
-.button-group, .submit-button {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.submit-button {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.submit-button:hover {
-    background-color: #218838;
-}
-
-/* Liste des commandes et rendez-vous */
-.orders-section, .appointments-section {
-    margin: 20px 0;
-}
-
-.orders-list, .appointments-list {
-    list-style: none;
-    padding: 0;
-}
-
-.orders-list li, .appointments-list li {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
-
-.text-success {
-    color: #28a745;
-}
-
-.text-info {
-    color: #17a2b8;
-}
-
-.text-danger {
-    color: #dc3545;
-}
-
-.text-warning {
-    color: #ffc107;
-}
-
-/* =====================================================
-   Fin des Styles CSS Supplémentaires
-===================================================== */

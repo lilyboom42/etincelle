@@ -319,7 +319,7 @@ class PaymentController extends AbstractController
     #[Route('/payment/page', name: 'payment_page', methods: ['GET'])]
 public function paymentPage(): Response
 {
-    return $this->render('payment/index.html.twig'); // Assurez-vous que le fichier existe
+    return $this->render('payment/index.html.twig'); 
 }
 
 

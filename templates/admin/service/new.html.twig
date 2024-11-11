@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{% if is_granted('ROLE_ADMIN') %}
 {% block title %}{{ service.id ? 'Modifier le service' : 'Ajouter un nouveau service' }}{% endblock %}
 
 {% block body %}
@@ -11,4 +11,6 @@
 {{ form_end(form) }}
 
 <a href="{{ path('service_index') }}" class="btn btn-secondary mt-3">Retour à la liste des services</a>
+	{% endif %}
+
 {% endblock %}

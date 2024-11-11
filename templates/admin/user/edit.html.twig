@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{% if is_granted('ROLE_ADMIN') %}
 {% block title %}Modifier utilisateur{% endblock %}
 
 {% block body %}
@@ -22,4 +22,6 @@
 {{ form_end(form) }}
 
 <a href="{{ path('admin_user_index') }}">Retour à la liste des utilisateurs</a>
+	{% endif %}
+
 {% endblock %}

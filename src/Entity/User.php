@@ -59,9 +59,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: false)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(targetEntity: BlogPost::class, mappedBy: 'author', orphanRemoval: true)]
-    private Collection $blogPosts;
-
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
     private Collection $orders;
 
@@ -87,7 +84,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->blogPosts = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->favorites = new ArrayCollection();
         $this->appointments = new ArrayCollection();
@@ -243,11 +239,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
-    }
-
-    public function getBlogPosts(): Collection
-    {
-        return $this->blogPosts;
     }
 
     public function getOrders(): Collection

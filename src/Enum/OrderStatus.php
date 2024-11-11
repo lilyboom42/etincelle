@@ -10,7 +10,6 @@ enum OrderStatus: string
     case CANCELLED = 'cancelled';
     case COMPLETED = 'completed';
 
-    // Méthode pour obtenir un libellé convivial pour chaque statut (facultatif)
     public function label(): string
     {
         return match($this) {
