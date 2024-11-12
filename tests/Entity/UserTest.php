@@ -41,4 +41,25 @@ class UserTest extends TestCase
         // Vérifier que le Cart est bien associé à l'utilisateur
         $this->assertSame($cart, $user->getCart());
     }
+
+    public function testSetCartNull(): void
+    {
+        // Créer une instance de l'entité User
+        $user = new User();
+
+        // Créer une instance de l'entité Cart
+        $cart = new Cart();
+
+        // Associer le Cart à l'utilisateur
+        $user->setCart($cart);
+
+        // Désassocier le Cart de l'utilisateur
+        $user->setCart(null); 
+
+        // Vérifier que le Cart est maintenant null
+        $this->assertNull($user->getCart());
+
+        // Vérifier que le Cart n'a plus d'utilisateur
+        $this->assertNull($cart->getUser());
+    }
 }

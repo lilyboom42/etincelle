@@ -1,0 +1,27 @@
+{# templates/emails/order_shipped.html.twig #}
+
+<html>
+    <body>
+        <h2>Confirmation d'expédition de votre commande</h2>
+        <p>Bonjour,</p>
+        <p>Nous avons le plaisir de vous informer que votre commande <strong>#{{ order.id }}</strong> a été expédiée.</p>
+        
+        <h3>Détails de la commande :</h3>
+        <ul>
+            <li><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y') }}</li>
+            <li><strong>Montant total :</strong> {{ order.total|number_format(2, ',', ' ') }} €</li>
+            <li><strong>Numéro de suivi :</strong> {{ trackingNumber }}</li>
+        </ul>
+        
+        <p>Vous pouvez suivre l'état de votre livraison en cliquant sur le lien ci-dessous :</p>
+        <p>
+            <a href="https://www.laposte.fr/outils/suivre-vos-envois?code={{ trackingNumber }}" target="_blank">
+                Suivre votre envoi
+            </a>
+        </p>
+        
+        <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
+        
+        <p>Cordialement,L'équipe de notre boutique</p>
+    </body>
+</html>

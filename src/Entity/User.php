@@ -30,7 +30,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    // Propriété temporaire pour le formulaire de changement de mot de passe (non persistée)
     #[Assert\Length(min: 6, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.")]
     private ?string $plainPassword = null;
 
@@ -82,16 +81,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Appointment::class, mappedBy: 'user')]
     private Collection $appointments;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?\DateTimeInterface $deletedAt = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->favorites = new ArrayCollection();
         $this->appointments = new ArrayCollection();
     }
-      /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $deletedAt;
 
     // Getter et Setter pour $deletedAt
     public function getDeletedAt(): ?\DateTimeInterface
@@ -121,6 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = new \DateTimeImmutable();
     }
 
+    // Getters et Setters
     public function getId(): ?int
     {
         return $this->id;
@@ -131,44 +132,64 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(string $email): self
     {
         $this->email = $email;
         return $this;
     }
 
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
+    /**
+     * @see UserInterface
+     */
     public function getRoles(): array
     {
         $roles = $this->roles;
+        // Garantit que chaque utilisateur a au moins le rôle ROLE_USER
         $roles[] = 'ROLE_USER';
+
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): static
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
         return $this;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
         $this->password = $password;
         return $this;
     }
 
+    /**
+     * Efface les données sensibles.
+     *
+     * @see UserInterface
+     */
     public function eraseCredentials(): void
     {
-        // Efface les données sensibles si nécessaire
+        // Si vous stockez des données temporaires sensibles, les effacer ici
+        $this->plainPassword = null;
     }
 
     public function getPlainPassword(): ?string
@@ -198,7 +219,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->userDetail;
     }
 
-    public function setUserDetail(?UserDetails $userDetail): static
+    public function setUserDetail(?UserDetails $userDetail): self
     {
         $this->userDetail = $userDetail;
         return $this;
@@ -209,7 +230,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): static
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
         return $this;
@@ -220,7 +241,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): static
+    public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
         return $this;
@@ -242,7 +263,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isActive;
     }
 
-    public function setActive(bool $isActive): static
+    public function setActive(bool $isActive): self
     {
         $this->isActive = $isActive;
         return $this;
@@ -263,7 +284,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->orders;
     }
 
-    public function addOrder(Order $order): static
+    public function addOrder(Order $order): self
     {
         if (!$this->orders->contains($order)) {
             $this->orders->add($order);
@@ -272,7 +293,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeOrder(Order $order): static
+    public function removeOrder(Order $order): self
     {
         if ($this->orders->removeElement($order)) {
             if ($order->getUser() === $this) {
@@ -301,7 +322,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->favorites;
     }
 
-    public function addFavorite(Product $product): static
+    public function addFavorite(Product $product): self
     {
         if (!$this->favorites->contains($product)) {
             $this->favorites->add($product);
@@ -309,7 +330,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeFavorite(Product $product): static
+    public function removeFavorite(Product $product): self
     {
         $this->favorites->removeElement($product);
         return $this;
@@ -320,12 +341,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->cart;
     }
 
-    public function setCart(Cart $cart): self
+    public function setCart(?Cart $cart): self
     {
-        if ($this->cart !== $cart) {
-            $this->cart = $cart;
+        // Si un panier est déjà associé, on le désassocie
+        if ($this->cart !== null && $this->cart !== $cart) {
+            $this->cart->setUser(null);
+        }
+
+        $this->cart = $cart;
+
+        // Si un nouveau panier est fourni, on l'associe à l'utilisateur
+        if ($cart !== null && $cart->getUser() !== $this) {
             $cart->setUser($this);
         }
+
         return $this;
     }
 
@@ -337,7 +366,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->appointments;
     }
 
-    public function addAppointment(Appointment $appointment): static
+    public function addAppointment(Appointment $appointment): self
     {
         if (!$this->appointments->contains($appointment)) {
             $this->appointments->add($appointment);
@@ -347,7 +376,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeAppointment(Appointment $appointment): static
+    public function removeAppointment(Appointment $appointment): self
     {
         if ($this->appointments->removeElement($appointment)) {
             // set the owning side to null (unless already changed)
@@ -358,5 +387,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    
 }

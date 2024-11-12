@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Exception\InsufficientStockException;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -68,7 +69,7 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderLine::class)]
     private Collection $orderLines;
 
-    #[ORM\ManyToOne(inversedBy: 'category')]
+    #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?CategoryProduct $categoryProduct = null;
 
@@ -296,7 +297,7 @@ class Product
         return $this->categoryProduct;
     }
 
-    public function setCategoryProduct(?CategoryProduct $categoryProduct): static
+    public function setCategoryProduct(?CategoryProduct $categoryProduct): self
     {
         $this->categoryProduct = $categoryProduct;
 
@@ -308,7 +309,8 @@ class Product
      *
      * @param int $quantity La quantité à décrémenter.
      *
-     * @throws \Exception Si le stock est insuffisant.
+     * @throws InsufficientStockException Si le stock est insuffisant.
+     * @throws \InvalidArgumentException Si la quantité est négative.
      */
     public function decrementStockQuantity(int $quantity): void
     {
@@ -317,7 +319,9 @@ class Product
         }
 
         if ($this->stockQuantity < $quantity) {
-            throw new \Exception('Stock insuffisant pour le produit : ' . $this->getName());
+            throw new InsufficientStockException(
+                'Stock insuffisant pour le produit : ' . $this->getName()
+            );
         }
 
         $this->stockQuantity -= $quantity;

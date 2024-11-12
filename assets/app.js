@@ -7,4 +7,9 @@ import './bootstrap.js';
  */
 import './styles/app.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+// console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+
+function toggleMenu() {
+    const navLinks = document.querySelector('.main-nav ul');
+    navLinks.classList.toggle('active');
+}

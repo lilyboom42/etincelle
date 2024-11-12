@@ -16,7 +16,7 @@ class Cart
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'cart')]
+    #[ORM\OneToOne(inversedBy: 'cart', targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
@@ -42,11 +42,13 @@ class Cart
         return $this->user;
     }
 
-    public function setUser(User $user): self
+    public function setUser(?User $user): self
     {
         if ($this->user !== $user) {
             $this->user = $user;
-            $user->setCart($this);
+            if ($user !== null && $user->getCart() !== $this) {
+                $user->setCart($this);
+            }
         }
 
         return $this;
@@ -57,7 +59,7 @@ class Cart
         return $this->cartItems;
     }
 
-    public function addCartItem(CartItem $cartItem): static
+    public function addCartItem(CartItem $cartItem): self
     {
         if (!$this->cartItems->contains($cartItem)) {
             $this->cartItems->add($cartItem);
@@ -66,7 +68,7 @@ class Cart
         return $this;
     }
 
-    public function removeCartItem(CartItem $cartItem): static
+    public function removeCartItem(CartItem $cartItem): self
     {
         if ($this->cartItems->removeElement($cartItem)) {
             if ($cartItem->getCart() === $this) {
@@ -83,15 +85,27 @@ class Cart
         }
     }
 
+    /**
+     * Calcule le total du panier.
+     *
+     * @return float Le total du panier.
+     */
     public function getTotal(): float
     {
-        $total = 0;
+        $total = 0.0;
         foreach ($this->cartItems as $item) {
-            $total += $item->getProduct()->getPrice() * $item->getQuantity();
+            $price = (float)$item->getProduct()->getPrice(); // Convertir le prix en float
+            $quantity = $item->getQuantity();
+            $total += $price * $quantity;
         }
         return $total;
     }
 
+    /**
+     * Vérifie si le panier contient des articles.
+     *
+     * @return bool Vrai si le panier contient au moins un article, sinon faux.
+     */
     public function hasItems(): bool
     {
         return !$this->cartItems->isEmpty();
