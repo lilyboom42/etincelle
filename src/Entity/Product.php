@@ -63,8 +63,6 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartItem::class, orphanRemoval: true)]
     private Collection $cartItems;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductCustomization::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $productCustomizations;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderLine::class)]
     private Collection $orderLines;
@@ -77,7 +75,6 @@ class Product
     {
         $this->productImages = new ArrayCollection();
         $this->cartItems = new ArrayCollection();
-        $this->productCustomizations = new ArrayCollection();
         $this->orderLines = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
@@ -207,31 +204,9 @@ class Product
         return $this;
     }
 
-    public function getProductCustomizations(): Collection
-    {
-        return $this->productCustomizations;
-    }
+    
 
-    public function addProductCustomization(ProductCustomization $customization): self
-    {
-        if (!$this->productCustomizations->contains($customization)) {
-            $this->productCustomizations[] = $customization;
-            $customization->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProductCustomization(ProductCustomization $customization): self
-    {
-        if ($this->productCustomizations->removeElement($customization)) {
-            if ($customization->getProduct() === $this) {
-                $customization->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
+   
 
     public function getOrderLines(): Collection
     {

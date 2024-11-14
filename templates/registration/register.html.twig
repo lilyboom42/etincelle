@@ -5,7 +5,6 @@
 
 {% block body %}
     <main class="registration-main">
-
         <h1 class="registration-title">Inscription</h1>
 
         {# Affichage des messages d'erreur et de succès #}
@@ -19,104 +18,106 @@
 
         <div class="container registration-container">
             {{ form_start(registrationForm, {'attr': {'data-turbo': 'false', 'class': 'registration-form'}}) }}
-                
-                {# Affiche les erreurs globales de validation du formulaire #}
-                {{ form_errors(registrationForm) }}
 
-                {# Champ Email #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.email.vars.id }}">Email</label>
-                    <div class="input-with-icon email">
-                        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'id': registrationForm.email.vars.id}}) }}
-                    </div>
-                    {{ form_errors(registrationForm.email) }}
-                </div>
+            {# Affiche les erreurs globales de validation du formulaire #}
+            {{ form_errors(registrationForm) }}
 
-                {# Prénom #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.firstName.vars.id }}">Prénom</label>
-                    {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'id': registrationForm.firstName.vars.id}}) }}
-                    {{ form_errors(registrationForm.firstName) }}
+            {# Champ Email #}
+            <div class="form-group">
+                <label for="{{ registrationForm.email.vars.id }}">Email</label>
+                <div class="input-with-icon email">
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'id': registrationForm.email.vars.id}}) }}
                 </div>
+                {{ form_errors(registrationForm.email) }}
+            </div>
 
-                {# Nom de famille #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.lastName.vars.id }}">Nom</label>
-                    {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'id': registrationForm.lastName.vars.id}}) }}
-                    {{ form_errors(registrationForm.lastName) }}
-                </div>
+            {# Prénom #}
+            <div class="form-group">
+                <label for="{{ registrationForm.firstName.vars.id }}">Prénom</label>
+                {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'id': registrationForm.firstName.vars.id}}) }}
+                {{ form_errors(registrationForm.firstName) }}
+            </div>
 
-                {# Nom d'utilisateur #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.userName.vars.id }}">Nom d'utilisateur</label>
-                    {{ form_widget(registrationForm.userName, {'attr': {'class': 'form-control', 'id': registrationForm.userName.vars.id}}) }}
-                    {{ form_errors(registrationForm.userName) }}
-                </div>
+            {# Nom de famille #}
+            <div class="form-group">
+                <label for="{{ registrationForm.lastName.vars.id }}">Nom</label>
+                {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'id': registrationForm.lastName.vars.id}}) }}
+                {{ form_errors(registrationForm.lastName) }}
+            </div}
 
-                {# Mot de passe #}
-                <div class="form-group">
-                    {{ form_label(registrationForm.plainPassword.first) }}
-                    <div class="input-with-icon password">
-                        {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'id': registrationForm.plainPassword.first.vars.id}}) }}
-                    </div>
-                    {{ form_errors(registrationForm.plainPassword.first) }}
-                </div>
+            {# Nom d'utilisateur #}
+            {# Assurez-vous que ce champ existe dans l'entité User ou ajustez-le en conséquence #}
+            {# Si ce champ n'existe pas, supprimez-le ou ajoutez-le à l'entité User #}
+            <div class="form-group">
+                <label for="{{ registrationForm.userName.vars.id }}">Nom d'utilisateur</label>
+                {{ form_widget(registrationForm.userName, {'attr': {'class': 'form-control', 'id': registrationForm.userName.vars.id}}) }}
+                {{ form_errors(registrationForm.userName) }}
+            </div>
 
-                {# Confirmer le mot de passe #}
-                <div class="form-group">
-                    {{ form_label(registrationForm.plainPassword.second) }}
-                    <div class="input-with-icon password">
-                        {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'id': registrationForm.plainPassword.second.vars.id}}) }}
-                    </div>
-                    {{ form_errors(registrationForm.plainPassword.second) }}
+            {# Mot de passe #}
+            <div class="form-group">
+                {{ form_label(registrationForm.plainPassword.first) }}
+                <div class="input-with-icon password">
+                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'id': registrationForm.plainPassword.first.vars.id, 'autocomplete': 'new-password'}}) }}
                 </div>
+                {{ form_errors(registrationForm.plainPassword.first) }}
+            </div>
 
-                {# Ville #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.userDetail.city.vars.id }}">Ville</label>
-                    {{ form_widget(registrationForm.userDetail.city, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.city.vars.id}}) }}
-                    {{ form_errors(registrationForm.userDetail.city) }}
+            {# Confirmer le mot de passe #}
+            <div class="form-group">
+                {{ form_label(registrationForm.plainPassword.second) }}
+                <div class="input-with-icon password">
+                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'id': registrationForm.plainPassword.second.vars.id, 'autocomplete': 'new-password'}}) }}
                 </div>
+                {{ form_errors(registrationForm.plainPassword.second) }}
+            </div>
 
-                {# Adresse #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.userDetail.address.vars.id }}">Adresse</label>
-                    {{ form_widget(registrationForm.userDetail.address, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.address.vars.id}}) }}
-                    {{ form_errors(registrationForm.userDetail.address) }}
-                </div>
+            {# Ville #}
+            <div class="form-group">
+                <label for="{{ registrationForm.userDetail.city.vars.id }}">Ville</label>
+                {{ form_widget(registrationForm.userDetail.city, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.city.vars.id}}) }}
+                {{ form_errors(registrationForm.userDetail.city) }}
+            </div>
 
-                {# Pays #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.userDetail.country.vars.id }}">Pays</label>
-                    {{ form_widget(registrationForm.userDetail.country, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.country.vars.id}}) }}
-                    {{ form_errors(registrationForm.userDetail.country) }}
-                </div>
+            {# Adresse #}
+            <div class="form-group">
+                <label for="{{ registrationForm.userDetail.address.vars.id }}">Adresse</label>
+                {{ form_widget(registrationForm.userDetail.address, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.address.vars.id}}) }}
+                {{ form_errors(registrationForm.userDetail.address) }}
+            </div>
 
-                {# Code Postal #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.userDetail.postalCode.vars.id }}">Code Postal</label>
-                    {{ form_widget(registrationForm.userDetail.postalCode, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.postalCode.vars.id}}) }}
-                    {{ form_errors(registrationForm.userDetail.postalCode) }}
-                </div>
+            {# Pays #}
+            <div class="form-group">
+                <label for="{{ registrationForm.userDetail.country.vars.id }}">Pays</label>
+                {{ form_widget(registrationForm.userDetail.country, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.country.vars.id}}) }}
+                {{ form_errors(registrationForm.userDetail.country) }}
+            </div>
 
-                {# Numéro de Téléphone #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.userDetail.phoneNumber.vars.id }}">Numéro de Téléphone</label>
-                    {{ form_widget(registrationForm.userDetail.phoneNumber, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.phoneNumber.vars.id}}) }}
-                    {{ form_errors(registrationForm.userDetail.phoneNumber) }}
-                </div>
+            {# Code Postal #}
+            <div class="form-group">
+                <label for="{{ registrationForm.userDetail.postalCode.vars.id }}">Code Postal</label>
+                {{ form_widget(registrationForm.userDetail.postalCode, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.postalCode.vars.id}}) }}
+                {{ form_errors(registrationForm.userDetail.postalCode) }}
+            </div}
 
-                {# Date de Naissance #}
-                <div class="form-group">
-                    <label for="{{ registrationForm.userDetail.birthDate.vars.id }}">Date de Naissance</label>
-                    {{ form_widget(registrationForm.userDetail.birthDate, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.birthDate.vars.id}}) }}
-                    {{ form_errors(registrationForm.userDetail.birthDate) }}
-                </div>
+            {# Numéro de Téléphone #}
+            <div class="form-group">
+                <label for="{{ registrationForm.userDetail.phoneNumber.vars.id }}">Numéro de Téléphone</label>
+                {{ form_widget(registrationForm.userDetail.phoneNumber, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.phoneNumber.vars.id}}) }}
+                {{ form_errors(registrationForm.userDetail.phoneNumber) }}
+            </div>
 
-                {# Bouton de soumission #}
-                <div class="button-group">
-                    <button type="submit" class="btn btn-primary">S'inscrire</button>
-                </div>
+            {# Date de Naissance #}
+            <div class="form-group">
+                <label for="{{ registrationForm.userDetail.birthDate.vars.id }}">Date de Naissance</label>
+                {{ form_widget(registrationForm.userDetail.birthDate, {'attr': {'class': 'form-control', 'id': registrationForm.userDetail.birthDate.vars.id}}) }}
+                {{ form_errors(registrationForm.userDetail.birthDate) }}
+            </div>
+
+            {# Bouton de soumission #}
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
+            </div>
 
             {{ form_end(registrationForm) }}
         </div>

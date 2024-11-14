@@ -9,9 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -30,7 +33,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Assert\Length(min: 6, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.")]
     private ?string $plainPassword = null;
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
@@ -44,10 +46,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank(message: "Le nom de famille ne doit pas être vide.")]
     private ?string $lastName = null;
-
-    #[ORM\Column(length: 180, unique: true)]
-    #[Assert\NotBlank(message: "Le nom d'utilisateur ne doit pas être vide.")]
-    private ?string $username = null;
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $isActive = true;
@@ -68,23 +66,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'user_favorites')]
     private Collection $favorites;
 
-    #[ORM\OneToOne(targetEntity: Cart::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?Cart $cart = null;
-
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     private ?string $resetToken = null;
 
-    /**
-     * @var Collection<int, Appointment>
-     */
     #[ORM\OneToMany(targetEntity: Appointment::class, mappedBy: 'user')]
     private Collection $appointments;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
+
+    
+    
+    
 
     public function __construct()
     {
@@ -93,7 +87,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->appointments = new ArrayCollection();
     }
 
-    // Getter et Setter pour $deletedAt
     public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->deletedAt;
@@ -102,7 +95,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDeletedAt(?\DateTimeInterface $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
-
         return $this;
     }
 
@@ -121,7 +113,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = new \DateTimeImmutable();
     }
 
-    // Getters et Setters
     public function getId(): ?int
     {
         return $this->id;
@@ -138,38 +129,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // Garantit que chaque utilisateur a au moins le rôle ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -181,14 +158,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * Efface les données sensibles.
-     *
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
-        // Si vous stockez des données temporaires sensibles, les effacer ici
         $this->plainPassword = null;
     }
 
@@ -244,17 +215,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
-        return $this;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
         return $this;
     }
 
@@ -336,31 +296,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCart(): ?Cart
-    {
-        return $this->cart;
-    }
-
-    public function setCart(?Cart $cart): self
-    {
-        // Si un panier est déjà associé, on le désassocie
-        if ($this->cart !== null && $this->cart !== $cart) {
-            $this->cart->setUser(null);
-        }
-
-        $this->cart = $cart;
-
-        // Si un nouveau panier est fourni, on l'associe à l'utilisateur
-        if ($cart !== null && $cart->getUser() !== $this) {
-            $cart->setUser($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Appointment>
-     */
     public function getAppointments(): Collection
     {
         return $this->appointments;
@@ -372,19 +307,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->appointments->add($appointment);
             $appointment->setUser($this);
         }
-
         return $this;
     }
 
     public function removeAppointment(Appointment $appointment): self
     {
         if ($this->appointments->removeElement($appointment)) {
-            // set the owning side to null (unless already changed)
             if ($appointment->getUser() === $this) {
                 $appointment->setUser(null);
             }
         }
-
         return $this;
     }
+    
+    
 }

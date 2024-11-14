@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Appointment;
-use Stripe\Stripe;
+use Stripe\StripeClient;
 use Stripe\Checkout\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -11,18 +11,18 @@ class StripeService
 {
     private StripeConfig $stripeConfig;
     private UrlGeneratorInterface $router;
+    private StripeClient $stripeClient;
 
     public function __construct(StripeConfig $stripeConfig, UrlGeneratorInterface $router)
     {
         $this->stripeConfig = $stripeConfig;
         $this->router = $router;
+        $this->stripeClient = new StripeClient($this->stripeConfig->getSecretKey());
     }
 
     public function createCheckoutSession(Appointment $appointment): Session
     {
-        Stripe::setApiKey($this->stripeConfig->getSecretKey());
-
-        $session = Session::create([
+        return $this->stripeClient->checkout->sessions->create([
             'payment_method_types' => ['card'],
             'line_items' => [[
                 'price_data' => [
@@ -30,7 +30,7 @@ class StripeService
                     'product_data' => [
                         'name' => $appointment->getService()->getName(),
                     ],
-                    'unit_amount' => $appointment->getPrice() * 100, // en centimes
+                    'unit_amount' => $appointment->getTotal() * 100, // en centimes
                 ],
                 'quantity' => 1,
             ]],
@@ -41,8 +41,11 @@ class StripeService
                 'appointment_id' => $appointment->getId(),
             ],
         ]);
+    }
 
-        return $session;
+    public function retrieveSession(string $sessionId): Session
+    {
+        return $this->stripeClient->checkout->sessions->retrieve($sessionId);
     }
 
     public function getPublicKey(): string

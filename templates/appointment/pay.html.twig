@@ -1,0 +1,39 @@
+{# templates/appointment/pay.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement de Rendez-vous{% endblock %}
+
+{% block body %}
+    <h1>Payer votre Rendez-vous</h1>
+
+    <button id="checkout-button" class="btn btn-primary">Payer avec Stripe</button>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe("{{ publicKey }}");
+        const checkoutButton = document.getElementById('checkout-button');
+
+        checkoutButton.addEventListener('click', () => {
+            fetch("{{ path('appointment_payment', {'id': appointment.id}) }}", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(session => {
+                if (session.error) {
+                    alert(session.error);
+                    return;
+                }
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .catch(error => {
+                console.error("Erreur:", error);
+                alert('Une erreur est survenue lors de la création de la session de paiement.');
+            });
+        });
+    </script>
+{% endblock %}

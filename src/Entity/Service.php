@@ -21,51 +21,55 @@ class Service
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $price = null;
+    private ?float $price = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isActive = true;
+
+    // Getters et Setters
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    // Nom
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
+    // Description
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(string $description): self
     {
         $this->description = $description;
-
         return $this;
     }
 
-    public function getPrice(): ?string
+    // Prix
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(string $price): static
+    public function setPrice(float $price): self
     {
         $this->price = $price;
-
         return $this;
     }
+
+    // Actif
     public function isActive(): bool
     {
         return $this->isActive;

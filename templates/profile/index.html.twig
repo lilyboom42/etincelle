@@ -3,24 +3,23 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
-    <h1 class="profile-title">Mon Profil</h1>
+	<h1 class="profile-title">Mon Profil</h1>
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <div class="admin-dashboard">
-            <h2>Tableau de Bord Administrateur</h2>
-            <div class="admin-buttons">
-                <a href="{{ path('service_index') }}" class="btn btn-primary">Gérer les Services</a>
-                <a href="{{ path('admin_appointment_pending') }}" class="btn btn-primary">Gérer les Rendez-vous en Attente</a>
-                <a href="{{ path('paid_appointments') }}" class="btn btn-primary">Voir Rendez-vous Payés</a>
-                <a href="{{ path('admin_order_index') }}" class="btn btn-primary">Gestion des stocks et envois</a>
-                <a href="{{ path('admin_calendar') }}" class="btn btn-primary">Calendrier</a>
-                <a href="{{ path('admin_user_index') }}" class="btn btn-primary">Gérer les Utilisateurs</a>
-                
-            </div>
-        </div>
-    {% endif %}
+	{% if is_granted('ROLE_ADMIN') %}
+		<div class="admin-dashboard">
+			<h2>Tableau de Bord Administrateur</h2>
+			<div class="admin-buttons">
+				<a href="{{ path('service_index') }}" class="btn btn-primary">Gérer les Services</a>
+				<a href="{{ path('admin_appointment_pending') }}" class="btn btn-primary">Gérer les Rendez-vous en Attente</a>
+				<a href="{{ path('paid_appointments') }}" class="btn btn-primary">Voir Rendez-vous Payés</a>
+				<a href="{{ path('admin_order_index') }}" class="btn btn-primary">Gestion des stocks et envois</a>
+				<a href="{{ path('admin_calendar') }}" class="btn btn-primary">Calendrier</a>
+				<a href="{{ path('admin_user_index') }}" class="btn btn-primary">Gérer les Utilisateurs</a>
+			</div>
+		</div>
+	{% endif %}
 
-   	<div class="profile-form-section">
+	<div class="profile-form-section">
 		<h2>Mes Informations</h2>
 		<p>Vous pouvez modifier vos informations personnelles en remplissant le formulaire ci-dessous.</p>
 		<div class="container">
@@ -108,75 +107,80 @@
 	</div>
 
 	<div class="orders-section">
-        <h2>Mes Commandes</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Commande ID</th>
-                    <th>Date</th>
-                    <th>Montant</th>
-                    <th>Statut</th>
-                    <th>Numéro de suivi</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                    <tr>
-                        <td>{{ order.id }}</td>
-                        <td>{{ order.createdAt|date('d/m/Y') }}</td>
-                        <td>{{ order.total }} €</td>
-                        <td>{{ order.orderStatus.label() }}</td>
-                        <td>
-                            {% if order.trackingNumber %}
-                                {{ order.trackingNumber }}
-                            {% else %}
-                                <span class="text-muted">En attente d'expédition</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="5">
-                            <h5>Détails des produits</h5>
-                            <ul>
-                                {% for line in order.orderLines %}
-                                    <li>{{ line.product.name }} - {{ line.quantity }} x {{ line.price }} €</li>
-                                {% endfor %}
-                            </ul>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="5" class="text-center">Vous n'avez pas encore de commandes.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+		<h2>Mes Commandes</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Commande ID</th>
+					<th>Date</th>
+					<th>Montant</th>
+					<th>Statut</th>
+					<th>Numéro de suivi</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for order in orders %}
+					<tr>
+						<td>{{ order.id }}</td>
+						<td>{{ order.createdAt|date('d/m/Y') }}</td>
+						<td>{{ order.total }} €</td>
+						<td>{{ order.orderStatus.label() }}</td>
+						<td>
+							{% if order.trackingNumber %}
+								{{ order.trackingNumber }}
+							{% else %}
+								<span class="text-muted">En attente d'expédition</span>
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<h5>Détails des produits</h5>
+							<ul>
+								{% for line in order.orderLines %}
+									<li>{{ line.product.name }} - {{ line.quantity }} x {{ line.price }} €</li>
+								{% endfor %}
+							</ul>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="5" class="text-center">Vous n'avez pas encore de commandes.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
-    <div class="appointments-section">
-        <h2>Mes Rendez-vous</h2>
-        <ul class="appointments-list">
-            {% for appointment in appointments %}
-                <li>
-                    <strong>Rendez-vous #{{ appointment.id }}</strong> - {{ appointment.datetime|date('d/m/Y H:i') }} - {{ appointment.service.name|capitalize }}
-                    <br>
-                    Statut : 
-                    {% if appointment.status == constant('App\\Enum\\AppointmentStatus::APPROVED') %}
-                        <span class="text-success">Approuvé</span>
-                        {% if appointment.payment is null %}
-                            <a href="{{ path('appointment_payment', {'id': appointment.id}) }}" class="btn btn-primary">Payer maintenant</a>
-                        {% else %}
-                            <span class="text-info">Payé le {{ appointment.payment.paymentDate|date('d/m/Y') }}</span>
-                        {% endif %}
-                    {% elseif appointment.status == constant('App\\Enum\\AppointmentStatus::REJECTED') %}
-                        <span class="text-danger">Refusé</span>
-                    {% else %}
-                        <span class="text-warning">En attente</span>
-                    {% endif %}
-                </li>
-            {% else %}
-                <li>Vous n'avez pas encore de rendez-vous.</li>
-            {% endfor %}
-        </ul>
-    </div>
+	<div class="appointments-section">
+		<h2>Mes Rendez-vous</h2>
+		<ul class="appointments-list">
+			{% for appointment in appointments %}
+				<li>
+					<strong>Rendez-vous #{{ appointment.id }}</strong>
+					- {{ appointment.appointmentDate|date('d/m/Y H:i') }}
+					- {{ appointment.service.name|capitalize }}
+					<br>
+					Statut :
+					{% if appointment.status.name == 'approuvé' %}
+						<span class="text-success">Approuvé</span>
+						{% if appointment.payment is null %}
+							<a href="{{ path('appointment_pay', {'id': appointment.id}) }}" class="btn btn-primary">Payer maintenant</a>
+						{% else %}
+							<span class="text-info">Payé le {{ appointment.payment.paymentDate|date('d/m/Y') }}</span>
+						{% endif %}
+					{% elseif appointment.status.name == 'rejeté' %}
+						<span class="text-danger">Refusé</span>
+					{% elseif appointment.status.name == 'payé' %}
+						<span class="text-info">Payé</span>
+					{% else %}
+						<span class="text-warning">{{ appointment.status.name|capitalize }}</span>
+					{% endif %}
+				</li>
+			{% else %}
+				<li>Vous n'avez pas encore de rendez-vous.</li>
+			{% endfor %}
+		</ul>
+	</div>
+
 {% endblock %}

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Appointment;
 use App\Entity\Service;
+use App\Entity\Status; 
 use App\Form\AppointmentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,11 +20,18 @@ class AppointmentController extends AbstractController
         $user = $this->getUser();
         if (!$user) {
             $this->addFlash('error', 'Vous devez être connecté pour prendre un rendez-vous.');
-            return $this->redirectToRoute('app_login'); 
+            return $this->redirectToRoute('app_login');
         }
 
         $appointment = new Appointment();
         $appointment->setUser($user);
+
+        // Récupérer le statut 'demandé' depuis la base de données
+        $requestedStatus = $entityManager->getRepository(Status::class)->findOneBy(['name' => 'demandé']);
+        if (!$requestedStatus) {
+            throw $this->createNotFoundException("Le statut 'demandé' n'a pas été trouvé dans la base de données.");
+        }
+        $appointment->setStatus($requestedStatus);
 
         $services = $entityManager->getRepository(Service::class)->findAll();
         $form = $this->createForm(AppointmentType::class, $appointment);

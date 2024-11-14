@@ -1,69 +1,100 @@
-{# templates/event/form.html.twig #}
+{# templates/event/new.html.twig #}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ isEdit ? 'Modifier' : 'Ajouter' }} un événement
+    {% if isEdit %}
+        Modifier l'événement
+    {% else %}
+        Créer un nouvel événement
+    {% endif %}
 {% endblock %}
 
 {% block body %}
-    <main class="event-form-main">
-        <h1 class="event-form-title">{{ isEdit ? 'Modifier' : 'Ajouter' }} un événement</h1>
+    <h1>
+        {% if isEdit %}
+            Modifier l'événement
+        {% else %}
+            Créer un nouvel événement
+        {% endif %}
+    </h1>
 
-        <form class="event-form-container" method="post" enctype="multipart/form-data">
-            {{ form_start(form, {'attr': {'class': 'form-container'}}) }}
-                {{ form_errors(form) }}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
 
-                <div class="form-group">
-                    {{ form_label(form.title) }}
-                    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.title) }}
-                </div>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
 
-                <div class="form-group">
-                    {{ form_label(form.description) }}
-                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.description) }}
-                </div>
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+        <div class="form-group">
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.title) }}
+        </div>
 
-                <div class="form-group">
-                    {{ form_label(form.eventDate) }}
-                    {{ form_widget(form.eventDate, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.eventDate) }}
-                </div>
+        <div class="form-group">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.description) }}
+        </div>
 
-                <div id="event-media-wrapper" class="media-wrapper" data-prototype="{{ form_widget(form.media.vars.prototype)|e('html_attr') }}">
-                    {% if isEdit and event.media|length > 0 %}
-                        <h3 class="media-existing-title">Médias existants :</h3>
-                        <div class="existing-media-list">
-                            {% for media in event.media %}
-                                <div class="event-media-item mb-2">
-                                    <p>Média actuel : <a href="{{ vich_uploader_asset(media, 'mediaFile') }}" target="_blank" class="media-link">{{ media.filename }}</a></p>
-                                </div>
-                            {% endfor %}
-                        </div>
+        <div class="form-group">
+            {{ form_label(form.eventDate) }}
+            {{ form_widget(form.eventDate, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.eventDate) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.mediaFiles) }} {# Renommé à 'mediaFiles' #}
+            {{ form_widget(form.mediaFiles, {'attr': {'class': 'form-control-file'}}) }}
+            {{ form_errors(form.mediaFiles) }}
+        </div>
+
+        <button class="btn btn-primary">
+            {% if isEdit %}
+                Mettre à jour
+            {% else %}
+                Créer
+            {% endif %}
+        </button>
+    {{ form_end(form) }}
+
+    {% if isEdit and event.media|length > 0 %}
+        <h2 class="mt-4">Médias existants</h2>
+        <div class="media-gallery">
+            {% for media in event.media %}
+                <div class="media-item" style="margin-bottom: 15px;">
+                    {% set media_url = vich_uploader_asset(media, 'mediaFile') %}
+                    {% if media_url %}
+                        {% set extension = media.filename|split('.')|last|lower %}
+                        {% if extension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                            <img src="{{ media_url }}" alt="Image pour l'événement" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                        {% elseif extension == 'mp4' %}
+                            <video controls style="max-width: 200px; max-height: 150px;">
+                                <source src="{{ media_url }}" type="video/mp4">
+                                Votre navigateur ne supporte pas la lecture de vidéos.
+                            </video>
+                        {% endif %}
                     {% endif %}
-
-                    {% for mediaForm in form.media %}
-                        <div class="form-group media-form-group">
-                            {{ form_label(mediaForm) }}
-                            {{ form_widget(mediaForm, {'attr': {'class': 'form-control media-input'}}) }}
-                            {{ form_errors(mediaForm) }}
-                        </div>
-                    {% endfor %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <form method="post" action="{{ path('media_delete', {'id': media.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce média ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ media.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm mt-2">Supprimer</button>
+                        </form>
+                    {% endif %}
                 </div>
-
-                <button type="submit" class="btn btn-success mt-3">
-                    {{ isEdit ? 'Enregistrer les modifications' : 'Créer l\'événement' }}
-                </button>
-            {{ form_end(form) }}
-        </form>
-    </main>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascript %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var $collectionHolder = document.querySelector('#event-media-wrapper');
+            if (!$collectionHolder) return;
 
             var addMediaButton = document.createElement('button');
             addMediaButton.type = 'button';
@@ -104,7 +135,9 @@
 
             removeButton.addEventListener('click', function(e) {
                 e.preventDefault();
-                $collectionHolder.removeChild(newFormDiv);
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce média ?')) {
+                    $collectionHolder.removeChild(newFormDiv);
+                }
             });
         }
     </script>

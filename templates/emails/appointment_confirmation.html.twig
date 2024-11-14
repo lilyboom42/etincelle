@@ -1,6 +1,6 @@
 <h2>Confirmation de votre rendez-vous</h2>
 <p>Bonjour {{ appointment.user.firstName }},</p>
-<p>Votre rendez-vous pour {{ appointment.service.name }} a été confirmé pour le {{ appointment.datetime|date('d/m/Y H:i') }}.</p>
+<p>Votre rendez-vous pour {{ appointment.service.name }} a été confirmé pour le {{ appointment.appointmentDate|date('d/m/Y H:i') }}.</p>
 <p>
     <a href="{{ googleLink }}" target="_blank">Ajouter à Google Calendar</a> |
     <a href="{{ icalLink }}" target="_blank">Télécharger iCal</a>

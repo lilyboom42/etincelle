@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\User;
+use App\Entity\OrderLine;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -46,7 +48,7 @@ class Order
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $stripeSessionId = null;
-    
+
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $trackingNumber = null;
 
@@ -70,7 +72,7 @@ class Order
         $this->updatedAt = new \DateTimeImmutable();
     }
 
-    // Getters and setters...
+    // Getters et Setters
 
     public function getId(): ?int
     {
@@ -126,6 +128,9 @@ class Order
         return $this;
     }
 
+    /**
+     * @return Collection<int, OrderLine>
+     */
     public function getOrderLines(): Collection
     {
         return $this->orderLines;
@@ -167,7 +172,7 @@ class Order
     {
         return $this->trackingNumber;
     }
-    
+
     public function setTrackingNumber(?string $trackingNumber): self
     {
         $this->trackingNumber = $trackingNumber;

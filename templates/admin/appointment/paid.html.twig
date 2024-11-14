@@ -16,19 +16,18 @@
     </thead>
     <tbody>
     {% for appointment in appointments %}
-        {% if appointment.status == constant('App\\Enum\\AppointmentStatus::PAID') %}
-            <tr>
-                <td>{{ appointment.id }}</td>
-                <td>{{ appointment.datetime|date('d/m/Y H:i') }}</td>
-                <td>{{ appointment.service.name }}</td>
-                <td>{{ appointment.price }} €</td>
-            </tr>
-        {% endif %}
+        <tr>
+            <td>{{ appointment.id }}</td>
+            <td>{{ appointment.appointmentDate|date('d/m/Y H:i') }}</td>
+            <td>{{ appointment.service.name }}</td>
+            <td>{{ appointment.service.price }} €</td> {# Utiliser le prix du service #}
+            <td>{{ appointment.user.email }}</td>
+        </tr>
     {% else %}
         <tr>
-            <td colspan="4" class="text-center">Aucun rendez-vous payé trouvé.</td>
+            <td colspan="5" class="text-center">Aucun rendez-vous payé trouvé.</td>
         </tr>
     {% endfor %}
-</tbody>
+    </tbody>
 </table>
 {% endblock %}

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Product;
 use App\Entity\Order;
+use App\Entity\CartItem;
 
 #[ORM\Entity(repositoryClass: OrderLineRepository::class)]
 class OrderLine
@@ -36,6 +37,10 @@ class OrderLine
     #[Assert\NotNull(message: "La commande associée ne doit pas être nulle.")]
     private ?Order $order = null;
 
+    #[ORM\OneToOne(inversedBy: 'orderLine', cascade: ['persist', 'remove'])]
+    private ?CartItem $cartItem = null;
+
+    // Getters et Setters
 
     public function getId(): ?int
     {
@@ -86,6 +91,23 @@ class OrderLine
     public function setOrder(?Order $order): static
     {
         $this->order = $order;
+
+        return $this;
+    }
+
+    public function getCartItem(): ?CartItem
+    {
+        return $this->cartItem;
+    }
+
+    public function setCartItem(?CartItem $cartItem): self
+    {
+        // Définir le côté propriétaire de la relation si nécessaire
+        if ($cartItem !== null && $cartItem->getOrderLine() !== $this) {
+            $cartItem->setOrderLine($this);
+        }
+
+        $this->cartItem = $cartItem;
 
         return $this;
     }

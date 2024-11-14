@@ -35,6 +35,8 @@ class Media
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    // Getters et Setters...
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +63,7 @@ class Media
     {
         $this->mediaFile = $mediaFile;
         if ($mediaFile) {
+            // Met à jour le champ updatedAt pour déclencher les événements Doctrine
             $this->updatedAt = new \DateTimeImmutable();
         }
     }
@@ -88,6 +91,4 @@ class Media
 
         return $this;
     }
-
-    
 }

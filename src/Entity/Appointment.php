@@ -3,95 +3,52 @@
 namespace App\Entity;
 
 use App\Repository\AppointmentRepository;
-use App\Enum\AppointmentStatus;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 class Appointment
 {
-    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $datetime = null;
-
-    #[ORM\Column(type: 'string', enumType: AppointmentStatus::class)]
-    private AppointmentStatus $status = AppointmentStatus::PENDING;
-
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
-    private ?string $trackingNumber = null;
-
-    #[ORM\ManyToOne(inversedBy: 'appointments')]
+    // Relation avec User
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'appointments')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    // Relation avec Service
     #[ORM\ManyToOne(targetEntity: Service::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Service $service = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private ?float $price = null;
+    // Date du rendez-vous
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $appointmentDate = null;
 
-    #[ORM\ManyToOne(targetEntity: Cart::class, inversedBy: 'appointments')]
-    private ?Cart $cart = null;
+    // Prix total
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?float $total = null;
 
-    #[ORM\OneToOne(targetEntity: Payment::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
+    // Relation avec Status
+    #[ORM\ManyToOne(targetEntity: Status::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Status $status = null;
+
+    // Relation avec Payment
+    #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
     private ?Payment $payment = null;
 
     // Getters et Setters
-
-    public function getTrackingNumber(): ?string
-    {
-        return $this->trackingNumber;
-    }
-
-    public function setTrackingNumber(?string $trackingNumber): self
-    {
-        $this->trackingNumber = $trackingNumber;
-        return $this;
-    }
-
-    public function getPayment(): ?Payment
-    {
-        return $this->payment;
-    }
-
-    public function setPayment(?Payment $payment): self
-    {
-        $this->payment = $payment;
-        return $this;
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDatetime(): ?\DateTimeInterface
-    {
-        return $this->datetime;
-    }
-
-    public function setDatetime(\DateTimeInterface $datetime): self
-    {
-        $this->datetime = $datetime;
-        return $this;
-    }
-
-    public function getStatus(): AppointmentStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(AppointmentStatus $status): self
-    {
-        $this->status = $status;
-        return $this;
-    }
-
+    // User
     public function getUser(): ?User
     {
         return $this->user;
@@ -103,6 +60,7 @@ class Appointment
         return $this;
     }
 
+    // Service
     public function getService(): ?Service
     {
         return $this->service;
@@ -112,33 +70,64 @@ class Appointment
     {
         $this->service = $service;
 
-        // Définir automatiquement le prix de l'appointment en fonction du service
+        // Définir automatiquement le total en fonction du prix du service
         if ($service) {
-            $this->price = $service->getPrice();
+            $this->total = $service->getPrice();
         }
 
         return $this;
     }
 
-    public function getPrice(): ?float
+    // Date du rendez-vous
+    public function getAppointmentDate(): ?\DateTimeInterface
     {
-        return $this->price;
+        return $this->appointmentDate;
     }
 
-    public function setPrice(float $price): self
+    public function setAppointmentDate(\DateTimeInterface $appointmentDate): self
     {
-        $this->price = $price;
+        $this->appointmentDate = $appointmentDate;
         return $this;
     }
 
-    public function getCart(): ?Cart
+    // Total
+    public function getTotal(): ?float
     {
-        return $this->cart;
+        return $this->total;
     }
 
-    public function setCart(?Cart $cart): self
+    public function setTotal(float $total): self
     {
-        $this->cart = $cart;
+        $this->total = $total;
+        return $this;
+    }
+
+    // Statut
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    // Paiement
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): self
+    {
+        // Mettre à jour le côté propriétaire de la relation si nécessaire
+        if ($payment !== null && $payment->getAppointment() !== $this) {
+            $payment->setAppointment($this);
+        }
+
+        $this->payment = $payment;
         return $this;
     }
 }

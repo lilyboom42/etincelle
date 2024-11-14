@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use App\Repository\CartItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
+use App\Entity\Product;
+use App\Entity\OrderLine;
 
 #[ORM\Entity(repositoryClass: CartItemRepository::class)]
 class CartItem
@@ -22,7 +25,12 @@ class CartItem
 
     #[ORM\ManyToOne(inversedBy: 'cartItems')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Cart $cart = null;
+    private ?User $user = null;
+
+    #[ORM\OneToOne(mappedBy: 'cartItem', cascade: ['persist', 'remove'])]
+    private ?OrderLine $orderLine = null;
+
+    // Getters et Setters
 
     public function getId(): ?int
     {
@@ -34,7 +42,7 @@ class CartItem
         return $this->product;
     }
 
-    public function setProduct(?Product $product): static
+    public function setProduct(?Product $product): self
     {
         $this->product = $product;
 
@@ -46,21 +54,38 @@ class CartItem
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): static
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
 
         return $this;
     }
 
-    public function getCart(): ?Cart
+    public function getUser(): ?User
     {
-        return $this->cart;
+        return $this->user;
     }
 
-    public function setCart(?Cart $cart): static
+    public function setUser(?User $user): self
     {
-        $this->cart = $cart;
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getOrderLine(): ?OrderLine
+    {
+        return $this->orderLine;
+    }
+
+    public function setOrderLine(?OrderLine $orderLine): self
+    {
+        // Définir le côté propriétaire de la relation si nécessaire
+        if ($orderLine !== null && $orderLine->getCartItem() !== $this) {
+            $orderLine->setCartItem($this);
+        }
+
+        $this->orderLine = $orderLine;
 
         return $this;
     }

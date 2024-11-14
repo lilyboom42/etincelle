@@ -16,22 +16,22 @@
     </thead>
     <tbody>
         {% for appointment in appointments %}
-            {% if appointment.status == constant('App\\Enum\\AppointmentStatus::PENDING') %}
-                <tr>
-                    <td>{{ appointment.id }}</td>
-                    <td>{{ appointment.datetime|date('d/m/Y H:i') }}</td>
-                    <td>{{ appointment.service.name }}</td>
-                    <td>{{ appointment.user.email }}</td>
-                    <td>
-                        <form action="{{ path('admin_appointment_approve', {'id': appointment.id}) }}" method="post" style="display:inline;">
-                            <button class="btn btn-success">Approuver</button>
-                        </form>
-                        <form action="{{ path('admin_appointment_reject', {'id': appointment.id}) }}" method="post" style="display:inline;">
-                            <button class="btn btn-danger">Refuser</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endif %}
+            <tr>
+                <td>{{ appointment.id }}</td>
+                <td>{{ appointment.appointmentDate|date('d/m/Y H:i') }}</td>
+                <td>{{ appointment.service.name }}</td>
+                <td>{{ appointment.user.email }}</td>
+                <td>
+                    <form action="{{ path('admin_appointment_approve', {'id': appointment.id}) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ appointment.id) }}">
+                        <button type="submit" class="btn btn-success">Approuver</button>
+                    </form>
+                    <form action="{{ path('admin_appointment_reject', {'id': appointment.id}) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ appointment.id) }}">
+                        <button type="submit" class="btn btn-danger">Refuser</button>
+                    </form>
+                </td>
+            </tr>
         {% else %}
             <tr>
                 <td colspan="5" class="text-center">Aucune demande de rendez-vous en attente.</td>

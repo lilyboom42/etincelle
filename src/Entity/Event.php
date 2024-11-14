@@ -61,6 +61,8 @@ class Event
         $this->updatedAt = new \DateTimeImmutable();
     }
 
+    // Getters et Setters...
+
     public function getId(): ?int
     {
         return $this->id;
@@ -115,6 +117,9 @@ class Event
         return $this;
     }
 
+    /**
+     * @return Collection<int, Media>
+     */
     public function getMedia(): Collection
     {
         return $this->media;
@@ -133,6 +138,7 @@ class Event
     public function removeMedia(Media $media): self
     {
         if ($this->media->removeElement($media)) {
+            // set the owning side to null (unless already changed)
             if ($media->getEvent() === $this) {
                 $media->setEvent(null);
             }

@@ -12,6 +12,6 @@ controllers:
 #     path: /blog/new
 #     controller: App\Controller\BlogController::new
 #     methods: [GET, POST]
-# app_login:
-#     path: /login
-#     controller: App\Controller\SecurityController::login
+app_login:
+    path: /login
+    controller: App\Controller\SecurityController::login

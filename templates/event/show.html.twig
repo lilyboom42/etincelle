@@ -3,59 +3,71 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ event.title }}
-	- Détails
+    {{ event.title }} - Détails
 {% endblock %}
 
 {% block body %}
 
-	{% for message in app.flashes('error') %}
-		<div class="alert alert-danger">{{ message }}</div>
-	{% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
 
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success">{{ message }}</div>
-	{% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
 
-	<h1>{{ event.title }}</h1>
+    <h1>{{ event.title }}</h1>
 
-	{# Affichage des images et vidéos associées à l'événement #}
-	{% if event.media|length > 0 %}
-		{% for media in event.media %}
-			{% set media_url = vich_uploader_asset(media, 'mediaFile') %}
-			{% if media_url %}
-				{% set extension = media.filename|split('.')|last|lower %}
-				{% if extension in ['jpg', 'jpeg', 'png', 'gif'] %}
-					<img src="{{ media_url }}" alt="Image pour l'événement" class="img-thumbnail" style="max-width: 300px; max-height: 200px;">
-				{% elseif extension == 'mp4' %}
-					<video controls style="max-width: 400px; max-height: 300px;">
-						<source src="{{ media_url }}" type="video/mp4">
-					</video>
-				{% endif %}
-			{% else %}
-				<p>Média introuvable.</p>
-			{% endif %}
-		{% endfor %}
-	{% else %}
-		<p>Aucun média associé.</p>
-	{% endif %}
+    {# Affichage des images et vidéos associées à l'événement #}
+    <div class="media-gallery">
+        {% for media in event.media %}
+            {% set media_url = vich_uploader_asset(media, 'mediaFile') %}
+            {% if media_url %}
+                {% set extension = media.filename|split('.')|last|lower %}
+                <div class="media-item" style="margin-bottom: 15px;">
+                    {% if extension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                        <img src="{{ media_url }}" alt="Image pour l'événement" class="img-thumbnail" style="max-width: 300px; max-height: 200px;">
+                    {% elseif extension == 'mp4' %}
+                        <video controls style="max-width: 400px; max-height: 300px;">
+                            <source src="{{ media_url }}" type="video/mp4">
+                            Votre navigateur ne supporte pas la lecture de vidéos.
+                        </video>
+                    {% endif %}
+                    {# Bouton de suppression pour chaque média #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <form method="post" action="{{ path('media_delete', {'id': media.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce média ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ media.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm mt-2">Supprimer</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% else %}
+                <p>Média introuvable.</p>
+            {% endif %}
+        {% endfor %}
+    </div>
 
-	<div class="event-details">
-		<p>
-			<strong>Description :</strong>
-			{{ event.description }}</p>
-		<p>
-			<strong>Date de l'événement :</strong>
-			{{ event.eventDate|date('d/m/Y') }}</p>
+    <div class="event-details">
+        <p>
+            <strong>Description :</strong>
+            {{ event.description }}
+        </p>
+        <p>
+            <strong>Date de l'événement :</strong>
+            {{ event.eventDate|date('d/m/Y') }}
+        </p>
 
-		{# Boutons d'actions pour l'événement #}
-		{% if is_granted('ROLE_ADMIN') %}
-	
-		<button type="submit" class="delete-button btn btn-danger">Supprimer</button>
-		<a href="{{ path('event_edit', {'id': event.id}) }}" class="btn btn-warning mt-3">Modifier</a>
-		
-		{% endif %}
-		<a href="{{ path('event_index') }}" class="btn btn-secondary mt-3">Retour aux événements</a>
+        {# Boutons d'actions pour l'événement #}
+        {% if is_granted('ROLE_ADMIN') %}
 
-	</div>
+        <form method="post" action="{{ path('event_delete', {'id': event.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ event.id) }}">
+            <button type="submit" class="delete-button btn btn-danger">Supprimer</button>
+        </form>
+        <a href="{{ path('event_edit', {'id': event.id}) }}" class="btn btn-warning mt-3">Modifier</a>
+
+        {% endif %}
+        <a href="{{ path('event_index') }}" class="btn btn-secondary mt-3">Retour aux événements</a>
+
+    </div>
 {% endblock %}

@@ -19,7 +19,6 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-
 class EventController extends AbstractController
 {
     #[Route('/event', name: 'event_index', methods: ['GET'])]
@@ -49,6 +48,22 @@ class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traitement des fichiers uploadés pour les médias
+            /** @var UploadedFile[] $mediaFiles */
+            $mediaFiles = $form->get('mediaFiles')->getData(); // Utilisation de 'mediaFiles'
+
+            if ($mediaFiles) {
+                foreach ($mediaFiles as $mediaFile) {
+                    if ($mediaFile instanceof UploadedFile) {
+                        $media = new Media();
+                        $media->setEvent($event);
+                        $media->setMediaFile($mediaFile); // Utilisation de VichUploader pour gérer l'upload
+                        $event->addMedia($media);
+                        $entityManager->persist($media);
+                    }
+                }
+            }
+
             $entityManager->persist($event);
             $entityManager->flush();
 
@@ -65,6 +80,27 @@ class EventController extends AbstractController
         ]);
     }
 
+    #[Route('/media/{id}/delete', name: 'media_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deleteMedia(Request $request, Media $media, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        // Vérifier le token CSRF
+        if ($this->isCsrfTokenValid('delete' . $media->getId(), $request->request->get('_token'))) {
+            $event = $media->getEvent();
+            $entityManager->remove($media);
+            $entityManager->flush();
+
+            // Envoyer des notifications aux abonnés
+            $this->sendNotification($mailer, $entityManager, $event, 'Supprimé');
+
+            $this->addFlash('success', 'Média supprimé avec succès.');
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
+        }
+
+        return $this->redirectToRoute('event_show', ['id' => $media->getEvent()->getId()]);
+    }
+
     #[Route('/event/{id}/edit', name: 'event_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, Event $event, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
@@ -73,6 +109,22 @@ class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traitement des fichiers uploadés pour les médias
+            /** @var UploadedFile[] $mediaFiles */
+            $mediaFiles = $form->get('mediaFiles')->getData(); // Utilisation de 'mediaFiles'
+
+            if ($mediaFiles) {
+                foreach ($mediaFiles as $mediaFile) {
+                    if ($mediaFile instanceof UploadedFile) {
+                        $media = new Media();
+                        $media->setEvent($event);
+                        $media->setMediaFile($mediaFile); // Utilisation de VichUploader pour gérer l'upload
+                        $event->addMedia($media);
+                        $entityManager->persist($media);
+                    }
+                }
+            }
+
             $entityManager->flush();
 
             // Envoyer des notifications aux abonnés
@@ -131,7 +183,6 @@ class EventController extends AbstractController
             $mailer->send($email);
         }
     }
-
 
     #[Route('/event/subscribe/{id}', name: 'event_subscribe', methods: ['GET', 'POST'])]
     public function subscribe(int $id, Request $request, EntityManagerInterface $entityManager, ?UserInterface $user): Response

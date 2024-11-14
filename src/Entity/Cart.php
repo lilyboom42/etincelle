@@ -37,22 +37,7 @@ class Cart
         return $this->id;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        if ($this->user !== $user) {
-            $this->user = $user;
-            if ($user !== null && $user->getCart() !== $this) {
-                $user->setCart($this);
-            }
-        }
-
-        return $this;
-    }
+  
 
     public function getCartItems(): Collection
     {
