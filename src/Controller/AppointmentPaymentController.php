@@ -191,26 +191,14 @@ class AppointmentPaymentController extends AbstractController
         $user = $appointment->getUser();
         $adminEmail = 'admin@example.com';
     
-        // Récupère la date de début et la convertit en DateTimeImmutable si nécessaire
-        $start = $appointment->getAppointmentDate();
-        if (!$start instanceof \DateTimeImmutable) {
-            if ($start instanceof \DateTime) {
-                $start = \DateTimeImmutable::createFromMutable($start);
-            } else {
-                throw new \RuntimeException("La date du rendez-vous est invalide.");
-            }
-        }
-    
-        // Utilisation de `add` pour ajouter une heure
-        $end = $start->add(new \DateInterval('PT1H'));
-    
+        $start = $appointment->getAppointmentDate(); // Correction ici
+        $end = (clone $start)->add(new \DateInterval('PT1H'));
         $title = 'Rendez-vous de ' . $user->getFirstName();
         $description = 'Rendez-vous pour ' . $appointment->getService()->getName();
     
         $googleLink = $this->calendarLinkService->generateGoogleCalendarLink($start, $end, $title, $description);
         $icalLink = $this->calendarLinkService->generateIcalLink($start, $end, $title, $description);
     
-        // Envoi de l'email au client
         $emailClient = (new Email())
             ->from('no-reply@example.com')
             ->to($user->getEmail())
@@ -222,7 +210,6 @@ class AppointmentPaymentController extends AbstractController
             ]));
         $this->mailer->send($emailClient);
     
-        // Envoi de l'email à l'administrateur
         $emailAdmin = (new Email())
             ->from('no-reply@example.com')
             ->to($adminEmail)
@@ -234,5 +221,5 @@ class AppointmentPaymentController extends AbstractController
             ]));
         $this->mailer->send($emailAdmin);
     }
-        
+    
 }

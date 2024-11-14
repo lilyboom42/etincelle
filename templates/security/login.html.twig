@@ -1,41 +1,76 @@
+{# templates/security/login.html.twig #}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Se connecter{% endblock %}
 
 {% block body %}
-<div class="container">
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+<div class="container mt-5">
+    <h1>Connexion</h1>
 
-        <div class="form-group">
-            <label for="username">Email</label>
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+
+    <form action="{{ path('app_login') }}" method="post">
+        <!-- Champ Email -->
+        <div class="form-group mb-3">
+            <label for="email">Email</label>
             <div class="input-with-icon email">
-                <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="username" required autofocus>
+                <input 
+                    type="email" 
+                    value="{{ last_username }}" 
+                    name="email"          
+                    id="email" 
+                    class="form-control"   
+                    autocomplete="username" 
+                    required 
+                    autofocus
+                />
             </div>
         </div>
 
-        <div class="form-group">
+        <!-- Champ Mot de passe -->
+        <div class="form-group mb-3">
             <label for="password">Mot de passe</label>
             <div class="input-with-icon password">
-                <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                <input 
+                    type="password" 
+                    name="_password" 
+                    id="password" 
+                    class="form-control" 
+                    autocomplete="current-password" 
+                    required
+                />
             </div>
         </div>
 
+        <!-- Token CSRF -->
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <div class="form-group-checkbox">
-            <input type="checkbox" name="_remember_me" id="_remember_me" class="form-control-checkbox" />
-            <label for="_remember_me">Se souvenir de moi</label>
+        <!-- Case à cocher Se souvenir de moi -->
+        <div class="form-group form-check mb-3">
+            <input 
+                type="checkbox" 
+                name="_remember_me" 
+                id="_remember_me" 
+                class="form-check-input"
+            />
+            <label for="_remember_me" class="form-check-label">Se souvenir de moi</label>
         </div>
 
-        <div class="button-group">
+        <!-- Boutons de soumission et d'inscription -->
+        <div class="button-group mb-3">
             <button type="submit" class="btn btn-primary">Se connecter</button>
-            <a href="{{ path('app_register') }}" class="btn btn-primary">S'inscrire</a>
+            <a href="{{ path('app_register') }}" class="btn btn-secondary">S'inscrire</a>
         </div>
 
-        <a href="{{ path('app_forgotten_password') }}" class="btn btn-link mt-3">Mot de passe oublié ?</a>
+        <!-- Lien Mot de passe oublié -->
+        <div class="mb-3">
+            <a href="{{ path('app_forgotten_password') }}" class="btn btn-link">Mot de passe oublié ?</a>
+        </div>
     </form>
 </div>
 {% endblock %}

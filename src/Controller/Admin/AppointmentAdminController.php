@@ -31,6 +31,7 @@ class AppointmentAdminController extends AbstractController
             'appointments' => $appointments,
         ]);
     }
+    
 
     #[Route('/approve/{id}', name: 'admin_appointment_approve', methods: ['POST'])]
     public function approve(Request $request, Appointment $appointment, EntityManagerInterface $entityManager): Response
@@ -56,6 +57,8 @@ class AppointmentAdminController extends AbstractController
         $this->addFlash('success', 'Rendez-vous approuvé avec succès.');
         return $this->redirectToRoute('admin_appointment_pending');
     }
+    
+    
 
     #[Route('/reject/{id}', name: 'admin_appointment_reject', methods: ['POST'])]
     public function reject(Request $request, Appointment $appointment, EntityManagerInterface $entityManager): Response
@@ -98,4 +101,5 @@ class AppointmentAdminController extends AbstractController
             'appointments' => $paidAppointments,
         ]);
     }
+    
 }

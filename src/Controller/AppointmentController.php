@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Appointment;
 use App\Entity\Service;
-use App\Entity\Status; 
+use App\Entity\Status; // Import de l'entité Status
 use App\Form\AppointmentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,12 +26,13 @@ class AppointmentController extends AbstractController
         $appointment = new Appointment();
         $appointment->setUser($user);
 
-        // Récupérer le statut 'demandé' depuis la base de données
-        $requestedStatus = $entityManager->getRepository(Status::class)->findOneBy(['name' => 'demandé']);
-        if (!$requestedStatus) {
-            throw $this->createNotFoundException("Le statut 'demandé' n'a pas été trouvé dans la base de données.");
-        }
-        $appointment->setStatus($requestedStatus);
+        // Récupérer le statut 'en attente' depuis la base de données
+$pendingStatus = $entityManager->getRepository(Status::class)->findOneBy(['name' => 'en attente']);
+if (!$pendingStatus) {
+    throw $this->createNotFoundException("Le statut 'en attente' n'a pas été trouvé dans la base de données.");
+}
+$appointment->setStatus($pendingStatus);
+
 
         $services = $entityManager->getRepository(Service::class)->findAll();
         $form = $this->createForm(AppointmentType::class, $appointment);

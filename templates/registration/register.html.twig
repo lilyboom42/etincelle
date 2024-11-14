@@ -45,15 +45,6 @@
                 {{ form_errors(registrationForm.lastName) }}
             </div}
 
-            {# Nom d'utilisateur #}
-            {# Assurez-vous que ce champ existe dans l'entité User ou ajustez-le en conséquence #}
-            {# Si ce champ n'existe pas, supprimez-le ou ajoutez-le à l'entité User #}
-            <div class="form-group">
-                <label for="{{ registrationForm.userName.vars.id }}">Nom d'utilisateur</label>
-                {{ form_widget(registrationForm.userName, {'attr': {'class': 'form-control', 'id': registrationForm.userName.vars.id}}) }}
-                {{ form_errors(registrationForm.userName) }}
-            </div>
-
             {# Mot de passe #}
             <div class="form-group">
                 {{ form_label(registrationForm.plainPassword.first) }}

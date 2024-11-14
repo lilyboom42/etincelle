@@ -1,14 +1,12 @@
 # config/packages/security.yaml
-
 security:
+    # Utilisation des password_hashers au lieu des encoders dans Symfony 5.3+
     password_hashers:
         App\Entity\User:
-            algorithm: argon2id
-            memory_cost: 1024
-            time_cost: 2
+            algorithm: auto
 
     providers:
-        app_user_provider:
+        users_in_database:
             entity:
                 class: App\Entity\User
                 property: email
@@ -19,26 +17,21 @@ security:
             security: false
 
         main:
+            provider: users_in_database
             lazy: true
-            provider: app_user_provider
             form_login:
                 login_path: app_login
                 check_path: app_login
-                enable_csrf: true
-                csrf_token_id: authenticate
-                username_parameter: _username
+                username_parameter: email    # Utilisation de 'email' comme identifiant
                 password_parameter: _password
+                csrf_token_id: authenticate  # Identifiant unique pour le token CSRF
+                csrf_parameter: _csrf_token  # Nom du paramètre CSRF dans le formulaire
+                enable_csrf: true            # Activation de la protection CSRF
+                default_target_path: profile_index
             logout:
                 path: app_logout
-                target: app_home
-
-            # Limitation des tentatives de connexion (Login Throttling)
-            login_throttling:
-                max_attempts: 5
+                target: app_login
 
     access_control:
-        - { path: ^/admin/user, roles: ROLE_ADMIN }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }

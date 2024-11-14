@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Repository\UesrDetails;
+use App\Entity\Order;
+use App\Entity\CartItem;
+use App\Entity\Appointment;
+use App\Entity\Product;
+use App\Entity\Subscriber;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +16,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -33,6 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\Length(min: 6, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.")]
     private ?string $plainPassword = null;
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
@@ -48,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
     #[ORM\Column(type: 'boolean')]
-    private ?bool $isActive = true;
+    private bool $isActive = true;
 
     #[ORM\Column(nullable: false)]
     private ?\DateTimeImmutable $createdAt = null;
@@ -58,6 +64,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
     private Collection $orders;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CartItem::class, cascade: ['persist', 'remove'])]
+    private Collection $cartItems;
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Subscriber $subscriber = null;
@@ -76,16 +85,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
 
-    
-    
-    
-
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->cartItems = new ArrayCollection();
         $this->favorites = new ArrayCollection();
         $this->appointments = new ArrayCollection();
     }
+
+    // ============================
+    // Getter et Setter pour deletedAt
+    // ============================
 
     public function getDeletedAt(): ?\DateTimeInterface
     {
@@ -97,6 +107,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->deletedAt = $deletedAt;
         return $this;
     }
+
+    // ============================
+    // Lifecycle Callbacks
+    // ============================
 
     #[ORM\PrePersist]
     public function setCreationDate(): void
@@ -112,6 +126,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
+
+    // ============================
+    // Identifiant et Email
+    // ============================
 
     public function getId(): ?int
     {
@@ -134,6 +152,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
+    // ============================
+    // Roles
+    // ============================
+
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -146,6 +168,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = $roles;
         return $this;
     }
+
+    // ============================
+    // Password
+    // ============================
 
     public function getPassword(): ?string
     {
@@ -174,6 +200,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // ============================
+    // Reset Token
+    // ============================
+
     public function getResetToken(): ?string
     {
         return $this->resetToken;
@@ -185,6 +215,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // ============================
+    // User Details
+    // ============================
+
     public function getUserDetail(): ?UserDetails
     {
         return $this->userDetail;
@@ -195,6 +229,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userDetail = $userDetail;
         return $this;
     }
+
+    // ============================
+    // Prénom et Nom de Famille
+    // ============================
 
     public function getFirstName(): ?string
     {
@@ -218,7 +256,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isActive(): ?bool
+    // ============================
+    // isActive
+    // ============================
+
+    public function isActive(): bool
     {
         return $this->isActive;
     }
@@ -229,6 +271,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // ============================
+    // Created At et Updated At
+    // ============================
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -238,6 +284,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->updatedAt;
     }
+
+    // ============================
+    // Orders
+    // ============================
 
     public function getOrders(): Collection
     {
@@ -263,6 +313,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // ============================
+    // Subscriber
+    // ============================
+
     public function getSubscriber(): ?Subscriber
     {
         return $this->subscriber;
@@ -276,6 +330,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->subscriber = $subscriber;
         return $this;
     }
+
+    // ============================
+    // Favorites
+    // ============================
 
     public function getFavorites(): Collection
     {
@@ -295,6 +353,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->favorites->removeElement($product);
         return $this;
     }
+
+    // ============================
+    // Appointments
+    // ============================
 
     public function getAppointments(): Collection
     {
@@ -319,6 +381,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
         return $this;
     }
-    
-    
+
+    // ============================
+    // CartItems
+    // ============================
+
+    /**
+     * @return Collection<int, CartItem>
+     */
+    public function getCartItems(): Collection
+    {
+        return $this->cartItems;
+    }
+
+    public function addCartItem(CartItem $cartItem): self
+    {
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems->add($cartItem);
+            $cartItem->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartItem(CartItem $cartItem): self
+    {
+        if ($this->cartItems->removeElement($cartItem)) {
+            if ($cartItem->getUser() === $this) {
+                $cartItem->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+public function getUsername(): string
+{
+    return $this->getUserIdentifier();
+}
 }
