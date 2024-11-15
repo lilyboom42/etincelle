@@ -191,8 +191,15 @@ class AppointmentPaymentController extends AbstractController
         $user = $appointment->getUser();
         $adminEmail = 'admin@example.com';
     
-        $start = $appointment->getAppointmentDate(); // Correction ici
-        $end = (clone $start)->add(new \DateInterval('PT1H'));
+        $start = $appointment->getAppointmentDate();
+        
+        // Assurez-vous que $start est une instance de DateTimeImmutable
+        if (!($start instanceof \DateTimeImmutable)) {
+            $start = new \DateTimeImmutable($start ?? 'now');
+        }
+        
+        $end = $start->add(new \DateInterval('PT1H'));
+        
         $title = 'Rendez-vous de ' . $user->getFirstName();
         $description = 'Rendez-vous pour ' . $appointment->getService()->getName();
     
@@ -221,5 +228,4 @@ class AppointmentPaymentController extends AbstractController
             ]));
         $this->mailer->send($emailAdmin);
     }
-    
 }

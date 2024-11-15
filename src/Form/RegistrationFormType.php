@@ -38,7 +38,6 @@ class RegistrationFormType extends AbstractType
                     new Assert\Length([
                         'min' => 8,
                         'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
-                        // vous pouvez définir une longueur maximale si nécessaire
                     ]),
                     new Assert\Regex([
                         'pattern' => '/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\W).{8,}/',

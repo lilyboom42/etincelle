@@ -231,90 +231,117 @@ class PaymentController extends AbstractController
     #[Route('/stripe/webhook', name: 'stripe_webhook')]
     public function webhook(Request $request): Response
     {
+        // Récupération du contenu du payload reçu de Stripe
         $payload = $request->getContent();
+        // Récupération de l'en-tête de la signature Stripe
         $sigHeader = $request->headers->get('stripe-signature');
-
+    
         try {
+            // Vérification de la validité du webhook à l'aide de la signature et du secret
             $event = \Stripe\Webhook::constructEvent($payload, $sigHeader, $this->stripeConfig->getWebhookSecret());
         } catch (\UnexpectedValueException $e) {
+            // Si le payload est invalide, log de l'erreur et retour d'une réponse d'erreur
             $this->logger->error('Invalid webhook payload', ['exception' => $e]);
             return new Response('Invalid payload', 400);
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            // Si la vérification de la signature échoue, log de l'erreur et retour d'une réponse d'erreur
             $this->logger->error('Invalid webhook signature', ['exception' => $e]);
             return new Response('Invalid signature', 400);
         }
-
+    
+        // Vérification du type de l'événement reçu, on traite ici uniquement 'checkout.session.completed'
         if ($event->type === 'checkout.session.completed') {
+            // Récupération de l'objet de session de paiement
             $session = $event->data->object;
-
+    
+            // Vérification si la commande associée à cette session de paiement a déjà été traitée
             $orderExists = $this->entityManager->getRepository(Order::class)
                 ->findOneBy(['stripeSessionId' => $session->id]);
-
+    
             if ($orderExists) {
+                // Si la commande existe déjà, retour d'une réponse sans retraitement
                 return new Response('Order already processed', 200);
             }
-
+    
+            // Récupération de l'ID utilisateur et des informations du panier à partir des métadonnées de la session
             $userId = $session->metadata->user_id ?? null;
             $cart = json_decode($session->metadata->cart, true);
-
+    
             if (!$userId || !$cart) {
+                // Si l'ID utilisateur ou les informations du panier sont manquants, retour d'une réponse d'erreur
                 return new Response('User ID or cart data not found in metadata', 400);
             }
-
+    
+            // Recherche de l'utilisateur correspondant à l'ID utilisateur
             $user = $this->entityManager->getRepository(User::class)->find($userId);
-
+    
             if (!$user) {
+                // Si l'utilisateur n'est pas trouvé, retour d'une réponse d'erreur
                 return new Response('User not found', 400);
             }
-
+    
+            // Démarrage d'une transaction pour garantir la cohérence des données lors de la création de la commande
             $this->entityManager->getConnection()->beginTransaction();
-
+    
             try {
+                // Création d'une nouvelle commande et assignation à l'utilisateur
                 $order = new Order();
                 $order->setUser($user);
                 $order->setOrderStatus(OrderStatus::COMPLETED);
                 $order->setStripeSessionId($session->id);
-
+    
                 $total = 0;
-
+    
+                // Boucle à travers chaque produit du panier pour créer des lignes de commande
                 foreach ($cart as $productId => $details) {
+                    // Recherche du produit correspondant à l'ID
                     $product = $this->entityManager->getRepository(Product::class)->find($productId);
-
+    
                     if (!$product) {
+                        // Si le produit n'est pas trouvé, continuer avec les produits restants
                         continue;
                     }
-
+    
+                    // Récupération de la quantité et calcul du sous-total
                     $quantity = $details['quantity'];
                     $unitAmount = $product->getPrice();
                     $subtotal = $unitAmount * $quantity;
                     $total += $subtotal;
-
+    
+                    // Création d'une ligne de commande pour chaque produit
                     $orderLine = new OrderLine();
                     $orderLine->setOrder($order);
                     $orderLine->setProduct($product);
                     $orderLine->setQuantity($quantity);
                     $orderLine->setPrice($unitAmount);
-
+    
+                    // Ajout de la ligne de commande à la commande
                     $order->addOrderLine($orderLine);
+    
+                    // Décrémentation de la quantité de stock du produit
                     $product->decrementStockQuantity($quantity);
                     $this->entityManager->persist($product);
                 }
-
+    
+                // Assignation du total à la commande et persistance des données
                 $order->setTotal($total);
                 $this->entityManager->persist($order);
                 $this->entityManager->flush();
-
+    
+                // Validation de la transaction
                 $this->entityManager->getConnection()->commit();
-
             } catch (\Exception $e) {
+                // En cas d'erreur, rollback de la transaction pour restaurer l'état initial
                 $this->entityManager->getConnection()->rollBack();
                 $this->logger->error('Erreur lors du traitement de la commande via webhook : ' . $e->getMessage());
                 return new Response('Webhook processing error', 500);
             }
         }
-
+    
+        // Retour d'une réponse de succès si le webhook a été traité correctement
         return new Response('Webhook handled', 200);
     }
+    
 
     #[Route('/payment/page', name: 'payment_page', methods: ['GET'])]
 public function paymentPage(): Response
