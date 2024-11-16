@@ -7,50 +7,51 @@
 {% endblock %}
 
 {% block body %}
-<div class="image-container">
-    <img src="{{ asset('img/img_etincelle_home.jpg') }}" alt="Image de bienvenue">
-    <div class="centered-text">
-        Bienvenue ici
-        <a href="{{ path('shop_index') }}" class="btn btn-primary">Accéder à la boutique</a>
-        {# <a href="#" class="btn btn-secondary">Accéder aux services</a> #}
+    {# Header devrait être ici, probablement défini dans base.html.twig #}
+
+    <div class="image-container">
+        <img src="{{ asset('img/img_etincelle_home.jpg') }}" alt="Image de bienvenue">
+        <div class="centered-text">
+            <a href="{{ path('shop_index') }}" class="btn btn-primary">Accéder à la boutique</a>
+            {# <a href="#" class="btn btn-secondary">Accéder aux services</a> #}
+        </div>
     </div>
-</div>
-
-<main>
-    <!-- Contenu de la page d'accueil -->
-    <section>
-        <h2>Notre Histoire</h2>
-        <p>Découvrez l'histoire de L'Étincelle, notre inspiration et notre engagement envers des matériaux durables et l'artisanat local.</p>
-    </section>
-
-    <section>
-        <h2>Nos Produits</h2>
-        <!-- Affichage dynamique des produits -->
-        <div class="product-grid">
-            {% for product in latestProducts %}
-                <div class="product-card">
-                    {% if product.productImages|length > 0 %}
-                        {% set imageUrl = vich_uploader_asset(product.productImages|first, 'imageFile') %}
-                        <img src="{{ imageUrl }}" alt="{{ product.name }}" class="product-image">
-                    {% else %}
-                        <img src="{{ asset('img/default_product.jpg') }}" alt="Image par défaut" class="product-image">
-                    {% endif %}
-                    <div class="card-body">
-                        <h2 class="card-title">{{ product.name }}</h2>
-                        <p class="card-text">
-                            {{ product.description|length > 100 ? product.description|slice(0, 100) ~ '...' : product.description }}
-                        </p>
-                        <p class="card-price">{{ product.price|number_format(2, '.', ',') }} €</p>
-                        <div class="card-actions">
-                            <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">Voir Détails</a>
-                            <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-secondary">Ajouter au Panier</a>
+    
+    <main>
+        <!-- Contenu de la page d'accueil -->
+        <section>
+            <h2>Notre Histoire</h2>
+            <p>Découvrez l'histoire de L'Étincelle, notre inspiration et notre engagement envers des matériaux durables et l'artisanat local.</p>
+        </section>
+    
+        <section>
+            <h2>Nos Produits</h2>
+            <!-- Affichage dynamique des produits -->
+            <div class="product-grid">
+                {% for product in latestProducts %}
+                    <div class="product-card">
+                        {% if product.productImages|length > 0 %}
+                            {% set imageUrl = vich_uploader_asset(product.productImages|first, 'imageFile') %}
+                            <img src="{{ imageUrl }}" alt="{{ product.name }}" class="product-image">
+                        {% else %}
+                            <img src="{{ asset('img/default_product.jpg') }}" alt="Image par défaut" class="product-image">
+                        {% endif %}
+                        <div class="card-body">
+                            <h2 class="card-title">{{ product.name }}</h2>
+                            <p class="card-text">
+                                {{ product.description|length > 100 ? product.description|slice(0, 100) ~ '...' : product.description }}
+                            </p>
+                            <p class="card-price">{{ product.price|number_format(2, '.', ',') }} €</p>
+                            <div class="card-actions">
+                                <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">Voir Détails</a>
+                                <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-secondary">Ajouter au Panier</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% else %}
-                <p>Aucun produit disponible pour le moment.</p>
-            {% endfor %}
-        </div>
-    </section>
-</main>
+                {% else %}
+                    <p>Aucun produit disponible pour le moment.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
 {% endblock %}
