@@ -19,4 +19,23 @@ class HomeController extends AbstractController
             'latestProducts' => $latestProducts,
         ]);
     }
+
+    #[Route('/confidentiality', name: 'confidentiality')]
+    public function confidentiality(): Response
+    {
+        return $this->render('others/confidentiality.html.twig');
+    }
+    
+    #[Route('/contact', name: 'contact')]
+    public function contact(): Response
+    {
+        return $this->render('others/contact.html.twig');
+    }
+
+    #[Route('/terms-of-use', name: 'terms_of_use')]
+    public function termsOfUse(): Response
+    {
+        return $this->render('others/terms_of_use.html.twig');
+    }
+
 }

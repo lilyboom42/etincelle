@@ -58,7 +58,7 @@ class ProfileController extends AbstractController
 
             // Envoi d'un e-mail après modification du profil
             $email = (new Email())
-                ->from('no-reply@votre-site.com') // Remplacez par l'adresse e-mail d'envoi
+                ->from('no-reply@votre-site.com') // Remplacer par l'adresse e-mail d'envoi
                 ->to($user->getEmail())
                 ->subject('Modification de votre profil')
                 ->html($this->renderView('emails/change.html.twig'));

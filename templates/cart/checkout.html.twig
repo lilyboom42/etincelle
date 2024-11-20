@@ -1,12 +1,22 @@
+{# templates/cart/checkout.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Valider la commande{% endblock %}
+{% block title %}Confirmation de Commande{% endblock %}
 
 {% block body %}
-    <h1 style="text-align: center;">Valider la commande</h1>
+    <h1 style="text-align: center;">Confirmation de Commande</h1>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" style="text-align: center;">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" style="text-align: center;">{{ message }}</div>
+    {% endfor %}
 
     {% if cart|length > 0 %}
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Produit</th>
@@ -20,21 +30,21 @@
                     <tr>
                         <td>{{ item.product.name }}</td>
                         <td>{{ item.quantity }}</td>
-                        <td>{{ item.product.price|number_format(2, '.', ',') }} €</td>
-                        <td>{{ item.subtotal|number_format(2, '.', ',') }} €</td>
+                        <td>{{ item.product.price|number_format(2, ',', ' ') }} €</td>
+                        <td>{{ (item.product.price * item.quantity)|number_format(2, ',', ' ') }} €</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <h3>Total : {{ total|number_format(2, '.', ',') }} €</h3>
+        <h3 style="text-align: center;">Total : {{ total|number_format(2, ',', ' ') }} €</h3>
 
         <form id="payment-form" style="text-align: center; margin-top: 20px;">
             <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
             <button id="checkout-button" type="button" class="btn btn-success btn-lg">Payer avec Stripe</button>
         </form>
     {% else %}
-        <p>Votre panier est vide.</p>
+        <p style="text-align: center;">Votre panier est vide.</p>
     {% endif %}
 {% endblock %}
 
@@ -42,9 +52,15 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Vérifiez si stripe_public_key est bien défini
+            if (!{{ stripe_public_key|json_encode|raw }}) {
+                console.error('Stripe public key is not defined.');
+                alert('Erreur de configuration du paiement.');
+                return;
+            }
+
             // Initialiser Stripe avec la clé publique
             var stripe = Stripe('{{ stripe_public_key }}');
-            console.log('Stripe initialisé avec la clé publique :', '{{ stripe_public_key }}'); // Pour débogage
 
             var checkoutButton = document.getElementById('checkout-button');
 
@@ -71,13 +87,16 @@
                             alert('Erreur : ' + (session.error || 'Session Stripe non valide.'));
                         }
                     })
+                    .then(function(result) {
+                        if (result.error) {
+                            alert(result.error.message);
+                        }
+                    })
                     .catch(function(error) {
                         console.error('Erreur:', error);
                         alert('Une erreur est survenue lors du paiement.');
                     });
                 });
-            } else {
-                console.error("Le bouton de paiement avec l'ID 'checkout-button' n'a pas été trouvé.");
             }
         });
     </script>

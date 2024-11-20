@@ -1,63 +1,68 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>
-			{% block title %}Welcome!
-			{% endblock %}
-		</title>
-		<!-- Lien vers Font Awesome -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-		<link
-		rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-		{# <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> #}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}Welcome!
+        {% endblock %}
+    </title>
+    <!-- Lien vers Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Lien vers votre fichier CSS personnalisé -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
-		{% block importmap %}
-			{{ importmap(['app']) }}
-		{% endblock %}
-	</head>
-	<body>
-		<div
-			class="wrapper">
-			<!-- Bloc pour le header -->
-			{% block header %}
-				{% include "partials/header.html.twig" %}
-			{% endblock %}
+    {% block importmap %}
+        {{ importmap(['app']) }}
+    {% endblock %}
+</head>
+<body>
+{% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    <div class="wrapper">
+        <!-- Bloc pour le header -->
+        {% block header %}
+            {% include "partials/header.html.twig" %}
+        {% endblock %}
 
-			<!-- Navigation principale -->
-			{% block navigation %}
-				{% include "partials/navigation.html.twig" %}
-			{% endblock %}
+        <!-- Navigation principale -->
+        {% block navigation %}
+            {% include "partials/navigation.html.twig" %}
+        {% endblock %}
 
-			<!-- Bloc pour le contenu principal -->
-			<main>
-				{% block body %}
-					{% for label, messages in app.flashes %}
-						<div class="alert alert-{{ label }}">
-							{% for message in messages %}
-								<p>{{ message }}</p>
-							{% endfor %}
-						</div>
-					{% endfor %}
-				{% endblock %}
-			</main>
+        <!-- Bloc pour le contenu principal -->
+        <main>
+            {% block body %}
+                {% for label, messages in app.flashes %}
+                    <div class="alert alert-{{ label }}">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {% endblock %}
+        </main>
 
-			<!-- Bloc pour le footer -->
-			{% block footer %}
-				{% include "partials/footer.html.twig" %}
-			{% endblock %}
-		</div>
+        <!-- Bloc pour le footer -->
+        {% block footer %}
+            {% include "partials/footer.html.twig" %}
+        {% endblock %}
+    </div>
 
-		<!-- Bloc pour inclure des scripts JavaScript -->
-		{% block javascript %}
-			<script>
-				function toggleMenu() {
-const navLinks = document.querySelector('.main-nav ul');
-navLinks.classList.toggle('active');
-}
-			</script>
-
-		{% endblock %}
-	</body>
+    <!-- Bloc pour inclure des scripts JavaScript -->
+    {% block javascript %}
+        <script>
+            function toggleMenu() {
+                const navLinks = document.querySelector('nav.main-nav ul');
+                navLinks.classList.toggle('active');
+            }
+        </script>
+    {% endblock %}
+</body>
 </html>

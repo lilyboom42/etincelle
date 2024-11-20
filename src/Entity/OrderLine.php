@@ -27,7 +27,8 @@ class OrderLine
     #[Assert\PositiveOrZero(message: "Le prix doit être un nombre positif ou zéro.")]
     private ?string $price = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orderLines')]
+    // #[ORM\ManyToOne(inversedBy: 'orderLines')]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: "Le produit associé ne doit pas être nul.")]
     private ?Product $product = null;
@@ -36,9 +37,6 @@ class OrderLine
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: "La commande associée ne doit pas être nulle.")]
     private ?Order $order = null;
-
-    #[ORM\OneToOne(inversedBy: 'orderLine', cascade: ['persist', 'remove'])]
-    private ?CartItem $cartItem = null;
 
     // Getters et Setters
 
@@ -52,7 +50,7 @@ class OrderLine
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): static
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
 
@@ -64,7 +62,7 @@ class OrderLine
         return $this->price;
     }
 
-    public function setPrice(string $price): static
+    public function setPrice(string $price): self
     {
         $this->price = $price;
 
@@ -76,7 +74,7 @@ class OrderLine
         return $this->product;
     }
 
-    public function setProduct(?Product $product): static
+    public function setProduct(?Product $product): self
     {
         $this->product = $product;
 
@@ -88,27 +86,12 @@ class OrderLine
         return $this->order;
     }
 
-    public function setOrder(?Order $order): static
+    public function setOrder(?Order $order): self
     {
         $this->order = $order;
 
         return $this;
     }
 
-    public function getCartItem(): ?CartItem
-    {
-        return $this->cartItem;
-    }
-
-    public function setCartItem(?CartItem $cartItem): self
-    {
-        // Définir le côté propriétaire de la relation si nécessaire
-        if ($cartItem !== null && $cartItem->getOrderLine() !== $this) {
-            $cartItem->setOrderLine($this);
-        }
-
-        $this->cartItem = $cartItem;
-
-        return $this;
-    }
+   
 }

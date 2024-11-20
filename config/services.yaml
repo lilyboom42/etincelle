@@ -21,6 +21,8 @@ services:
             - "../src/DependencyInjection/"
             - "../src/Entity/"
             - "../src/Kernel.php"
+            - "../src/Tests/"
+            - "../src/migrations/"
 
     # Define services explicitly if needed
     App\Service\ProductService:
@@ -38,7 +40,8 @@ services:
 
     App\Service\CartService:
         arguments:
-            $entityManager: "@doctrine.orm.entity_manager"
+            $requestStack: '@request_stack'
+
 
     # Injection de StripeConfig dans PaymentController
     App\Controller\PaymentController:
@@ -61,5 +64,8 @@ services:
     App\EventListener\UserAccessListener:
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
-
+            
+    # Configuration du StripeSessionFactory
+    App\Service\StripeSessionFactory:
+        public: true
     

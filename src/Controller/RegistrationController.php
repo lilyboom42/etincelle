@@ -43,7 +43,7 @@ class RegistrationController extends AbstractController
 
             // Envoyer un e-mail de bienvenue
             $email = (new Email())
-                ->from('admin@etincele.com')
+                ->from('admin@sparkles.com')
                 ->to($user->getEmail())
                 ->subject('Bienvenue parmi nous')
                 ->text('Bienvenue sur notre plateforme !')

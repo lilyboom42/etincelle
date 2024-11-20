@@ -7,8 +7,8 @@
 
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button type="submit" class="btn btn-success">{{ service.id ? 'Mettre à jour' : 'Ajouter' }}</button>
+    <button type="submit" class="btn btn-success-custom">{{ service.id ? 'Mettre à jour' : 'Ajouter' }}</button>
 {{ form_end(form) }}
 
-<a href="{{ path('service_index') }}" class="btn btn-secondary mt-3">Retour à la liste des services</a>
+<a href="{{ path('service_index') }}" class="btn btn-secondary-custom mt-3">Retour à la liste des services</a>
 {% endblock %}

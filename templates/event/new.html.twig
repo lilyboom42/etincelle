@@ -1,5 +1,3 @@
-{# templates/event/new.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}
@@ -30,29 +28,29 @@
     {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
         <div class="form-group">
             {{ form_label(form.title) }}
-            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            {{ form_widget(form.title, {'class': 'form-control-custom'}) }}
             {{ form_errors(form.title) }}
         </div>
 
         <div class="form-group">
             {{ form_label(form.description) }}
-            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_widget(form.description, {'class': 'form-control-custom'}) }}
             {{ form_errors(form.description) }}
         </div>
 
         <div class="form-group">
             {{ form_label(form.eventDate) }}
-            {{ form_widget(form.eventDate, {'attr': {'class': 'form-control'}}) }}
+            {{ form_widget(form.eventDate, {'class': 'form-control-custom'}) }}
             {{ form_errors(form.eventDate) }}
         </div>
 
         <div class="form-group">
-            {{ form_label(form.mediaFiles) }} {# Renommé à 'mediaFiles' #}
-            {{ form_widget(form.mediaFiles, {'attr': {'class': 'form-control-file'}}) }}
+            {{ form_label(form.mediaFiles) }}
+            {{ form_widget(form.mediaFiles, {'class': 'form-control-file-custom'}) }}
             {{ form_errors(form.mediaFiles) }}
         </div>
 
-        <button class="btn btn-primary">
+        <button class="btn btn-primary-custom">
             {% if isEdit %}
                 Mettre à jour
             {% else %}
@@ -65,14 +63,14 @@
         <h2 class="mt-4">Médias existants</h2>
         <div class="media-gallery">
             {% for media in event.media %}
-                <div class="media-item" style="margin-bottom: 15px;">
+                <div class="media-item">
                     {% set media_url = vich_uploader_asset(media, 'mediaFile') %}
                     {% if media_url %}
                         {% set extension = media.filename|split('.')|last|lower %}
                         {% if extension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                            <img src="{{ media_url }}" alt="Image pour l'événement" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                            <img src="{{ media_url }}" alt="Image pour l'événement" class="media-image-thumbnail">
                         {% elseif extension == 'mp4' %}
-                            <video controls style="max-width: 200px; max-height: 150px;">
+                            <video controls class="media-video-thumbnail">
                                 <source src="{{ media_url }}" type="video/mp4">
                                 Votre navigateur ne supporte pas la lecture de vidéos.
                             </video>
@@ -81,7 +79,7 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <form method="post" action="{{ path('media_delete', {'id': media.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce média ?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ media.id) }}">
-                            <button type="submit" class="btn btn-danger btn-sm mt-2">Supprimer</button>
+                            <button type="submit" class="btn btn-danger-custom">Supprimer</button>
                         </form>
                     {% endif %}
                 </div>
@@ -93,32 +91,32 @@
 {% block javascript %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var $collectionHolder = document.querySelector('#event-media-wrapper');
-            if (!$collectionHolder) return;
+            var collectionHolder = document.querySelector('#event-media-wrapper');
+            if (!collectionHolder) return;
 
             var addMediaButton = document.createElement('button');
             addMediaButton.type = 'button';
-            addMediaButton.className = 'btn btn-primary mb-3 add-media-button';
+            addMediaButton.className = 'btn btn-primary-custom add-media-button';
             addMediaButton.innerText = 'Ajouter un média';
 
             var newLinkDiv = document.createElement('div');
             newLinkDiv.appendChild(addMediaButton);
 
-            $collectionHolder.appendChild(newLinkDiv);
+            collectionHolder.appendChild(newLinkDiv);
 
-            $collectionHolder.dataset.index = $collectionHolder.querySelectorAll('.event-media-item').length;
+            collectionHolder.dataset.index = collectionHolder.querySelectorAll('.event-media-item').length;
 
             addMediaButton.addEventListener('click', function(e) {
-                addMediaForm($collectionHolder, newLinkDiv);
+                addMediaForm(collectionHolder, newLinkDiv);
             });
         });
 
-        function addMediaForm($collectionHolder, newLinkDiv) {
-            var prototype = $collectionHolder.dataset.prototype;
-            var index = $collectionHolder.dataset.index;
+        function addMediaForm(collectionHolder, newLinkDiv) {
+            var prototype = collectionHolder.dataset.prototype;
+            var index = collectionHolder.dataset.index;
 
             var newForm = prototype.replace(/__name__/g, index);
-            $collectionHolder.dataset.index = parseInt(index) + 1;
+            collectionHolder.dataset.index = parseInt(index) + 1;
 
             var newFormDiv = document.createElement('div');
             newFormDiv.innerHTML = newForm;
@@ -126,17 +124,17 @@
 
             var removeButton = document.createElement('button');
             removeButton.type = 'button';
-            removeButton.className = 'btn btn-danger remove-media-button mt-2';
+            removeButton.className = 'btn btn-danger-custom remove-media-button mt-2';
             removeButton.innerText = 'Supprimer';
 
             newFormDiv.appendChild(removeButton);
 
-            $collectionHolder.insertBefore(newFormDiv, newLinkDiv);
+            collectionHolder.insertBefore(newFormDiv, newLinkDiv);
 
             removeButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 if (confirm('Êtes-vous sûr de vouloir supprimer ce média ?')) {
-                    $collectionHolder.removeChild(newFormDiv);
+                    collectionHolder.removeChild(newFormDiv);
                 }
             });
         }

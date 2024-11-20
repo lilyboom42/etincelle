@@ -15,9 +15,7 @@
 	{% endfor %}
 
 	{% if is_granted('ROLE_ADMIN') %}
-
-		<a href="{{ path('product_new') }}" class="btn btn-primary mb-3">Ajouter un nouveau produit</a>
-
+		<a href="{{ path('product_new') }}" class="btn btn-primary-custom mb-3">Ajouter un nouveau produit</a>
 	{% endif %}
 
 	<div class="product-grid">
@@ -41,39 +39,46 @@
 					€</p>
 
 				{% if product.stockQuantity > 0 %}
-					<p class="text-success">En stock:
+					<p class="text-success-custom">En stock:
 						{{ product.stockQuantity }}</p>
 				{% else %}
-					<p class="text-danger">Rupture de stock</p>
+					<p class="text-danger-custom">Rupture de stock</p>
 				{% endif %}
 
-				<div class="button-group">
-					<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
-					<a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-info">Détails</a>
-					<form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
-						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
-						{% if is_granted('ROLE_ADMIN') %}
-
-							<a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>
-							<button type="submit" class="btn btn-danger delete-button">Supprimer</button>
-                            
-						{% endif %}
+				<div
+					class="button-group">
+					<form action="{{ path('add_to_cart', {'id': product.id}) }}" method="post">
+						<input type="hidden" name="quantity" value="1">
+						<button type="submit" class="btn btn-primary">Ajouter au panier</button>
 					</form>
+					<button>
+						<a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-secondary-custom">Détails</a>
+					</button>
+					<button>
+						<a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-secondary-custom">Modifier</a>
+					</button>
+					{% if is_granted('ROLE_ADMIN') %}
+						<form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+							<button type="submit" class="btn btn-danger-custom">Supprimer</button>
+						</form>
+					{% endif %}
+
+
 				</div>
 
-				{# Bouton Favoris avec un Cœur #}
 				{% if app.user %}
 					<div class="button-group">
 						{% if app.user.getFavorites().contains(product) %}
 							<form action="{{ path('favorite_remove', {'id': product.id}) }}" method="post">
-								<button type="submit" class="btn btn-danger">
+								<button type="submit" class="btn btn-danger-custom">
 									<i class="fa fa-heart"></i>
 									Retirer des favoris
 								</button>
 							</form>
 						{% else %}
 							<form action="{{ path('favorite_add', {'id': product.id}) }}" method="post">
-								<button type="submit" class="btn btn-outline-danger">
+								<button type="submit" class="btn btn-outline-danger-custom">
 									<i class="fa fa-heart-o"></i>
 									Ajouter aux favoris
 								</button>

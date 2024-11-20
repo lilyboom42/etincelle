@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de Confidentialité - Sparkles
+{% endblock %}
+
+{% block importmap %}
+	{{ importmap(['app']) }}
+{% endblock %}
+
+{% block body %}
+	<div class="privacy-policy">
+		<h1>Politique de Confidentialité</h1>
+
+		<p>
+			Bienvenue sur Sparkles. Votre vie privée est d'une importance capitale pour nous. Cette politique de confidentialité explique comment nous collectons, utilisons, partageons et protégeons vos informations personnelles.
+		</p>
+
+		<h2>1. Collecte des informations</h2>
+		<p>
+			Nous collectons les informations suivantes lorsque vous utilisez notre site :
+		</p>
+		<ul>
+			<li>Informations personnelles : nom, prénom, adresse e-mail, numéro de téléphone, adresse de facturation et de livraison.</li>
+			<li>Informations de paiement : vos paiements sont traités par Stripe et nous ne stockons pas les données de votre carte bancaire.</li>
+			<li>Données liées à vos commandes : produits achetés, réservations effectuées.</li>
+			<li>Informations techniques : adresse IP, type de navigateur, système d'exploitation et données de navigation.</li>
+		</ul>
+
+		<h2>2. Utilisation des informations</h2>
+		<p>Nous utilisons vos informations pour :</p>
+		<ul>
+			<li>Traiter vos commandes et paiements en toute sécurité.</li>
+			<li>Gérer vos réservations de soins et massages.</li>
+			<li>Envoyer des confirmations de commande et des notifications relatives à votre compte.</li>
+			<li>Améliorer l'expérience utilisateur sur notre site.</li>
+			<li>Respecter nos obligations légales et sécuritaires.</li>
+		</ul>
+
+		<h2>3. Partage des informations</h2>
+		<p>
+			Vos informations sont partagées uniquement dans les cas suivants :
+		</p>
+		<ul>
+			<li>Avec Stripe pour le traitement sécurisé des paiements.</li>
+			<li>Avec des prestataires de livraison pour l'expédition de vos commandes.</li>
+			<li>Dans le cadre d'obligations légales, comme une demande des autorités.</li>
+		</ul>
+
+		<h2>4. Sécurité des données</h2>
+		<p>
+			Nous mettons en place des mesures de sécurité rigoureuses pour protéger vos informations, notamment :
+		</p>
+		<ul>
+			<li>Le chiffrement des données sensibles (par exemple, via SSL/TLS).</li>
+			<li>Le stockage sécurisé des données sur des serveurs conformes aux normes RGPD.</li>
+			<li>Des audits réguliers pour garantir la sécurité de notre site.</li>
+		</ul>
+
+		<h2>5. Vos droits</h2>
+		<p>Conformément à la réglementation RGPD, vous disposez des droits suivants :</p>
+		<ul>
+			<li>Droit d'accès à vos données personnelles.</li>
+			<li>Droit de rectification de vos données en cas d'erreur.</li>
+			<li>Droit de suppression de vos données ("droit à l'oubli").</li>
+			<li>Droit d'opposition ou de limitation du traitement.</li>
+			<li>Droit à la portabilité de vos données.</li>
+		</ul>
+		<p>
+			Pour exercer vos droits, vous pouvez nous contacter via l'adresse e-mail suivante :
+			<a href="mailto:contact@sparkles.com">contact@sparkles.com</a>.
+		</p>
+
+		<h2>6. Cookies</h2>
+		<p>
+			Nous utilisons des cookies pour améliorer votre expérience utilisateur. Vous pouvez gérer vos préférences dans les paramètres de votre navigateur.
+		</p>
+
+		<h2>7. Modification de la politique</h2>
+		<p>
+			Cette politique de confidentialité peut être modifiée à tout moment. Nous vous informerons des changements majeurs par e-mail ou via une notification sur notre site.
+		</p>
+
+		<h2>8. Contact</h2>
+		<p>
+			Si vous avez des questions ou des préoccupations concernant notre politique de confidentialité, vous pouvez nous contacter à :
+		</p>
+		<p>
+			<strong>Sparkles</strong>
+			<ul>
+				<li>
+					<strong>Email :</strong>
+					contact@Sparkles.com
+				</li>
+				<li>
+					<strong>Téléphone :</strong>
+					+33 6 06 08 09 10
+				</li>
+				<li>
+					<strong>Adresse :</strong>
+					39 rue des étoiles, 11271 Etoiler, France
+				</li>
+			</ul>
+		</p>
+	</div>
+{% endblock %}

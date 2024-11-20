@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon Panier{% endblock %}
+{% block title %}Votre Panier{% endblock %}
 
 {% block body %}
-    <h1 style="text-align: center;">Votre Panier</h1> {# Centrer le titre avec inline CSS #}
+    <h1 style="text-align: center;">Votre Panier</h1>
 
     {% for message in app.flashes('error') %}
         <div class="alert alert-danger" style="text-align: center;">{{ message }}</div>
@@ -13,15 +13,15 @@
         <div class="alert alert-success" style="text-align: center;">{{ message }}</div>
     {% endfor %}
 
-      {% if cart|length > 0 %}
-        <table>
+    {% if cart|length > 0 %}
+        <table class="custom-table">
             <thead>
                 <tr>
                     <th>Image</th>
                     <th>Produit</th>
                     <th>Quantité</th>
                     <th>Prix Unitaire</th>
-                    <th>Total</th>
+                    <th>Sous-total</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -29,9 +29,9 @@
                 {% for item in cart %}
                     <tr>
                         <td>
-                            {% if item.product.productImages|length > 0 and item.product.productImages|first.imagesPath is not empty %}
+                            {% if item.product.productImages|length > 0 %}
                                 {% set imageUrl = vich_uploader_asset(item.product.productImages|first, 'imageFile') %}
-                                <img src="{{ imageUrl }}" alt="{{ item.product.name }}" class="product-image">
+                                <img src="{{ imageUrl }}" alt="{{ item.product.name }}" class="product-image" style="width: 100px; height: auto;">
                             {% else %}
                                 <p>Aucune image</p>
                             {% endif %}
@@ -39,14 +39,16 @@
                         <td>{{ item.product.name }}</td>
                         <td>
                             <form action="{{ path('update_cart_quantity', {id: item.product.id}) }}" method="post">
-                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stockQuantity }}">
-                                <button type="submit">Mettre à jour</button>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stockQuantity }}" class="input-field-custom">
+                                <button type="submit" class="btn btn-secondary-custom">Mettre à jour</button>
                             </form>
                         </td>
-                        <td>{{ item.product.price|number_format(2, '.', ',') }} €</td>
-                        <td>{{ (item.product.price * item.quantity)|number_format(2, '.', ',') }} €</td>
+                        <td>{{ item.product.price|number_format(2, ',', ' ') }} €</td>
+                        <td>{{ item.subtotal|number_format(2, ',', ' ') }} €</td>
                         <td>
-                            <a href="{{ path('remove_from_cart', {id: item.product.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit du panier ?');">Supprimer</a>
+                            <form action="{{ path('remove_from_cart', {id: item.product.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit du panier ?');">
+                                <button type="submit" class="btn btn-danger-custom">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}
@@ -55,7 +57,7 @@
 
         <!-- Bouton Valider et Payer -->
         <div style="text-align: center; margin-top: 20px;">
-            <a href="{{ path('cart_checkout') }}" class="btn btn-primary btn-lg">Valider et Payer</a>
+            <a href="{{ path('checkout_page') }}" class="btn btn-primary-custom btn-lg">Procéder au paiement</a>
         </div>
     {% else %}
         <p style="text-align: center;">Votre panier est vide.</p>

@@ -4,7 +4,7 @@
 
 {% block body %}
 <h1>Rendez-vous Payés</h1>
-<table class="table table-striped">
+<table class="custom-table custom-table-striped">
     <thead>
         <tr>
             <th>ID</th>
@@ -20,12 +20,12 @@
             <td>{{ appointment.id }}</td>
             <td>{{ appointment.appointmentDate|date('d/m/Y H:i') }}</td>
             <td>{{ appointment.service.name }}</td>
-            <td>{{ appointment.service.price }} €</td> {# Utiliser le prix du service #}
+            <td>{{ appointment.service.price }} €</td>
             <td>{{ appointment.user.email }}</td>
         </tr>
     {% else %}
         <tr>
-            <td colspan="5" class="text-center">Aucun rendez-vous payé trouvé.</td>
+            <td colspan="5" class="text-center-custom">Aucun rendez-vous payé trouvé.</td>
         </tr>
     {% endfor %}
     </tbody>

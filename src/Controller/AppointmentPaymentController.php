@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Appointment;
 use App\Entity\Payment;
-use App\Entity\Status; // Import de l'entité Status
+use App\Entity\Status;
 use App\Service\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -39,9 +39,6 @@ class AppointmentPaymentController extends AbstractController
         $this->calendarLinkService = $calendarLinkService;
     }
 
-    /**
-     * Affiche la page de paiement pour un rendez-vous spécifique.
-     */
     #[Route('/{id}/pay', name: 'appointment_pay', methods: ['GET'])]
     public function pay(int $id): Response
     {
@@ -57,7 +54,6 @@ class AppointmentPaymentController extends AbstractController
             return $this->redirectToRoute('profile_index');
         }
 
-        // Récupérer le statut 'approuvé'
         $approvedStatus = $this->entityManager->getRepository(Status::class)->findOneBy(['name' => 'approuvé']);
         if (!$approvedStatus) {
             throw $this->createNotFoundException("Le statut 'approuvé' n'a pas été trouvé dans la base de données.");
@@ -79,9 +75,6 @@ class AppointmentPaymentController extends AbstractController
         ]);
     }
 
-    /**
-     * Gère la création de la session de paiement Stripe.
-     */
     #[Route('/{id}', name: 'appointment_payment', methods: ['POST'])]
     public function payment(Request $request, int $id): Response
     {
@@ -95,7 +88,6 @@ class AppointmentPaymentController extends AbstractController
             return $this->json(['error' => 'Accès refusé.'], 403);
         }
 
-        // Récupérer le statut 'approuvé'
         $approvedStatus = $this->entityManager->getRepository(Status::class)->findOneBy(['name' => 'approuvé']);
         if (!$approvedStatus) {
             return $this->json(['error' => "Le statut 'approuvé' n'a pas été trouvé."], 500);
@@ -119,9 +111,6 @@ class AppointmentPaymentController extends AbstractController
         return $this->json(['id' => $session->id]);
     }
 
-    /**
-     * Gère le succès du paiement.
-     */
     #[Route('/success', name: 'appointment_payment_success', methods: ['GET'])]
     public function success(Request $request): Response
     {
@@ -152,17 +141,13 @@ class AppointmentPaymentController extends AbstractController
         $payment->setPaymentDate(new \DateTime());
         $payment->setAppointment($appointment);
 
-        // Récupérer le statut 'payé'
         $paidStatus = $this->entityManager->getRepository(Status::class)->findOneBy(['name' => 'payé']);
         if (!$paidStatus) {
             $this->addFlash('error', "Le statut 'payé' n'a pas été trouvé.");
             return $this->redirectToRoute('profile_index');
         }
 
-        // Mise à jour du statut du paiement
         $payment->setStatus($paidStatus);
-
-        // Mise à jour du statut du rendez-vous en 'payé'
         $appointment->setStatus($paidStatus);
 
         $this->entityManager->persist($payment);
@@ -176,9 +161,6 @@ class AppointmentPaymentController extends AbstractController
         return $this->redirectToRoute('profile_index');
     }
 
-    /**
-     * Gère l'annulation du paiement.
-     */
     #[Route('/cancel', name: 'appointment_payment_cancel', methods: ['GET'])]
     public function cancel(): Response
     {
@@ -190,22 +172,24 @@ class AppointmentPaymentController extends AbstractController
     {
         $user = $appointment->getUser();
         $adminEmail = 'admin@example.com';
-    
+
         $start = $appointment->getAppointmentDate();
-        
-        // Assurez-vous que $start est une instance de DateTimeImmutable
-        if (!($start instanceof \DateTimeImmutable)) {
-            $start = new \DateTimeImmutable($start ?? 'now');
+
+        // Convertir \DateTime en \DateTimeImmutable si nécessaire
+        if ($start instanceof \DateTime) {
+            $start = \DateTimeImmutable::createFromMutable($start);
+        } elseif (!$start instanceof \DateTimeImmutable) {
+            $start = new \DateTimeImmutable('now');
         }
-        
+
         $end = $start->add(new \DateInterval('PT1H'));
-        
+
         $title = 'Rendez-vous de ' . $user->getFirstName();
         $description = 'Rendez-vous pour ' . $appointment->getService()->getName();
-    
+
         $googleLink = $this->calendarLinkService->generateGoogleCalendarLink($start, $end, $title, $description);
         $icalLink = $this->calendarLinkService->generateIcalLink($start, $end, $title, $description);
-    
+
         $emailClient = (new Email())
             ->from('no-reply@example.com')
             ->to($user->getEmail())
@@ -216,7 +200,7 @@ class AppointmentPaymentController extends AbstractController
                 'icalLink' => $icalLink,
             ]));
         $this->mailer->send($emailClient);
-    
+
         $emailAdmin = (new Email())
             ->from('no-reply@example.com')
             ->to($adminEmail)
