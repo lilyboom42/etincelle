@@ -1,5 +1,3 @@
-{# templates/security/login.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Se connecter{% endblock %}
@@ -24,7 +22,7 @@
                     value="{{ last_username }}" 
                     name="email"          
                     id="email" 
-                    class="form-control"   
+                    class="form-control-custom"   
                     autocomplete="username" 
                     required 
                     autofocus
@@ -40,7 +38,7 @@
                     type="password" 
                     name="_password" 
                     id="password" 
-                    class="form-control" 
+                    class="form-control-custom" 
                     autocomplete="current-password" 
                     required
                 />
@@ -56,20 +54,20 @@
                 type="checkbox" 
                 name="_remember_me" 
                 id="_remember_me" 
-                class="form-check-input"
+                class="form-check-input-custom"
             />
-            <label for="_remember_me" class="form-check-label">Se souvenir de moi</label>
+            <label for="_remember_me" class="form-check-label-custom">Se souvenir de moi</label>
         </div>
 
         <!-- Boutons de soumission et d'inscription -->
         <div class="button-group mb-3">
-            <button type="submit" class="btn btn-primary">Se connecter</button>
-            <a href="{{ path('app_register') }}" class="btn btn-secondary">S'inscrire</a>
+            <button type="submit" class="btn btn-primary-custom">Se connecter</button>
+            <a href="{{ path('app_register') }}" class="btn btn-secondary-custom">S'inscrire</a>
         </div>
 
         <!-- Lien Mot de passe oublié -->
         <div class="mb-3">
-            <a href="{{ path('app_forgotten_password') }}" class="btn btn-link">Mot de passe oublié ?</a>
+            <a href="{{ path('app_forgotten_password') }}" class="btn btn-link-custom">Mot de passe oublié ?</a>
         </div>
     </form>
 </div>

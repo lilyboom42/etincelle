@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use App\Repository\UesrDetails;
 use App\Entity\Order;
-use App\Entity\CartItem;
 use App\Entity\Appointment;
 use App\Entity\Product;
 use App\Entity\Subscriber;
@@ -66,9 +65,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
     private Collection $orders;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CartItem::class, cascade: ['persist', 'remove'])]
-    private Collection $cartItems;
-
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Subscriber $subscriber = null;
 
@@ -89,7 +85,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->orders = new ArrayCollection();
-        $this->cartItems = new ArrayCollection();
         $this->favorites = new ArrayCollection();
         $this->appointments = new ArrayCollection();
     }
@@ -383,41 +378,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // ============================
-    // CartItems
-    // ============================
 
-    /**
-     * @return Collection<int, CartItem>
-     */
-    public function getCartItems(): Collection
+
+    public function getUsername(): string
     {
-        return $this->cartItems;
+        return $this->getUserIdentifier();
     }
-
-    public function addCartItem(CartItem $cartItem): self
-    {
-        if (!$this->cartItems->contains($cartItem)) {
-            $this->cartItems->add($cartItem);
-            $cartItem->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCartItem(CartItem $cartItem): self
-    {
-        if ($this->cartItems->removeElement($cartItem)) {
-            if ($cartItem->getUser() === $this) {
-                $cartItem->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-public function getUsername(): string
-{
-    return $this->getUserIdentifier();
-}
 }

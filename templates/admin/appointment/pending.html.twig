@@ -4,7 +4,7 @@
 
 {% block body %}
 <h1>Demandes de rendez-vous en attente</h1>
-<table class="table">
+<table class="custom-table">
     <thead>
         <tr>
             <th>ID</th>
@@ -24,17 +24,17 @@
                 <td>
                     <form action="{{ path('admin_appointment_approve', {'id': appointment.id}) }}" method="post" style="display:inline;">
                         <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ appointment.id) }}">
-                        <button type="submit" class="btn btn-success">Approuver</button>
+                        <button type="submit" class="btn btn-success-custom">Approuver</button>
                     </form>
                     <form action="{{ path('admin_appointment_reject', {'id': appointment.id}) }}" method="post" style="display:inline;">
                         <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ appointment.id) }}">
-                        <button type="submit" class="btn btn-danger">Refuser</button>
+                        <button type="submit" class="btn btn-danger-custom">Refuser</button>
                     </form>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5" class="text-center">Aucune demande de rendez-vous en attente.</td>
+                <td colspan="5" class="text-center-custom">Aucune demande de rendez-vous en attente.</td>
             </tr>
         {% endfor %}
     </tbody>

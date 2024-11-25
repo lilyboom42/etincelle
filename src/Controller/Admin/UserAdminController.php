@@ -58,7 +58,7 @@ class UserAdminController extends AbstractController
         $entityManager->remove($user);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+        $this->addFlash('success', 'Utilisateur desactivé avec succès.');
         return $this->redirectToRoute('admin_user_index');
     }
 }

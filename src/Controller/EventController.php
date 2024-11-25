@@ -27,15 +27,15 @@ class EventController extends AbstractController
         // Récupérer la liste des événements
         $query = $entityManager->getRepository(Event::class)->createQueryBuilder('e')->getQuery();
 
-        // Pagination avec KnpPaginatorBundle
+       
         $pagination = $paginator->paginate(
-            $query, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            10 /*limit per page*/
+            $query, 
+            $request->query->getInt('page', 1), 
+            10 
         );
 
         return $this->render('event/index.html.twig', [
-            'pagination' => $pagination, // Envoie la variable pagination au template
+            'pagination' => $pagination, 
         ]);
     }
 

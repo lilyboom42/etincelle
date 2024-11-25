@@ -8,26 +8,26 @@
     <h1>{{ isEdit ? 'Modifier' : 'Ajouter' }} un produit</h1>
 
     <div class="product-form">
-        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+        {{ form_start(form, {'attr': {'class': 'form-horizontal-custom'}}) }}
         
         <div class="form-group">
-            {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.name, {'class': 'form-control-custom'}) }}
         </div>
         
         <div class="form-group">
-            {{ form_row(form.categoryProduct, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.categoryProduct, {'class': 'form-control-custom'}) }}
         </div>
         
         <div class="form-group">
-            {{ form_row(form.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.description, {'class': 'form-control-custom'}) }}
         </div>
         
         <div class="form-group">
-            {{ form_row(form.price, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.price, {'class': 'form-control-custom'}) }}
         </div>
         
         <div class="form-group">
-            {{ form_row(form.stockQuantity, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.stockQuantity, {'class': 'form-control-custom'}) }}
         </div>
 
         <label>Images</label>
@@ -35,15 +35,15 @@
             <ul class="images list-unstyled">
                 {% for image in form.productImages %}
                     <li class="form-group">
-                        {{ form_widget(image, {'attr': {'class': 'form-control'}}) }}
-                        <button type="button" class="btn btn-danger remove-image">Supprimer cette image</button>
+                        {{ form_widget(image, {'class': 'form-control-custom'}) }}
+                        <button type="button" class="btn btn-danger-custom remove-image">Supprimer cette image</button>
                     </li>
                 {% endfor %}
             </ul>
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary-custom">
                 {{ product is defined ? 'Mettre à jour' : 'Ajouter' }}
             </button>
         </div>
@@ -65,7 +65,7 @@
         const addButton = document.createElement('button');
         addButton.innerText = 'Ajouter une image';
         addButton.type = 'button';
-        addButton.classList.add('btn', 'btn-success', 'add-image');
+        addButton.classList.add('btn', 'btn-primary-custom', 'add-image');
         collectionHolder.appendChild(addButton);  // Positionner le bouton après la liste d'images
 
         let index = parseInt(collectionHolder.dataset.index, 10) || collectionHolder.querySelectorAll('ul.images li').length;
@@ -83,7 +83,7 @@
             const removeButton = document.createElement('button');
             removeButton.innerText = 'Supprimer cette image';
             removeButton.type = 'button';
-            removeButton.classList.add('btn', 'btn-danger', 'remove-image');
+            removeButton.classList.add('btn', 'btn-danger-custom', 'remove-image');
 
             newFormElement.appendChild(removeButton);
             collectionHolder.querySelector('ul.images').appendChild(newFormElement);

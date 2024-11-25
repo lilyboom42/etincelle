@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Appointment;
-use App\Entity\Status; // Import de l'entité Status
+use App\Entity\Status;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request; // Import de Request
@@ -19,7 +19,7 @@ class AppointmentAdminController extends AbstractController
     public function pending(EntityManagerInterface $entityManager): Response
     {
         // Récupérer le statut 'demandé'
-        $requestedStatus = $entityManager->getRepository(Status::class)->findOneBy(['name' => 'demandé']);
+        $requestedStatus = $entityManager->getRepository(Status::class)->findOneBy(['name' => 'en attente']);
         if (!$requestedStatus) {
             throw $this->createNotFoundException("Le statut 'demandé' n'a pas été trouvé dans la base de données.");
         }

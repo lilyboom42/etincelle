@@ -17,37 +17,44 @@ class AppointmentController extends AbstractController
     #[Route('/appointment/new', name: 'appointment_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $user = $this->getUser();
-        if (!$user) {
-            $this->addFlash('error', 'Vous devez être connecté pour prendre un rendez-vous.');
-            return $this->redirectToRoute('app_login');
-        }
-
-        $appointment = new Appointment();
-        $appointment->setUser($user);
-
-        // Récupérer le statut 'en attente' depuis la base de données
-$pendingStatus = $entityManager->getRepository(Status::class)->findOneBy(['name' => 'en attente']);
-if (!$pendingStatus) {
-    throw $this->createNotFoundException("Le statut 'en attente' n'a pas été trouvé dans la base de données.");
-}
-$appointment->setStatus($pendingStatus);
-
-
+        // Récupération des services pour afficher la page même pour les visiteurs
         $services = $entityManager->getRepository(Service::class)->findAll();
-        $form = $this->createForm(AppointmentType::class, $appointment);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($appointment);
-            $entityManager->flush();
+        // Vérifier si l'utilisateur est connecté
+        $user = $this->getUser();
 
-            $this->addFlash('success', 'Votre rendez-vous a été demandé avec succès.');
-            return $this->redirectToRoute('appointment_new');
+        // Initialiser la variable du formulaire à null pour les visiteurs non connectés
+        $form = null;
+
+        if ($user) {
+            $appointment = new Appointment();
+            $appointment->setUser($user);
+
+            // Récupérer le statut 'en attente' depuis la base de données
+            $pendingStatus = $entityManager->getRepository(Status::class)->findOneBy(['name' => 'en attente']);
+            if (!$pendingStatus) {
+                throw $this->createNotFoundException("Statut 'en attente' introuvable.");
+            }
+            $appointment->setStatus($pendingStatus);
+
+            // Créer le formulaire pour les utilisateurs connectés
+            $form = $this->createForm(AppointmentType::class, $appointment);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($appointment);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Votre rendez-vous a été demandé avec succès.');
+                return $this->redirectToRoute('appointment_new');
+            }
+        } else {
+            // Message flash pour indiquer que l'utilisateur doit se connecter
+            $this->addFlash('info', 'Connectez-vous pour prendre un rendez-vous.');
         }
 
         return $this->render('appointment/new.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form ? $form->createView() : null, // Formulaire si connecté, null sinon
             'services' => $services,
         ]);
     }

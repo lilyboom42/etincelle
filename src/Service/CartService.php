@@ -2,56 +2,59 @@
 
 namespace App\Service;
 
-use App\Entity\User;
-use App\Entity\Cart;
-use App\Entity\Product;
-use App\Entity\CartItem;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartService
 {
+    private const CART_SESSION_KEY = 'cart';
+
     public function __construct(
-        private readonly EntityManagerInterface $entityManager
+        private readonly RequestStack $requestStack
     ) {}
 
-    public function getOrCreateCart(User $user): Cart
+    public function getCart(): array
     {
-        $cart = $user->getCart();
-        
-        if (!$cart) {
-            $cart = new Cart();
-            $cart->setUser($user);
-            $this->entityManager->persist($cart);
-            $this->entityManager->flush();
-        }
-        
-        return $cart;
+        return $this->requestStack->getSession()->get(self::CART_SESSION_KEY, []);
     }
 
-    public function addToCart(Cart $cart, $product, int $quantity = 1): void
+    public function saveCart(array $cart): void
     {
-        // Chercher si le produit existe déjà dans le panier
-        $cartItem = null;
-        foreach ($cart->getCartItems() as $item) {
-            if ($item->getProduct() === $product) {
-                $cartItem = $item;
-                break;
-            }
-        }
+        $this->requestStack->getSession()->set(self::CART_SESSION_KEY, $cart);
+    }
 
-        if ($cartItem) {
-            // Mettre à jour la quantité si le produit existe déjà
-            $cartItem->setQuantity($cartItem->getQuantity() + $quantity);
+    public function addToCart(int $productId, int $quantity = 1): void
+    {
+        $cart = $this->getCart();
+        if (isset($cart[$productId])) {
+            $cart[$productId] += $quantity;
         } else {
-            // Créer un nouveau CartItem si le produit n'existe pas
-            $cartItem = new CartItem();
-            $cartItem->setCart($cart);
-            $cartItem->setProduct($product);
-            $cartItem->setQuantity($quantity);
-            $cart->addCartItem($cartItem);
+            $cart[$productId] = $quantity;
         }
+        $this->saveCart($cart);
+    }
 
-        $this->entityManager->persist($cartItem);
-        $this->entityManager->flush();
+    public function removeFromCart(int $productId): void
+    {
+        $cart = $this->getCart();
+        if (isset($cart[$productId])) {
+            unset($cart[$productId]);
+            $this->saveCart($cart);
+        }
+    }
+
+    public function updateCartItemQuantity(int $productId, int $newQuantity): void
+    {
+        $cart = $this->getCart();
+        if ($newQuantity > 0) {
+            $cart[$productId] = $newQuantity;
+        } else {
+            unset($cart[$productId]);
+        }
+        $this->saveCart($cart);
+    }
+
+    public function clearCart(): void
+    {
+        $this->saveCart([]);
     }
 }

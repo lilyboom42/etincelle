@@ -3,184 +3,183 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
-	<h1 class="profile-title">Mon Profil</h1>
+    <h1 class="profile-title">Mon Profil</h1>
 
-	{% if is_granted('ROLE_ADMIN') %}
-		<div class="admin-dashboard">
-			<h2>Tableau de Bord Administrateur</h2>
-			<div class="admin-buttons">
-				<a href="{{ path('service_index') }}" class="btn btn-primary">Gérer les Services</a>
-				<a href="{{ path('admin_appointment_pending') }}" class="btn btn-primary">Gérer les Rendez-vous en Attente</a>
-				<a href="{{ path('paid_appointments') }}" class="btn btn-primary">Voir Rendez-vous Payés</a>
-				<a href="{{ path('admin_order_index') }}" class="btn btn-primary">Gestion des stocks et envois</a>
-				<a href="{{ path('admin_calendar') }}" class="btn btn-primary">Calendrier</a>
-				<a href="{{ path('admin_user_index') }}" class="btn btn-primary">Gérer les Utilisateurs</a>
-			</div>
-		</div>
-	{% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="admin-dashboard">
+            <h2>Tableau de Bord Administrateur</h2>
+            <div class="admin-buttons">
+                <a href="{{ path('service_index') }}" class="btn btn-primary-custom">Gérer les Services</a>
+                <a href="{{ path('admin_appointment_pending') }}" class="btn btn-primary-custom">Gérer les Rendez-vous en Attente</a>
+                <a href="{{ path('paid_appointments') }}" class="btn btn-primary-custom">Voir Rendez-vous Payés</a>
+                <a href="{{ path('admin_order_index') }}" class="btn btn-primary-custom">Gestion des stocks et envois</a>
+                {# <a href="{{ path('admin_calendar') }}" class="btn btn-primary-custom">Calendrier</a> #}
+                <a href="{{ path('admin_user_index') }}" class="btn btn-primary-custom">Gérer les Utilisateurs</a>
+            </div>
+        </div>
+    {% endif %}
 
-	<div class="profile-form-section">
-		<h2>Mes Informations</h2>
-		<p>Vous pouvez modifier vos informations personnelles en remplissant le formulaire ci-dessous.</p>
-		<div class="container">
-			{{ form_start(form) }}
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label for="{{ form.firstName.vars.id }}">Prénom</label>
-						{{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
-						{{ form_errors(form.firstName) }}
-					</div>
-					<div class="form-group">
-						<label for="{{ form.lastName.vars.id }}">Nom</label>
-						{{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
-						{{ form_errors(form.lastName) }}
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label for="{{ form.email.vars.id }}">Email</label>
-						{{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-						{{ form_errors(form.email) }}
-					</div>
-					<div class="form-group">
-						<label for="{{ form.username.vars.id }}">Nom d'utilisateur</label>
-						{{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
-						{{ form_errors(form.username) }}
-					</div>
-				</div>
-			</div>
+    <div class="profile-form-section">
+        <h2>Mes Informations</h2>
+        <p>Vous pouvez modifier vos informations personnelles en remplissant le formulaire ci-dessous.</p>
+        <div class="container">
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.firstName.vars.id }}">Prénom</label>
+                        {{ form_widget(form.firstName, {'class': 'form-control-custom'}) }}
+                        {{ form_errors(form.firstName) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.lastName.vars.id }}">Nom</label>
+                        {{ form_widget(form.lastName, {'class': 'form-control-custom'}) }}
+                        {{ form_errors(form.lastName) }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.email.vars.id }}">Email</label>
+                        {{ form_widget(form.email, {'class': 'form-control-custom'}) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.username.vars.id }}">Nom d'utilisateur</label>
+                        {{ form_widget(form.username, {'class': 'form-control-custom'}) }}
+                        {{ form_errors(form.username) }}
+                    </div>
+                </div>
+            </div>
 
-			<div class="password-section">
-				<div class="form-group">
-					<label for="{{ form.plainPassword.first.vars.id }}">Mot de passe</label>
-					{{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
-					{{ form_errors(form.plainPassword.first) }}
-				</div>
-				<div class="form-group">
-					<label for="{{ form.plainPassword.second.vars.id }}">Confirmer le mot de passe</label>
-					{{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
-					{{ form_errors(form.plainPassword.second) }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="{{ form.userDetail.city.vars.id }}">Ville</label>
-				{{ form_widget(form.userDetail.city, {'attr': {'class': 'input-field'}}) }}
-				{{ form_errors(form.userDetail.city) }}
-			</div>
+            <div class="password-section">
+                <div class="form-group">
+                    <label for="{{ form.plainPassword.first.vars.id }}">Mot de passe</label>
+                    {{ form_widget(form.plainPassword.first, {'class': 'form-control-custom'}) }}
+                    {{ form_errors(form.plainPassword.first) }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.plainPassword.second.vars.id }}">Confirmer le mot de passe</label>
+                    {{ form_widget(form.plainPassword.second, {'class': 'form-control-custom'}) }}
+                    {{ form_errors(form.plainPassword.second) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.userDetail.city.vars.id }}">Ville</label>
+                {{ form_widget(form.userDetail.city, {'class': 'input-field-custom'}) }}
+                {{ form_errors(form.userDetail.city) }}
+            </div>
 
-			<div class="form-group">
-				<label for="{{ form.userDetail.address.vars.id }}">Adresse</label>
-				{{ form_widget(form.userDetail.address, {'attr': {'class': 'input-field'}}) }}
-				{{ form_errors(form.userDetail.address) }}
-			</div>
+            <div class="form-group">
+                <label for="{{ form.userDetail.address.vars.id }}">Adresse</label>
+                {{ form_widget(form.userDetail.address, {'class': 'input-field-custom'}) }}
+                {{ form_errors(form.userDetail.address) }}
+            </div>
 
-			<div class="form-group">
-				<label for="{{ form.userDetail.country.vars.id }}">Pays</label>
-				{{ form_widget(form.userDetail.country, {'attr': {'class': 'input-field'}}) }}
-				{{ form_errors(form.userDetail.country) }}
-			</div>
+            <div class="form-group">
+                <label for="{{ form.userDetail.country.vars.id }}">Pays</label>
+                {{ form_widget(form.userDetail.country, {'class': 'input-field-custom'}) }}
+                {{ form_errors(form.userDetail.country) }}
+            </div>
 
-			<div class="form-group">
-				<label for="{{ form.userDetail.postalCode.vars.id }}">Code Postal</label>
-				{{ form_widget(form.userDetail.postalCode, {'attr': {'class': 'input-field'}}) }}
-				{{ form_errors(form.userDetail.postalCode) }}
-			</div>
+            <div class="form-group">
+                <label for="{{ form.userDetail.postalCode.vars.id }}">Code Postal</label>
+                {{ form_widget(form.userDetail.postalCode, {'class': 'input-field-custom'}) }}
+                {{ form_errors(form.userDetail.postalCode) }}
+            </div>
 
-			<div class="form-group">
-				<label for="{{ form.userDetail.phoneNumber.vars.id }}">Numéro de téléphone</label>
-				{{ form_widget(form.userDetail.phoneNumber, {'attr': {'class': 'input-field'}}) }}
-				{{ form_errors(form.userDetail.phoneNumber) }}
-			</div>
+            <div class="form-group">
+                <label for="{{ form.userDetail.phoneNumber.vars.id }}">Numéro de téléphone</label>
+                {{ form_widget(form.userDetail.phoneNumber, {'class': 'input-field-custom'}) }}
+                {{ form_errors(form.userDetail.phoneNumber) }}
+            </div>
 
-			<div class="form-group">
-				<label for="{{ form.userDetail.birthDate.vars.id }}">Date de naissance</label>
-				{{ form_widget(form.userDetail.birthDate, {'attr': {'class': 'input-field'}}) }}
-				{{ form_errors(form.userDetail.birthDate) }}
-			</div>
+            <div class="form-group">
+                <label for="{{ form.userDetail.birthDate.vars.id }}">Date de naissance</label>
+                {{ form_widget(form.userDetail.birthDate, {'class': 'input-field-custom'}) }}
+                {{ form_errors(form.userDetail.birthDate) }}
+            </div>
 
-			<div class="button-group">
-				<button type="submit" class="btn btn-success">Mettre à jour</button>
-			</div>
-			{{ form_end(form) }}
-		</div>
-	</div>
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary-custom">Mettre à jour</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
 
-	<div class="orders-section">
-		<h2>Mes Commandes</h2>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>Commande ID</th>
-					<th>Date</th>
-					<th>Montant</th>
-					<th>Statut</th>
-					<th>Numéro de suivi</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for order in orders %}
-					<tr>
-						<td>{{ order.id }}</td>
-						<td>{{ order.createdAt|date('d/m/Y') }}</td>
-						<td>{{ order.total }} €</td>
-						<td>{{ order.orderStatus.label() }}</td>
-						<td>
-							{% if order.trackingNumber %}
-								{{ order.trackingNumber }}
-							{% else %}
-								<span class="text-muted">En attente d'expédition</span>
-							{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<td colspan="5">
-							<h5>Détails des produits</h5>
-							<ul>
-								{% for line in order.orderLines %}
-									<li>{{ line.product.name }} - {{ line.quantity }} x {{ line.price }} €</li>
-								{% endfor %}
-							</ul>
-						</td>
-					</tr>
-				{% else %}
-					<tr>
-						<td colspan="5" class="text-center">Vous n'avez pas encore de commandes.</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+    <div class="orders-section">
+        <h2>Mes Commandes</h2>
+        <table class="custom-table custom-table-striped">
+            <thead>
+                <tr>
+                    <th>Commande ID</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                    <th>Statut</th>
+                    <th>Numéro de suivi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                        <td>{{ order.total }} €</td>
+                        <td>{{ order.orderStatus.label() }}</td>
+                        <td>
+                            {% if order.trackingNumber %}
+                                {{ order.trackingNumber }}
+                            {% else %}
+                                <span class="text-muted">En attente d'expédition</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <h5>Détails des produits</h5>
+                            <ul>
+                                {% for line in order.orderLines %}
+                                    <li>{{ line.product.name }} - {{ line.quantity }} x {{ line.price }} €</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center-custom">Vous n'avez pas encore de commandes.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-	<div class="appointments-section">
-		<h2>Mes Rendez-vous</h2>
-		<ul class="appointments-list">
-			{% for appointment in appointments %}
-				<li>
-					<strong>Rendez-vous #{{ appointment.id }}</strong>
-					- {{ appointment.appointmentDate|date('d/m/Y H:i') }}
-					- {{ appointment.service.name|capitalize }}
-					<br>
-					Statut :
-					{% if appointment.status.name == 'approuvé' %}
-						<span class="text-success">Approuvé</span>
-						{% if appointment.payment is null %}
-							<a href="{{ path('appointment_pay', {'id': appointment.id}) }}" class="btn btn-primary">Payer maintenant</a>
-						{% else %}
-							<span class="text-info">Payé le {{ appointment.payment.paymentDate|date('d/m/Y') }}</span>
-						{% endif %}
-					{% elseif appointment.status.name == 'rejeté' %}
-						<span class="text-danger">Refusé</span>
-					{% elseif appointment.status.name == 'payé' %}
-						<span class="text-info">Payé</span>
-					{% else %}
-						<span class="text-warning">{{ appointment.status.name|capitalize }}</span>
-					{% endif %}
-				</li>
-			{% else %}
-				<li>Vous n'avez pas encore de rendez-vous.</li>
-			{% endfor %}
-		</ul>
-	</div>
-
+    <div class="appointments-section">
+        <h2>Mes Rendez-vous</h2>
+        <ul class="appointments-list">
+            {% for appointment in appointments %}
+                <li>
+                    <strong>Rendez-vous #{{ appointment.id }}</strong>
+                    - {{ appointment.appointmentDate|date('d/m/Y H:i') }}
+                    - {{ appointment.service.name|capitalize }}
+                    <br>
+                    Statut :
+                    {% if appointment.status.name == 'approuvé' %}
+                        <span class="text-success-custom">Approuvé</span>
+                        {% if appointment.payment is null %}
+                            <a href="{{ path('appointment_pay', {'id': appointment.id}) }}" class="btn btn-primary-custom">Payer maintenant</a>
+                        {% else %}
+                            <span class="text-info-custom">Payé le {{ appointment.payment.paymentDate|date('d/m/Y') }}</span>
+                        {% endif %}
+                    {% elseif appointment.status.name == 'rejeté' %}
+                        <span class="text-danger-custom">Refusé</span>
+                    {% elseif appointment.status.name == 'payé' %}
+                        <span class="text-info-custom">Payé</span>
+                    {% else %}
+                        <span class="text-warning-custom">{{ appointment.status.name|capitalize }}</span>
+                    {% endif %}
+                </li>
+            {% else %}
+                <li>Vous n'avez pas encore de rendez-vous.</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

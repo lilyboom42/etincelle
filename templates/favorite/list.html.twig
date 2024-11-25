@@ -1,11 +1,9 @@
-{# templates/favorites/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Mes Favoris{% endblock %}
 
 {% block body %}
     <div class="container favorites-page">
-        {# Affichage des messages d'erreur et de succès #}
         {% for message in app.flashes('error') %}
             <div class="alert alert-danger" role="alert">
                 {{ message }}
@@ -23,8 +21,7 @@
         {% if favorites|length > 0 %}
             <div class="product-grid">
                 {% for product in favorites %}
-                    <div class="product-card card">
-                        {# Image du produit #}
+                    <div class="product-card">
                         {% if product.productImages|length > 0 %}
                             <a href="{{ path('product_show', {'id': product.id}) }}" class="image-container">
                                 <img src="{{ vich_uploader_asset(product.productImages|first, 'imageFile') }}" alt="Image de {{ product.name }}" class="product-image">
@@ -36,17 +33,14 @@
                         {% endif %}
 
                         <div class="card-body">
-                            {# Nom du produit #}
                             <h2 class="card-title">
                                 <a href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }}</a>
                             </h2>
 
-                            {# Description du produit #}
                             <p>{{ product.description|length > 100 ? product.description|slice(0, 100) ~ '...' : product.description }}</p>
 
-                            {# Bouton pour retirer des favoris #}
                             <form action="{{ path('favorite_remove', {'id': product.id}) }}" method="post">
-                                <button type="submit" class="btn btn-danger" aria-label="Retirer {{ product.name }} de vos favoris">
+                                <button type="submit" class="btn btn-danger-custom" aria-label="Retirer {{ product.name }} de vos favoris">
                                     <i class="fa fa-trash-alt" aria-hidden="true"></i> Retirer
                                 </button>
                             </form>

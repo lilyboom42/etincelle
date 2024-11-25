@@ -60,10 +60,6 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?int $imageSize = null;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartItem::class, orphanRemoval: true)]
-    private Collection $cartItems;
-
-
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderLine::class)]
     private Collection $orderLines;
 
@@ -74,7 +70,6 @@ class Product
     public function __construct()
     {
         $this->productImages = new ArrayCollection();
-        $this->cartItems = new ArrayCollection();
         $this->orderLines = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
@@ -177,36 +172,6 @@ class Product
         $this->stockQuantity = $stockQuantity;
         return $this;
     }
-
-    public function getCartItems(): Collection
-    {
-        return $this->cartItems;
-    }
-
-    public function addCartItem(CartItem $cartItem): self
-    {
-        if (!$this->cartItems->contains($cartItem)) {
-            $this->cartItems->add($cartItem);
-            $cartItem->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCartItem(CartItem $cartItem): self
-    {
-        if ($this->cartItems->removeElement($cartItem)) {
-            if ($cartItem->getProduct() === $this) {
-                $cartItem->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    
-
-   
 
     public function getOrderLines(): Collection
     {

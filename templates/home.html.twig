@@ -1,12 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenue chez L'Étincelle{% endblock %}
+{% block title %}Bienvenue chez Sparkles
+{% endblock %}
 
 {% block importmap %}
     {{ importmap(['app']) }}
 {% endblock %}
 
 {% block body %}
+<<<<<<< HEAD
     {# Header devrait être ici, probablement défini dans base.html.twig #}
 
     <div class="image-container">
@@ -26,6 +28,34 @@
     
         <section>
             <h2>Nos Produits</h2>
+=======
+    <div class="image-container">
+        <img src="{{ asset('img/img_etincelle_home.jpg') }}" alt="Image de bienvenue">
+        <div class="centered-text">
+            <h1 class="intro">Bienvenue chez Sparkles</h1>
+        </div>
+    </div>
+
+    <main>
+        <!-- Introduction à Sparkles -->
+        <section class="introduction">
+            <h2 class= "title-h2">Découvrez Sparkles, votre destination bien-être en ligne</h2>
+            <p>
+                Bienvenue chez
+                <strong>Sparkles</strong>, la boutique e-commerce dédiée à l’harmonie et à l’énergie positive. Nous vous proposons une sélection raffinée de bracelets énergétiques, de pierres précieuses et de minéraux soigneusement choisis pour équilibrer vos chakras et favoriser votre bien-être quotidien.
+            </p>
+        </section>
+
+        <!-- Nos Produits -->
+        <section class="produits">
+            <h2 class= "title-h2">Nos Produits</h2>
+            <div>
+                <p>
+                    Chaque bracelet chez Sparkles est conçu avec intention et amour, intégrant des pierres aux propriétés uniques pour vous accompagner dans votre quête de sérénité et de vitalité. Que vous recherchiez l’améthyste pour la tranquillité, le quartz rose pour l’amour ou la tourmaline pour la protection, notre collection répond à toutes vos aspirations spirituelles.
+                </p>
+            </div>
+
+>>>>>>> bug
             <!-- Affichage dynamique des produits -->
             <div class="product-grid">
                 {% for product in latestProducts %}
@@ -37,14 +67,27 @@
                             <img src="{{ asset('img/default_product.jpg') }}" alt="Image par défaut" class="product-image">
                         {% endif %}
                         <div class="card-body">
+<<<<<<< HEAD
                             <h2 class="card-title">{{ product.name }}</h2>
+=======
+                            <h3 class="card-title">{{ product.name }}</h3>
+>>>>>>> bug
                             <p class="card-text">
                                 {{ product.description|length > 100 ? product.description|slice(0, 100) ~ '...' : product.description }}
                             </p>
                             <p class="card-price">{{ product.price|number_format(2, '.', ',') }} €</p>
                             <div class="card-actions">
+<<<<<<< HEAD
                                 <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">Voir Détails</a>
                                 <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-secondary">Ajouter au Panier</a>
+=======
+                                <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary-custom">Voir Détails</a>
+                                {# Formulaire pour Ajouter au Panier #}
+                                <form action="{{ path('add_to_cart', {'id': product.id}) }}" method="POST" style="display: inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('add_to_cart' ~ product.id) }}">
+                                    <button type="submit" class="btn btn-secondary-custom">Ajouter au Panier</button>
+                                </form>
+>>>>>>> bug
                             </div>
                         </div>
                     </div>
@@ -53,5 +96,34 @@
                 {% endfor %}
             </div>
         </section>
+<<<<<<< HEAD
     </main>
+=======
+
+        <!-- Nos Services -->
+        <section class="services">
+            <h2 class= "title-h2">Nos Services</h2>
+            <p>
+                En plus de nos bijoux énergétiques, Sparkles offre une gamme de soins énergétiques et de massages personnalisés. Nos praticiens expérimentés utilisent des techniques ancestrales et modernes pour harmoniser votre énergie, libérer les tensions et revitaliser votre corps et votre esprit. Que ce soit en ligne ou en personne, nos séances sont conçues pour vous offrir un moment de détente profond et un regain d’énergie positive.
+            </p>
+            <a href="{{ path('appointment_new') }}" class="btn btn-primary-custom">Découvrir nos services</a>
+        </section>
+
+        <!-- Appel à l'action -->
+        <section class="appel-action">
+            <p>
+                Chez Sparkles, nous croyons en la puissance des minéraux et des énergies pour transformer votre quotidien. Explorez notre boutique en ligne et laissez-vous séduire par nos produits uniques et nos services bien-être. Rejoignez la communauté Sparkles et illuminez votre vie avec éclat et équilibre.
+            </p>
+            <a href="{{ path('shop_index') }}" class="btn btn-primary-custom">Visitez notre boutique</a>
+        </section>
+    </main>
+{% endblock %}
+{% block javascript %}
+    <script>
+        function toggleMenu() {
+            const navLinks = document.querySelector('.main-nav ul');
+            navLinks.classList.toggle('active');
+        }
+    </script>
+>>>>>>> bug
 {% endblock %}

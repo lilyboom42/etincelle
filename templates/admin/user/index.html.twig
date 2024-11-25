@@ -4,7 +4,7 @@
 
 {% block body %}
 <h1>Gestion des utilisateurs</h1>
-<table>
+<table class="custom-table">
     <thead>
         <tr>
             <th>ID</th>
@@ -20,10 +20,10 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles | join(', ') }}</td>
                 <td>
-                    <a href="{{ path('admin_user_edit', {'id': user.id}) }}">Modifier</a>
+                    <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn btn-secondary-custom">Modifier</a>
                     <form action="{{ path('admin_user_delete', {'id': user.id}) }}" method="post" style="display:inline;">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                        <button type="submit">Supprimer</button>
+                        {# <button type="submit" class="btn btn-danger-custom">Désactiver</button> #}
                     </form>
                 </td>
             </tr>

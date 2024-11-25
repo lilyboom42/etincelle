@@ -81,7 +81,7 @@ class Appointment
     // Date du rendez-vous
     public function getAppointmentDate(): ?\DateTimeInterface
     {
-        return $this->appointmentDate;
+        return $this->appointmentDate ?? new \DateTimeImmutable('now');
     }
 
     public function setAppointmentDate(\DateTimeInterface $appointmentDate): self
