@@ -17,6 +17,7 @@
   --color-info: #17a2b8; /* Bleu pour les informations */
 }
 
+
 /* ========================= */
 /*      CSS1 - Base Styles    */
 /* ========================= */
@@ -40,7 +41,6 @@ h6 {
   text-align: center;
 }
 
-/* Optionnel : Ajouter une marge supérieure aux paragraphes */
 p {
   margin-top: 0.5em;
   margin-bottom: 1em;
@@ -48,6 +48,7 @@ p {
 
 /* Header */
 header {
+  font-family: 'Poppins', sans-serif;
   background-color: var(--color-primary-dark);
   padding: 20px 0;
   color: var(--color-white);
@@ -101,7 +102,7 @@ header {
 
 .social-icons a {
   color: var(--color-white);
-  font-size: 1.5em; /* Taille des icônes augmentée */
+  font-size: 1.5em; 
   transition: color 0.3s ease;
 }
 
@@ -239,7 +240,7 @@ main {
   }
 
   .image-container img {
-    max-height: 250px; /* Réduire la hauteur de l'image */
+    max-height: 250px; 
   }
 
   .centered-text {
@@ -250,12 +251,12 @@ main {
   }
 
   .centered-text h1 {
-    font-size: 1.5em; /* Réduire la taille du texte */
+    font-size: 1.5em; 
     margin-bottom: 10px;
   }
 
   .centered-text .btn {
-    padding: 8px 16px; /* Réduire la taille du bouton */
+    padding: 8px 16px; 
     font-size: 0.9em;
   }
 }
@@ -263,15 +264,15 @@ main {
 /* Media Queries pour Très Petits Écrans */
 @media (max-width: 480px) {
   .image-container img {
-    max-height: 200px; /* Réduire davantage la hauteur de l'image */
+    max-height: 200px; 
   }
 
   .centered-text h1 {
-    font-size: 1.2em; /* Réduire encore la taille du texte */
+    font-size: 1.2em; 
   }
 
   .centered-text .btn {
-    padding: 6px 12px; /* Réduire encore la taille du bouton */
+    padding: 6px 12px; 
     font-size: 0.8em;
   }
 }
@@ -503,15 +504,15 @@ footer {
 @media (max-width: 768px) {
   .input-field,
   .form-control {
-    width: 100%; /* Largeur maximale sur mobile */
+    width: 100%; 
   }
 }
 
 .form-group {
-  margin-bottom: 0.8em; /* Réduit l'espace global entre les groupes */
+  margin-bottom: 0.8em;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Aligne les labels et champs */
+  align-items: flex-start; 
 }
 
 .btn-form-serv {
@@ -521,27 +522,27 @@ footer {
 
 .input-field:focus,
 .form-control:focus {
-  border-color: var(--color-primary-dark); /* Change la bordure au focus */
+  border-color: var(--color-primary-dark); 
   outline: none;
 }
 
 .form-group label {
   display: block;
   font-weight: bold;
-  margin-bottom: 0.3em; /* Diminue l'espace entre le label et le champ */
-  font-size: 0.95rem; /* Taille du texte légèrement réduite */
+  margin-bottom: 0.3em; 
+  font-size: 0.95rem; 
   color: var(--color-text);
 }
 
 .input-field,
 .form-control {
-  width: 100%; /* Augmente la largeur à 100% */
-  max-width: none; /* Supprime la limite de largeur maximale */
-  padding: 6px 10px; /* Réduit légèrement le padding pour diminuer la hauteur */
+  width: 100%; 
+  max-width: none; 
+  padding: 6px 10px; 
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-bottom: 8px; /* Réduit l'espace vertical */
+  margin-bottom: 8px; 
   transition: border-color 0.3s ease;
 }
 
@@ -984,7 +985,7 @@ table th,
 table td {
   text-align: center;
   padding: 10px;
-  border: 1px solid #ddd; /* Ligne de séparation entre les cellules (facultatif) */
+  border: 1px solid #ddd; 
 }
 
 /* Centrer l'image dans la cellule */
@@ -1013,7 +1014,6 @@ a {
   text-decoration: none;
 }
 
-/* public/css/shop.css */
 
 /* Grille des produits supplémentaire */
 .product-grid {
@@ -1042,41 +1042,41 @@ a {
 
 /* Style du conteneur du formulaire */
 .container {
-  max-width: 800px; /* Augmenté de 400px à 800px */
+  max-width: 800px; 
   margin: 0 auto;
   background-color: #fff;
-  padding: 15px; /* Réduit de 20px à 15px */
-  border-radius: 20px; /* Légère réduction pour un aspect plus compact */
+  padding: 15px; 
+  border-radius: 20px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Titre du formulaire */
 h1 {
   text-align: center;
-  color: #362b49; /* Vert menthe doux */
+  color: #362b49; 
   margin-bottom: 20px;
 }
 
 /* Style des champs de saisie */
 .form-control {
-  width: 100%; /* Largeur étendue */
-  padding: 6px 10px; /* Padding réduit */
-  border: 2px solid #8fbc8f; /* Vert doux */
+  width: 100%; 
+  padding: 6px 10px; 
+  border: 2px solid #8fbc8f;
   border-radius: 5px;
   font-size: 1rem;
   color: #362b49;
 }
 
 .form-control:focus {
-  border-color: #fdf1b8; /* Jaune doré */
-  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Effet doré */
+  border-color: #fdf1b8; 
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); 
 }
 
 /* Bouton de soumission */
 .btn-primary {
-  background-color: #8fbc8f; /* Vert doux */
+  background-color: #8fbc8f;
   color: #fff;
-  border: 2px solid #228b22; /* Vert forêt */
+  border: 2px solid #228b22;
   padding: 10px;
   font-size: 1.2rem;
   border-radius: 5px;
@@ -1086,11 +1086,11 @@ h1 {
 }
 
 .btn-primary:hover {
-  background-color: #ffd700; /* Jaune doré au survol */
-  color: #362b49; /* Bleu nuit */
+  background-color: #ffd700; 
+  color: #362b49; 
 }
 
-/* Bouton secondaire pour s'inscrire */
+
 
 /* Lien de réinitialisation du mot de passe */
 .btn-link {
@@ -1132,7 +1132,7 @@ table th,
 table td {
   text-align: center;
   padding: 10px;
-  border: 1px solid #ddd; /* Ligne de séparation entre les cellules (facultatif) */
+  border: 1px solid #ddd; 
 }
 
 /* Centrer l'image dans la cellule */
@@ -1144,11 +1144,10 @@ table td {
   object-fit: cover;
 }
 
-/* Optionnel : styliser le bouton Mettre à jour et Supprimer */
 button {
   padding: 5px 10px;
   cursor: pointer;
-  background-color: var(--color-primary-dark);
+  /* background-color: var(--color-primary-dark); */
   border: none;
   color: white;
   border-radius: 5px;
@@ -1162,12 +1161,10 @@ button:hover {
 
 /* Styles de base pour le formulaire */
 form {
-  /* display: flex;
-    flex-direction: column; */
   align-items: center;
-  max-width: 800px; /* Ajusté pour correspondre au conteneur */
+  max-width: 800px; 
   margin: 0 auto;
-  padding: 5px; /* Réduit le padding interne */
+  padding: 5px; 
   background-color: #f9f9f9;
   border-radius: 8px;
 }
@@ -1175,7 +1172,7 @@ form {
 h1 {
   text-align: center;
   font-size: 24px;
-  color: #362b49; /* Bleu nuit */
+  color: #362b49; 
   margin-bottom: 20px;
 }
 
@@ -1257,7 +1254,7 @@ ul.images li input {
 
 /* Messages d'alerte */
 .alert {
-  padding: 15px; /* Uniformisé pour consistance */
+  padding: 15px;
   margin-bottom: 15px;
   border-radius: 4px;
   font-size: 14px;
@@ -1276,7 +1273,7 @@ ul.images li input {
 }
 
 .product-form {
-  max-width: 900px; /* Augmenté de 700px à 900px */
+  max-width: 900px; 
   margin: 0 auto;
   padding: 20px;
   background-color: #f9f9f9;
@@ -1285,9 +1282,7 @@ ul.images li input {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* .form-group {
-    margin-bottom: 15px;
-} */
+
 
 label {
   font-weight: bold;
@@ -1295,7 +1290,7 @@ label {
 
 button[type="submit"],
 .btn {
-  padding: 8px 16px; /* Réduit la hauteur des boutons */
+  padding: 8px 16px; 
   font-size: 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -1305,8 +1300,8 @@ button[type="submit"],
 button[type="submit"] {
   display: block;
   width: 100%;
-  padding: 8px 16px; /* Réduit le padding */
-  font-size: 1rem; /* Ajuste la taille de la police */
+  padding: 8px 16px; 
+  font-size: 1rem; 
   background-color: #007bff;
   color: white;
   border: none;
@@ -1467,19 +1462,19 @@ h1 {
 /* Formulaires */
 
 .container {
-  max-width: 800px; /* Conserve une largeur suffisante pour la lisibilité */
+  max-width: 800px; 
   margin: 0 auto;
   background-color: #fff;
-  padding: 15px; /* Padding réduit */
-  border-radius: 20px; /* Rayon de bordure ajusté */
+  padding: 15px; 
+  border-radius: 20px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Styles de base pour le formulaire */
 
-/* Groupes de formulaire */
+
 .form-group {
-  margin-bottom: 0.8em; /* Espace vertical réduit */
+  margin-bottom: 0.8em; 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1496,36 +1491,35 @@ h1 {
 /* Champs de saisie */
 .input-field,
 .form-control {
-  width: 100%; /* Largeur étendue */
-  max-width: none; /* Supprime la limite de largeur */
-  padding: 6px 10px; /* Padding réduit */
+  width: 100%;
+  max-width: none; 
+  padding: 6px 10px; 
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-bottom: 8px; /* Espace vertical réduit */
+  margin-bottom: 8px; 
   transition: border-color 0.3s ease;
 }
 
 .input-field:focus,
 .form-control:focus {
-  border-color: var(--color-primary-dark); /* Couleur de bordure au focus */
+  border-color: var(--color-primary-dark); 
   outline: none;
 }
 
 /* Boutons de formulaire */
 button[type="submit"],
 .btn-primary {
-  padding: 8px 16px; /* Padding ajusté */
-  font-size: 1rem; /* Taille de police ajustée */
-  border-radius: 4px;
+  padding: 8px 16px; 
+  font-size: 1rem; 
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 100%; /* Bouton occupant toute la largeur */
+  width: 100%; 
 }
 
 button[type="submit"]:hover,
 .btn-primary:hover {
-  background-color: #0056b3; /* Couleur au survol */
+  background-color: #0056b3; 
 }
 
 /* Alignement des labels et champs sur grands écrans */
@@ -1567,22 +1561,22 @@ button[type="submit"]:hover,
   }
 
   .container {
-    padding: 10px; /* Padding réduit pour les petits écrans */
+    padding: 10px; 
     border-radius: 15px;
   }
 
   form {
-    padding: 5px; /* Padding interne réduit */
+    padding: 5px; 
   }
 
   .input-field,
   .form-control {
-    padding: 5px 8px; /* Padding encore réduit */
-    margin-bottom: 6px; /* Espace vertical encore réduit */
+    padding: 5px 8px;
+    margin-bottom: 6px; 
   }
 
   .form-group {
-    margin-bottom: 0.6em; /* Espace vertical réduit */
+    margin-bottom: 0.6em; 
   }
 
   .vich-image img {
