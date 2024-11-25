@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-/* Importation de la police Poppins */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
-=======
 /* ========================= */
 /*         :ROOT             */
 /* ========================= */
->>>>>>> bug
 /* Déclaration des couleurs principales */
 :root {
   --color-primary: #c4e0f9; /* Bleu clair */
@@ -30,17 +24,6 @@
 
 /* Structure générale et typographie */
 * {
-<<<<<<< HEAD
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif; /* Changement de la police globale */
-}
-
-/* Ajout d'une transition par défaut pour tous les éléments interactifs */
-a, button, .btn {
-    transition: all 0.3s ease;
-=======
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -61,43 +44,10 @@ h6 {
 p {
   margin-top: 0.5em;
   margin-bottom: 1em;
->>>>>>> bug
 }
 
 /* Header */
 header {
-<<<<<<< HEAD
-    background-color: var(--color-primary-dark);
-    padding: 20px 0;
-    color: var(--color-white);
-    display: flex;
-    justify-content: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 1000;
-}
-
-.header-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 20px;
-    animation: fadeInDown 1s ease-out; /* Animation d'apparition */
-}
-
-/* Animation clé */
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-=======
   font-family: 'Poppins', sans-serif;
   background-color: var(--color-primary-dark);
   padding: 20px 0;
@@ -114,36 +64,16 @@ header {
   width: 100%;
   max-width: 1200px;
   padding: 0 20px;
->>>>>>> bug
 }
 
 /* Logo */
 .image-logo {
-<<<<<<< HEAD
-    max-width: 100px;
-    height: auto;
-    transition: transform 0.3s ease;
-}
-
-.image-logo:hover {
-    transform: scale(1.1); /* Effet de zoom sur le logo au survol */
-=======
   max-width: 100px;
   height: auto;
->>>>>>> bug
 }
 
 /* Titre */
 .header-content h1 {
-<<<<<<< HEAD
-    font-size: 2em;
-    color: var(--color-white);
-    margin: 0;
-    font-weight: 700; /* Poids de la police ajusté */
-    text-align: center;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    flex: 1;
-=======
   font-size: 2em;
   color: var(--color-white);
   margin: 0;
@@ -162,7 +92,6 @@ header {
 
 .header-content img {
   height: 50px;
->>>>>>> bug
 }
 
 /* Icônes sociales */
@@ -172,16 +101,6 @@ header {
 }
 
 .social-icons a {
-<<<<<<< HEAD
-    color: var(--color-white);
-    font-size: 1.5em; /* Taille des icônes augmentée */
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.social-icons a:hover {
-    color: var(--color-secondary-dark);
-    transform: scale(1.2); /* Effet de zoom sur les icônes au survol */
-=======
   color: var(--color-white);
   font-size: 1.5em; 
   transition: color 0.3s ease;
@@ -189,7 +108,6 @@ header {
 
 .social-icons a:hover {
   color: var(--color-secondary-dark);
->>>>>>> bug
 }
 
 /* Media queries pour ajuster le header sur mobile */
@@ -211,20 +129,12 @@ header {
   }
 }
 
-<<<<<<< HEAD
-html, body {
-    height: 100%;
-    font-family: 'Poppins', sans-serif; /* Assurer que toute la typographie utilise Poppins */
-    color: var(--color-text);
-    line-height: 1.6;
-=======
 html,
 body {
   height: 100%;
   font-family: Arial, sans-serif;
   color: var(--color-text);
   line-height: 1.6;
->>>>>>> bug
 }
 
 body {
@@ -243,13 +153,8 @@ body {
 
 /* Contenu principal */
 main {
-<<<<<<< HEAD
-    flex: 1;
-    padding: 20px;
-=======
   flex: 1;
   padding: 20px;
->>>>>>> bug
 }
 
 /* Navigation principale */
@@ -270,20 +175,6 @@ main {
 }
 
 .main-nav a {
-<<<<<<< HEAD
-    text-decoration: none;
-    color: var(--color-primary-dark);
-    font-weight: 500; /* Poids de la police ajusté */
-    padding: 10px 15px;
-    display: block;
-    transition: color 0.3s, background-color 0.3s;
-    border-radius: 4px;
-}
-
-.main-nav a:hover {
-    color: var(--color-secondary-dark);
-    background-color: rgba(255, 255, 255, 0.1); /* Légère surbrillance au survol */
-=======
   text-decoration: none;
   color: var(--color-primary-dark);
   font-weight: bold;
@@ -294,27 +185,10 @@ main {
 
 .main-nav a:hover {
   color: var(--color-secondary-dark);
->>>>>>> bug
 }
 
 /* Styles pour le bouton burger */
 .burger-menu {
-<<<<<<< HEAD
-    display: none;
-    font-size: 1.5em;
-    background: none;
-    border: none;
-    color: var(--color-primary-dark);
-    cursor: pointer;
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    transition: transform 0.3s ease;
-}
-
-.burger-menu:hover {
-    transform: rotate(90deg); /* Rotation lors du survol */
-=======
   display: none;
   font-size: 1.5em;
   background: none;
@@ -324,7 +198,6 @@ main {
   position: absolute;
   top: 15px;
   right: 20px;
->>>>>>> bug
 }
 
 .burger-menu:focus {
@@ -333,23 +206,6 @@ main {
 
 /* Image de la page d'accueil */
 .image-container {
-<<<<<<< HEAD
-    position: relative;
-    text-align: center;
-    color: var(--color-primary-dark);
-}
-
-.image-container img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    max-height: 400px;
-    transition: filter 0.5s ease;
-}
-
-.image-container img:hover {
-    filter: brightness(0.8); /* Assombrissement de l'image au survol */
-=======
   position: relative;
   text-align: center;
   color: var(--color-white);
@@ -361,7 +217,6 @@ main {
   height: auto;
   object-fit: cover;
   max-height: 400px;
->>>>>>> bug
 }
 
 .centered-text {
@@ -390,21 +245,6 @@ main {
 
   .centered-text {
     position: absolute;
-<<<<<<< HEAD
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.6); /* Augmentation de l'opacité pour un meilleur contraste */
-    padding: 20px;
-    border-radius: 8px;
-    font-size: 1em;
-    transition: background 0.3s ease;
-}
-
-
-.centered-text:hover {
-    background: rgba(0, 0, 0, 0.7); 
-=======
     background: rgba(0, 0, 0, 0.5);
     padding: 15px;
     text-align: center;
@@ -435,7 +275,6 @@ main {
     padding: 6px 12px; 
     font-size: 0.8em;
   }
->>>>>>> bug
 }
 
 /* Tableaux */
@@ -465,24 +304,6 @@ table td {
   justify-content: center;
 }
 
-<<<<<<< HEAD
-.product-card, .order-card, .appointment-card {
-    background-color: var(--color-white);
-    border: 1px solid #ddd;
-    border-radius: 8px; /* Augmentation du rayon des bords */
-    overflow: hidden;
-    text-align: center;
-    padding: 10px;
-    max-width: 300px;
-    flex: 1 1 calc(25% - 20px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre légère */
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.product-card:hover, .order-card:hover, .appointment-card:hover {
-    transform: translateY(-10px); /* Légère élévation au survol */
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-=======
 .product-card,
 .order-card,
 .appointment-card {
@@ -494,7 +315,6 @@ table td {
   padding: 10px;
   max-width: 300px;
   flex: 1 1 calc(25% - 20px);
->>>>>>> bug
 }
 
 /* Gestion de la largeur des cartes en fonction de la taille d'écran */
@@ -511,25 +331,12 @@ table td {
 }
 
 /* Images de produits */
-<<<<<<< HEAD
-.product-image, .product-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 1px solid #ddd;
-    transition: transform 0.3s ease;
-}
-
-.product-image:hover, .product-card img:hover {
-    transform: scale(1.05); /* Légère augmentation de la taille au survol */
-=======
 .product-image,
 .product-card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
   border-bottom: 1px solid #ddd;
->>>>>>> bug
 }
 
 .card-body {
@@ -537,14 +344,8 @@ table td {
 }
 
 .card-title {
-<<<<<<< HEAD
-    font-size: 1.2em;
-    margin: 10px 0;
-    font-weight: 500;
-=======
   font-size: 1.2em;
   margin: 10px 0;
->>>>>>> bug
 }
 
 .product-description,
@@ -565,18 +366,6 @@ table td {
   margin-top: 10px;
 }
 
-<<<<<<< HEAD
-/* Boutons de la boutique */
-.btn {
-    display: inline-block;
-    padding: 10px 20px; /* Augmentation du padding pour plus de confort */
-    font-size: 1em;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-=======
 .product-card .button-group .btn {
   padding: 8px 12px;
 }
@@ -590,7 +379,6 @@ table td {
   text-decoration: none;
   border-radius: 4px;
   cursor: pointer;
->>>>>>> bug
 }
 
 .btn-primary {
@@ -599,30 +387,13 @@ table td {
   border: none;
 }
 
-.btn-primary:hover {
-    background-color: var(--color-primary);
-    color: var(--color-text);
-    transform: scale(1.05); 
-}
-
 .btn-secondary {
   color: var(--color-white);
-}
-
-.btn-secondary:hover {
-    background-color: var(--color-secondary);
-    color: var(--color-text);
-    transform: scale(1.05);
 }
 
 .btn-success {
   background-color: var(--color-tertiary-dark);
   color: var(--color-white);
-}
-
-.btn-success:hover {
-    background-color: var(--color-tertiary);
-    transform: scale(1.05);
 }
 
 .btn-outline-danger {
@@ -641,18 +412,8 @@ table td {
   flex-direction: column;
 }
 
-.btn-outline-danger:hover {
-    background-color: var(--color-secondary-dark);
-    color: var(--color-white);
-    transform: scale(1.05);
-}
-
 .btn:focus {
   outline: 2px solid var(--color-primary-dark);
-}
-
-.btn:hover {
-    opacity: 0.9;
 }
 
 /* Footer */
@@ -703,17 +464,6 @@ footer {
   margin-bottom: 5px;
 }
 
-<<<<<<< HEAD
-.footer-links ul li a, .footer-social ul li a {
-    color: var(--color-white);
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.footer-links ul li a:hover, .footer-social ul li a:hover {
-    text-decoration: underline;
-    color: var(--color-secondary-dark);
-=======
 .footer-links ul li a,
 .footer-social ul li a {
   color: var(--color-white);
@@ -723,7 +473,6 @@ footer {
 .footer-links ul li a:hover,
 .footer-social ul li a:hover {
   text-decoration: underline;
->>>>>>> bug
 }
 
 .footer-bottom {
@@ -736,21 +485,9 @@ footer {
 
 /* Alertes de succès et erreurs */
 .alert {
-<<<<<<< HEAD
-    padding: 15px;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-    animation: fadeIn 0.5s ease-in-out; /* Animation d'apparition */
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-=======
   padding: 15px;
   margin-bottom: 1rem;
   border-radius: 4px;
->>>>>>> bug
 }
 
 .alert-danger {
@@ -797,20 +534,6 @@ footer {
   color: var(--color-text);
 }
 
-<<<<<<< HEAD
-.input-field, .form-control {
-    width: 100%;
-    padding: 10px; /* Augmentation du padding pour plus de confort */
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.input-field:focus, .form-control:focus {
-    border-color: var(--color-primary-dark);
-    box-shadow: 0 0 5px rgba(15, 55, 95, 0.5); /* Effet de focus */
-=======
 .input-field,
 .form-control {
   width: 100%; 
@@ -821,7 +544,6 @@ footer {
   border-radius: 4px;
   margin-bottom: 8px; 
   transition: border-color 0.3s ease;
->>>>>>> bug
 }
 
 .button-group {
@@ -858,26 +580,12 @@ button:focus {
 }
 
 .product-image-wrapper {
-<<<<<<< HEAD
-    width: 150px;
-    height: 150px;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: var(--color-background);
-    transition: transform 0.3s ease;
-}
-
-.product-image-wrapper:hover {
-    transform: scale(1.05); /* Légère augmentation de la taille au survol */
-=======
   width: 150px;
   height: 150px;
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--color-background);
->>>>>>> bug
 }
 
 .product-image {
@@ -892,27 +600,6 @@ button:focus {
 }
 
 .product-details {
-<<<<<<< HEAD
-    text-align: center;
-    max-width: 600px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: var(--color-background);
-    margin-bottom: 20px;
-    animation: fadeInUp 1s ease-out; /* Animation d'apparition */
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-=======
   text-align: center;
   max-width: 600px;
   padding: 20px;
@@ -920,7 +607,6 @@ button:focus {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--color-background);
   margin-bottom: 20px;
->>>>>>> bug
 }
 
 .product-details p {
@@ -946,18 +632,6 @@ button:focus {
 }
 
 .button-group .btn {
-<<<<<<< HEAD
-    padding: 10px 20px;
-    font-size: 1em;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.button-group .btn:hover {
-    opacity: 0.9;
-    transform: translateY(-2px); /* Légère élévation au survol */
-=======
   padding: 10px 20px;
   font-size: 1em;
   border-radius: 5px;
@@ -967,7 +641,6 @@ button:focus {
 
 .btn:hover {
   opacity: 0.9;
->>>>>>> bug
 }
 
 /* Responsive Navigation */
@@ -976,21 +649,6 @@ button:focus {
     display: block;
   }
 
-<<<<<<< HEAD
-    .main-nav ul {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 60px; /* Ajustement pour éviter le chevauchement */
-        right: 20px;
-        background-color: var(--color-primary-dark);
-        border-radius: 5px;
-        width: 150px;
-        padding: 10px;
-        z-index: 100;
-        animation: slideDown 0.3s ease forwards;
-    }
-=======
   .main-nav ul {
     display: none;
     flex-direction: column;
@@ -1003,7 +661,6 @@ button:focus {
     padding: 10px;
     z-index: 100;
   }
->>>>>>> bug
 
   .main-nav ul.active {
     display: flex;
@@ -1926,15 +1583,4 @@ button[type="submit"]:hover,
     max-width: 40vw;
   }
 }
-
-/* Animation pour le menu burger */
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+ a
