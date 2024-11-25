@@ -8,27 +8,6 @@
 {% endblock %}
 
 {% block body %}
-<<<<<<< HEAD
-    {# Header devrait être ici, probablement défini dans base.html.twig #}
-
-    <div class="image-container">
-        <img src="{{ asset('img/img_etincelle_home.jpg') }}" alt="Image de bienvenue">
-        <div class="centered-text">
-            <a href="{{ path('shop_index') }}" class="btn btn-primary">Accéder à la boutique</a>
-            {# <a href="#" class="btn btn-secondary">Accéder aux services</a> #}
-        </div>
-    </div>
-    
-    <main>
-        <!-- Contenu de la page d'accueil -->
-        <section>
-            <h2>Notre Histoire</h2>
-            <p>Découvrez l'histoire de L'Étincelle, notre inspiration et notre engagement envers des matériaux durables et l'artisanat local.</p>
-        </section>
-    
-        <section>
-            <h2>Nos Produits</h2>
-=======
     <div class="image-container">
         <img src="{{ asset('img/img_etincelle_home.jpg') }}" alt="Image de bienvenue">
         <div class="centered-text">
@@ -55,7 +34,6 @@
                 </p>
             </div>
 
->>>>>>> bug
             <!-- Affichage dynamique des produits -->
             <div class="product-grid">
                 {% for product in latestProducts %}
@@ -67,27 +45,18 @@
                             <img src="{{ asset('img/default_product.jpg') }}" alt="Image par défaut" class="product-image">
                         {% endif %}
                         <div class="card-body">
-<<<<<<< HEAD
-                            <h2 class="card-title">{{ product.name }}</h2>
-=======
                             <h3 class="card-title">{{ product.name }}</h3>
->>>>>>> bug
                             <p class="card-text">
                                 {{ product.description|length > 100 ? product.description|slice(0, 100) ~ '...' : product.description }}
                             </p>
                             <p class="card-price">{{ product.price|number_format(2, '.', ',') }} €</p>
                             <div class="card-actions">
-<<<<<<< HEAD
-                                <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">Voir Détails</a>
-                                <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-secondary">Ajouter au Panier</a>
-=======
                                 <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary-custom">Voir Détails</a>
                                 {# Formulaire pour Ajouter au Panier #}
                                 <form action="{{ path('add_to_cart', {'id': product.id}) }}" method="POST" style="display: inline;">
                                     <input type="hidden" name="_token" value="{{ csrf_token('add_to_cart' ~ product.id) }}">
                                     <button type="submit" class="btn btn-secondary-custom">Ajouter au Panier</button>
                                 </form>
->>>>>>> bug
                             </div>
                         </div>
                     </div>
@@ -96,9 +65,6 @@
                 {% endfor %}
             </div>
         </section>
-<<<<<<< HEAD
-    </main>
-=======
 
         <!-- Nos Services -->
         <section class="services">
@@ -125,5 +91,4 @@
             navLinks.classList.toggle('active');
         }
     </script>
->>>>>>> bug
 {% endblock %}

@@ -1,6 +1,6 @@
 Courriel : Courriel
 Prénom: Prénom
-Nom de famille : Last Name
+Nom de famille : Nom de famille
 Mot de passe : Mot de passe
 Ville : Ville
 Adresse : Adresse
@@ -26,3 +26,11 @@ Adresse email: "Adresse email"
 Envoyer un lien de réinitialisation: "Envoyer un lien de réinitialisation"
 Title: "Titre"
 Event date: "Date de l'événement"
+Email: "Adresse email"
+First: "Mot de passe"
+Second: "Entrez le mot de passe à nouveau"
+City: "Ville"
+Address: "Adresse"
+Country: "Pays"
+Postal code: "Code postal"
+Phone number: "Numéro de téléphone"

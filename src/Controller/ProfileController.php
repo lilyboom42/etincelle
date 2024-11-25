@@ -15,6 +15,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 
 class ProfileController extends AbstractController
 {
@@ -25,7 +27,8 @@ class ProfileController extends AbstractController
         UserInterface $user,
         UserPasswordHasherInterface $passwordHasher,
         MailerInterface $mailer,
-        AppointmentRepository $appointmentRepository
+        AppointmentRepository $appointmentRepository,
+        UrlGeneratorInterface $urlGenerator // Ajouter le service pour générer des URL
     ): Response {
         // Vérifier que l'utilisateur est bien une instance de la classe User
         if (!$user instanceof User) {
@@ -56,12 +59,17 @@ class ProfileController extends AbstractController
 
             $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
 
+            // Générer l'URL vers le profil de l'utilisateur
+            $profileUrl = $urlGenerator->generate('profile_index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
             // Envoi d'un e-mail après modification du profil
             $email = (new Email())
                 ->from('no-reply@votre-site.com') // Remplacer par l'adresse e-mail d'envoi
                 ->to($user->getEmail())
                 ->subject('Modification de votre profil')
-                ->html($this->renderView('emails/change.html.twig'));
+                ->html($this->renderView('emails/change.html.twig', [
+                    'url' => $profileUrl, // Passer l'URL au template
+                ]));
 
             $mailer->send($email);
         }

@@ -190,13 +190,12 @@ main {
 /* Styles pour le bouton burger */
 .burger-menu {
   display: none;
-  font-size: 1.5em;
+  font-size: 2em;
   background: none;
   border: none;
   color: var(--color-primary-dark);
   cursor: pointer;
-  position: absolute;
-  top: 15px;
+  position: fixed;
   right: 20px;
 }
 
@@ -423,6 +422,10 @@ footer {
   padding: 20px 0;
   text-align: center;
   width: 100%;
+}
+
+.fa-brands, .fab{
+  font-size: xxx-large;
 }
 
 .footer-container {
@@ -664,6 +667,7 @@ button:focus {
 
   .main-nav ul.active {
     display: flex;
+    position: fixed;
   }
 
   .main-nav ul li {
@@ -1487,6 +1491,8 @@ h1 {
   margin-bottom: 5px;
   color: #333;
 }
+
+
 
 /* Champs de saisie */
 .input-field,

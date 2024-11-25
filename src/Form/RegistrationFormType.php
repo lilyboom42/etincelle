@@ -31,6 +31,7 @@ class RegistrationFormType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
+                'label' => 'password',
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez entrer un mot de passe',

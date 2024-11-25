@@ -5,6 +5,14 @@
 {% block body %}
     <h1>Payer votre Rendez-vous</h1>
 
+    <div class="appointment-details">
+        <h2>Détails du Rendez-vous</h2>
+        <p><strong>Date :</strong> {{ appointment.appointmentDate|date('d/m/Y') }}</p>
+        {# <p><strong>Heure :</strong> {{ appointment.time }}</p> #}
+        <p><strong>Service :</strong> {{ appointment.service.name }}</p>
+        <p><strong>Montant :</strong> {{ appointment.total|number_format(2, ',', ' ') }} €</p>
+    </div>
+
     <button id="checkout-button" class="btn btn-primary-custom">Payer avec Stripe</button>
 
     <script src="https://js.stripe.com/v3/"></script>
