@@ -54,9 +54,11 @@
 					<button>
 						<a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-secondary-custom">Détails</a>
 					</button>
+					{% if is_granted('ROLE_ADMIN') %}
 					<button>
 						<a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-secondary-custom">Modifier</a>
 					</button>
+					{% endif %}
 					{% if is_granted('ROLE_ADMIN') %}
 						<form action="{{ path('product_delete', { 'id': product.id }) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
 							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
